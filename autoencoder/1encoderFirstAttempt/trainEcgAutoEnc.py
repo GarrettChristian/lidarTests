@@ -27,20 +27,6 @@ autoencoder.compile(optimizer='adam', loss='mae')
 
 # -------------------------------------
 
-dataframe = pd.read_csv('ecg.csv', header=None)
-raw_data = dataframe.values
-dataframe.head()
-
-# The last element contains the labels
-labels = raw_data[:, -1]
-
-# The other data points are the electrocadriogram data
-data = raw_data[:, 0:-1]
-
-train_data, test_data, train_labels, test_labels = train_test_split(
-    data, labels, test_size=0.2, random_state=21
-)
-
 # normalize data to [0, 1]
 
 # print(train_data)
@@ -76,7 +62,7 @@ train_data, test_data, train_labels, test_labels = train_test_split(
         
 # print("shape new", np.shape(trainLidar))
 
-trainLidar = np.array([])
+lidar_data = np.array([])
 
 path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
 for file in glob.glob(path + "**/0000*.bin", recursive = True):
@@ -89,43 +75,21 @@ for file in glob.glob(path + "**/0000*.bin", recursive = True):
     # print(np.shape(pcd))
     # print(pcd)
 
-    if (np.size(trainLidar)):
-        trainLidar = np.vstack((trainLidar, pcd))
+    if (np.size(lidar_data)):
+        lidar_data = np.vstack([lidar_data, pcd])
     else:
-        trainLidar = np.array([pcd])
+        lidar_data = np.array([pcd])
 
-        
-print("shape new", np.shape(trainLidar))
+print(lidar_data)
+print(np.shape(lidar_data))
 
-testLidar = np.array([])
+labels = np.ones(np.shape(lidar_data)[0])
+# print(labels)
+# print(np.size(labels))
 
-path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
-for file in glob.glob(path + "**/00001*.bin", recursive = True):
-    print(file)
-    size_float = 4
-    list_pcd = []
-    with open(file, "rb") as f:
-        byte = f.read(size_float * 4)
-        for x in range(0, 2070272):
-        # while byte:
-            if byte:
-                x, y, z, intensity = struct.unpack("ffff", byte)
-                list_pcd.append([x, y, z])
-                byte = f.read(size_float * 4)
-            else:
-                list_pcd.append([0, 0, 0])
-    np_pcd = np.asarray(list_pcd)
-    pcd = np.array([np_pcd])
-    # print("shape new", np.shape(pcd))
-    # print(pcd)
-    # print("shape new", np.shape(trainLidar))
-    # print(trainLidar)
-    if (np.size(testLidar)):
-        testLidar = np.vstack((testLidar, pcd))
-    else:
-        testLidar = np.array([np_pcd])
-        
-print("shape new", np.shape(testLidar))
+train_data, test_data, train_labels, test_labels = train_test_split(
+    lidar_data, labels, test_size=0.2, random_state=21
+)
 
 
 # min_val = tf.reduce_min(train_data)
@@ -152,11 +116,11 @@ print("shape new", np.shape(testLidar))
 # Notice that the autoencoder is trained using only the normal ECGs, 
 # but is evaluated using the full test set.
 
-history = autoencoder.fit(trainLidar, trainLidar, 
+history = autoencoder.fit(train_data, train_data, 
           epochs=20, 
           batch_size=512,
-          validation_data=(testLidar, testLidar),
+          validation_data=(test_data, test_data),
           shuffle=True)
 
 
-autoencoder.save("ecgModel")
+autoencoder.save("pcdModel")
