@@ -18,7 +18,7 @@ class AnomalyDetector(Model):
     self.decoder = tf.keras.Sequential([
       layers.Dense(64, activation="relu"),
       layers.Dense(128, activation="relu"),
-      layers.Dense(1552704, activation="sigmoid")])
+      layers.Dense(2070272, activation="sigmoid")])
 
   def call(self, x):
     encoded = self.encoder(x)
@@ -27,6 +27,8 @@ class AnomalyDetector(Model):
 
 # Adapted from this tutorial:
 # https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly
+# https://gist.github.com/twolodzko/aa4f4ad52f16c293df40342929b025a4?short_path=4d6ba34
+# one above is really cool example of how the noise version works
 class DataGenerator(keras.utils.Sequence):
   def __init__(self, list_IDs, labels, batch_size=100, dim=(2070272), n_channels=1, shuffle=True):
       'Initialization'
@@ -49,7 +51,8 @@ class DataGenerator(keras.utils.Sequence):
     # Initialization
     # X = np.empty((self.batch_size, *self.dim, self.n_channels))
     X = np.empty((self.batch_size, *self.dim))
-    y = np.empty((self.batch_size), dtype=int)
+    y = np.empty((self.batch_size, *self.dim))
+    # y = np.empty((self.batch_size), dtype=int)
 
     # Generate data
     for i, ID in enumerate(list_IDs_temp):
@@ -57,13 +60,14 @@ class DataGenerator(keras.utils.Sequence):
         # X[i,] = np.load(ID)
         pcdi = np.fromfile(ID, dtype=np.float32)
         X[i,] = np.pad(pcdi, (0,2070272 - int(np.shape(pcdi)[0])), 'constant', constant_values=(0))
-
+        
         # Store class
         # y[i] = self.labels[ID]
-        y[i] = 1
+        # y[i] = 1
 
     # return X, keras.utils.to_categorical(y, num_classes=self.n_classes)
-    return X, y
+    # return X, y
+    return X, X
 
   def __len__(self):
     'Denotes the number of batches per epoch'
