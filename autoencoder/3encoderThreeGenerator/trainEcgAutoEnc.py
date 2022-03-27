@@ -28,15 +28,15 @@ autoencoder = AnomalyDetector()
 autoencoder.compile(optimizer='adam', loss='mae')
 
 
-path = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/"
-# path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
+# path = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/"
+path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
 
-files = np.array(glob.glob(path + "**/0000*.bin", recursive = True))
+files = np.array(glob.glob(path + "**/00*.bin", recursive = True))
 print(np.shape(files))
 
 # Parameters
 params = {'dim': (2070272,),
-          'batch_size': 100,
+          'batch_size': 150,
           'n_channels': 1,
           'shuffle': True}
 
@@ -54,6 +54,6 @@ print(np.shape(train_data))
 training_generator = DataGenerator(train_data, train_data, **params)
 validation_generator = DataGenerator(test_data, test_data, **params)
 
-history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=1)
+history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20)
 
 autoencoder.save("pcdModel")

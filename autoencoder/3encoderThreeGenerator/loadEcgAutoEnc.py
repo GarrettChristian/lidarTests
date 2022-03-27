@@ -30,8 +30,8 @@ autoencoder = keras.models.load_model('pcdModel')
 # -------------------------------------
 
 
-# binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
-binFileName = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/velodyne/000000.bin"
+binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
+# binFileName = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/velodyne/000000.bin"
 np_arr = np.fromfile(binFileName, dtype=np.float32)
 print(np.shape(np_arr))
 
