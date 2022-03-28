@@ -28,15 +28,15 @@ autoencoder = AnomalyDetector()
 autoencoder.compile(optimizer='adam', loss='mae')
 
 
-# path = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/"
-path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
+path = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/"
+# path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
 
-files = np.array(glob.glob(path + "**/00*.bin", recursive = True))
+files = np.array(glob.glob(path + "velodyne/00*.bin", recursive = True))
 print(np.shape(files))
 
 # Parameters
 params = {'dim': (1035136,),
-          'batch_size': 150,
+          'batch_size': 100,
           'n_channels': 1,
           'shuffle': True}
 

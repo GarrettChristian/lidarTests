@@ -30,17 +30,17 @@ autoencoder = keras.models.load_model('pcdModel')
 # -------------------------------------
 
 
-binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
-# binFileName = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/velodyne/000000.bin"
+# binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
+binFileName = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/velodyne/000000.bin"
 np_arr = np.fromfile(binFileName, dtype=np.float32)
 print(np.shape(np_arr))
 
-np_arr = np.pad(np_arr, (0,2070272 - int(np.shape(np_arr)[0])), 'constant', constant_values=(0))
-print(np.shape(np_arr))
-test_arr = np.array([np_arr])
 
-print(np.shape(test_arr))
-
+pcdi = np_arr.reshape((int(np.shape(np_arr)[0]) // 4, 4))
+pcdi = np.delete(pcdi, np.s_[2::], 1)
+pcdi = pcdi.reshape(np.size(pcdi),)
+pcdi = np.pad(pcdi, (0,1035136 - int(np.shape(pcdi)[0])), 'constant', constant_values=(0))
+test_arr = np.array([pcdi])
 
 # np_arr = np_arr.reshape((int(np.shape(np_arr)[0]) // 4, 4))
 # print(np.shape(np_arr))
@@ -54,20 +54,26 @@ print(np.shape(test_arr))
 
 # ---
 
-encoded_data = autoencoder.encoder(test_arr).numpy()
+encoded_data = autoencoder.encoder([test_arr]).numpy()
 decoded_data = autoencoder.decoder(encoded_data).numpy()
 
 print(np.shape(decoded_data))
 print(np.shape(decoded_data[0]))
 
+# dec_reshape = decoded_data[0]
+# dec_reshape = dec_reshape.reshape((int(np.shape(dec_reshape)[0]) // 4, 4))
+# print(np.shape(dec_reshape))
+# dec_reshape = np.delete(dec_reshape, 3, 1)
+# print(np.shape(dec_reshape))
+
 dec_reshape = decoded_data[0]
-dec_reshape = dec_reshape.reshape((int(np.shape(dec_reshape)[0]) // 4, 4))
-print(np.shape(dec_reshape))
-dec_reshape = np.delete(dec_reshape, 3, 1)
-print(np.shape(dec_reshape))
+dec_reshape = dec_reshape.reshape((int(np.shape(dec_reshape)[0]) // 2), 2)
+new_col = dec_reshape.sum(1)[...,None]
+
+all_data = np.hstack((dec_reshape, new_col))
 
 pcd = o3d.geometry.PointCloud()
-pcd.points = o3d.utility.Vector3dVector(dec_reshape)
+pcd.points = o3d.utility.Vector3dVector(all_data)
 o3d.visualization.draw_geometries([pcd])
 
-print(dec_reshape)
+print(all_data)
