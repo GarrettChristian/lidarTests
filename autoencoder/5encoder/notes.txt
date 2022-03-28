@@ -1,0 +1,64 @@
+
+
+
+
+Bump up all sizes
+Need to go really big 
+
+Try something huge first 
+Needs a lot of data 
+
+try 20 thousand 200 thousand 
+
+
+
+MNIST could be better example
+
+last of encoder to match the first layer of descoder 
+
+
+big jumps are bad 
+first 
+
+
+
+
+All the powers of 2 until you hit the output 
+64 - 512 
+
+
+Generating cubes 
+not enough capative 
+
+rounding or coursoin error 
+with my data before 
+
+
+in mnist each region has a defined area
+give consistent orientation 
+
+
+Could be ordered z value check later 
+
+
+in lidar format, don't have to pad with 0's 
+missing is infinity 
+
+
+
+Get raw data, so I don't have to resize
+
+Invariant data, same sizes 
+
+
+
+
+
+
+
+
+
+
+
+
+
