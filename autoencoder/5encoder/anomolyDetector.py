@@ -11,28 +11,29 @@ class AnomalyDetector(Model):
   def __init__(self):
     super(AnomalyDetector, self).__init__()
     self.encoder = tf.keras.Sequential([
-      # layers.Dense(524288, activation="relu"),
+      layers.Dense(524288, activation="relu"),
       layers.Dense(262144, activation="relu"),
       layers.Dense(131072, activation="relu"),
-      layers.Dense(65536, activation="relu"),
-      layers.Dense(32768, activation="relu"),
-      layers.Dense(16384, activation="relu"),
-      layers.Dense(8192, activation="relu"),
-      layers.Dense(1024, activation="relu"),
-      layers.Dense(512, activation="relu"),
-      layers.Dense(256, activation="relu")])
+      # layers.Dense(65536, activation="relu"),
+      # layers.Dense(32768, activation="relu"),
+      # layers.Dense(16384, activation="relu"),
+      # layers.Dense(8192, activation="relu"),
+      # layers.Dense(1024, activation="relu"),
+      # layers.Dense(512, activation="relu"),
+      # layers.Dense(256, activation="relu")
+      ])
 
     self.decoder = tf.keras.Sequential([
-      layers.Dense(256, activation="relu"),
-      layers.Dense(512, activation="relu"),
-      layers.Dense(1024, activation="relu"),
-      layers.Dense(8192, activation="relu"),
-      layers.Dense(16384, activation="relu"),
-      layers.Dense(32768, activation="relu"),
-      layers.Dense(65536, activation="relu"),
+      # layers.Dense(256, activation="relu"),
+      # layers.Dense(512, activation="relu"),
+      # layers.Dense(1024, activation="relu"),
+      # layers.Dense(8192, activation="relu"),
+      # layers.Dense(16384, activation="relu"),
+      # layers.Dense(32768, activation="relu"),
+      # layers.Dense(65536, activation="relu"),
       layers.Dense(131072, activation="relu"),
       layers.Dense(262144, activation="relu"),
-      # layers.Dense(524288, activation="relu"),
+      layers.Dense(524288, activation="relu"),
       layers.Dense(1035136, activation="sigmoid")
       ])
   def call(self, x):

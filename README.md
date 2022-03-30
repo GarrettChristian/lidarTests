@@ -32,3 +32,8 @@ https://github.com/cuge1995/bin-to-pcd-python
 pcd to bin
 
 https://github.com/Yuseung-Na/pcd2bin/blob/master/pcd2bin.py
+
+
+---
+
+python3 visualize_voxels.py --sequence 00 --dataset /Volumes/Extreme\ SSD/semKitti/dataset/
