@@ -3,6 +3,7 @@
 
 import vispy
 from vispy.scene import visuals, SceneCanvas
+import vispy.io as io
 import numpy as np
 from matplotlib import pyplot as plt
 import numpy as np
@@ -187,13 +188,12 @@ class LaserScanVis:
     self.action = "no"  # no, next, back, quit are the possibilities
 
     # img canvas size
-    self.multiplier = 1
     self.canvas_W = 1024
     self.canvas_H = 64
 
     # new canvas for img
     self.img_canvas = SceneCanvas(keys='interactive', show=True,
-                                  size=(self.canvas_W, self.canvas_H * self.multiplier))
+                                  size=(self.canvas_W, self.canvas_H))
     # grid
     self.img_grid = self.img_canvas.central_widget.add_grid()
     # interface (n next, b back, q quit, very simple)
@@ -228,6 +228,12 @@ class LaserScanVis:
     self.img_vis.set_data(data)
     self.img_vis.update()
 
+  def set_new_pcd(self, scan_name):
+    self.scan_name = scan_name
+
+    self.reset()
+    self.update_scan()
+
   # interface
   def key_press(self, event):
     self.img_canvas.events.key_press.block()
@@ -246,11 +252,10 @@ class LaserScanVis:
   def run(self):
     vispy.app.run()
 
+  def save(self, location):
+    image = self.img_canvas.render()
+    io.write_png(location, image)
 
 
-# create a visualizer
-scan = LaserScan(project=True)
-binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/velodyne/000000.bin"
-vis = LaserScanVis(scan=scan, scan_name=binFileName)
 
-vis.run()
+
