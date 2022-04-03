@@ -190,12 +190,12 @@ class LaserScanVis:
     # img canvas size
     self.canvas_W = 1024
     self.canvas_H = 64
-    # self.canvas_W = 512
-    # self.canvas_H = 32
 
     # new canvas for img
     self.img_canvas = SceneCanvas(keys='interactive', show=True,
                                   size=(self.canvas_W, self.canvas_H))
+    # self.img_canvas = SceneCanvas(keys='interactive', show=True,
+    #                               size=(self.canvas_W, self.canvas_H), px_scale=1)
     # grid
     self.img_grid = self.img_canvas.central_widget.add_grid()
     # interface (n next, b back, q quit, very simple)
@@ -255,7 +255,11 @@ class LaserScanVis:
     vispy.app.run()
 
   def save(self, location):
-    image = self.img_canvas.render()
+    # needed to specify size since it gets multiplied by pixel width
+    image = self.img_canvas.render(size=(1024, 64))
+    print(self.img_canvas.size)
+    print(self.img_canvas.pixel_scale)
+    print(np.shape(image))
     io.write_png(location, image)
 
 

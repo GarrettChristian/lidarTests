@@ -5,8 +5,8 @@ import numpy as np
 
 # imgPath = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
 # imgPath = '/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/rangeImg/rangeimgs/00/001372.png'
-imgPath = "000000.png"
-# imgPath = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/rangeImg/unrealistic1.png"
+# imgPath = "000000.png"
+imgPath = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/rangeImg/unrealistic1.png"
 
 image = Image.open(imgPath)
 X = np.array(image)
@@ -27,7 +27,7 @@ newShape = np.expand_dims(grey, axis=2)
 print(np.shape(newShape))
 print(newShape)
 
-undoExpandDims = newShape.reshape(64, 1024)
+undoExpandDims = newShape.reshape(1024, 64)
 print(np.shape(undoExpandDims))
 
 decodedImage = Image.fromarray(undoExpandDims)
