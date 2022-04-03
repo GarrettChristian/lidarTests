@@ -18,43 +18,38 @@ import struct
 
 # ----------------------------------------------------------------------------------------------------
 
-# class AnomalyDetector(Model):
-#   def __init__(self):
-#     super(AnomalyDetector, self).__init__()
-#     self.encoder = tf.keras.Sequential([
-#       layers.Conv2D(4096, (3, 3), activation="relu", padding="same"),
-#       layers.MaxPooling2D((2, 2), padding="same"),
-#       layers.Conv2D(4096, (3, 3), activation="relu", padding="same"),
-#       layers.MaxPooling2D((2, 2), padding="same")
-#       ])
-
-#     self.decoder = tf.keras.Sequential([
-#       layers.Conv2DTranspose(4096, (3, 3), strides=2, activation="relu", padding="same"),
-#       layers.Conv2DTranspose(4096, (3, 3), strides=2, activation="relu", padding="same"),
-#       layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same")
-#       ])
-#   def call(self, x):
-#     encoded = self.encoder
-#     decoded = self.decoder(encoded)
-#     return decoded
-
-# ----------------------------------------------------------------------------------------------------
-
-# https://keras.io/examples/vision/autoencoder/
-# https://pyimagesearch.com/2020/02/17/autoencoders-with-keras-tensorflow-and-deep-learning/
+# https://blog.keras.io/building-autoencoders-in-keras.html
 def create_model():
   model = Sequential()
 
-  # Encoder
-  model.add(layers.Conv2D(64, (3, 3), activation="relu", padding="same"))
-  model.add(layers.MaxPooling2D((2, 2), padding="same"))
-  model.add(layers.Conv2D(64, (3, 3), activation="relu", padding="same"))
-  model.add(layers.MaxPooling2D((2, 2), padding="same"))
+  # # Encoder
+  # model.add(layers.Conv2D(64, (3, 3), activation="relu", padding="same"))
+  # model.add(layers.MaxPooling2D((2, 2), padding="same"))
+  # model.add(layers.Conv2D(64, (3, 3), activation="relu", padding="same"))
+  # model.add(layers.MaxPooling2D((2, 2), padding="same"))
 
-  # Decoder
-  model.add(layers.Conv2DTranspose(64, (3, 3), strides=2, activation="relu", padding="same"))
-  model.add(layers.Conv2DTranspose(64, (3, 3), strides=2, activation="relu", padding="same"))
-  model.add(layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same"))
+  # # Decoder
+  # model.add(layers.Conv2DTranspose(64, (3, 3), strides=2, activation="relu", padding="same"))
+  # model.add(layers.Conv2DTranspose(64, (3, 3), strides=2, activation="relu", padding="same"))
+  # model.add(layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same"))
+
+  # Encoder
+  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+
+  
+  # Decoder 
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same'))
 
   return model
 
@@ -100,7 +95,9 @@ class DataGenerator(keras.utils.Sequence):
         image = Image.open(ID)
         imageGrey = ImageOps.grayscale(image)
         imageGreyArray = np.array(imageGrey)
-        X[i,] = np.expand_dims(imageGreyArray, axis=2)        
+        imageGreyArrayNorm = imageGreyArray.astype('float32') / 255
+        X[i,] = np.expand_dims(imageGreyArrayNorm, axis=2)
+        # print(np.shape(X[i,]))
         
         # Store class
         # y[i] = self.labels[ID]
