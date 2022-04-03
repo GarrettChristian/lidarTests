@@ -190,6 +190,8 @@ class LaserScanVis:
     # img canvas size
     self.canvas_W = 1024
     self.canvas_H = 64
+    # self.canvas_W = 512
+    # self.canvas_H = 32
 
     # new canvas for img
     self.img_canvas = SceneCanvas(keys='interactive', show=True,

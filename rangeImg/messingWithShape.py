@@ -3,7 +3,10 @@ from PIL import Image
 from PIL import ImageOps
 import numpy as np
 
-imgPath = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
+# imgPath = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
+# imgPath = '/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/rangeImg/rangeimgs/00/001372.png'
+imgPath = "000000.png"
+# imgPath = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/rangeImg/unrealistic1.png"
 
 image = Image.open(imgPath)
 X = np.array(image)
