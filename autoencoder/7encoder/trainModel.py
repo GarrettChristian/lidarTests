@@ -22,17 +22,6 @@ import struct
 def create_model():
   model = Sequential()
 
-  # # Encoder
-  # model.add(layers.Conv2D(64, (3, 3), activation="relu", padding="same"))
-  # model.add(layers.MaxPooling2D((2, 2), padding="same"))
-  # model.add(layers.Conv2D(64, (3, 3), activation="relu", padding="same"))
-  # model.add(layers.MaxPooling2D((2, 2), padding="same"))
-
-  # # Decoder
-  # model.add(layers.Conv2DTranspose(64, (3, 3), strides=2, activation="relu", padding="same"))
-  # model.add(layers.Conv2DTranspose(64, (3, 3), strides=2, activation="relu", padding="same"))
-  # model.add(layers.Conv2D(1, (3, 3), activation="sigmoid", padding="same"))
-
   # Encoder
   model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
@@ -40,7 +29,6 @@ def create_model():
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
-
   
   # Decoder 
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
@@ -136,7 +124,8 @@ def main():
   # PATH TO THE TRAINING FILES
   # path = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/"
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
-  path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
+  # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
+  path = "cd /p/lidarrealism/data/rangeimgs/00/"
 
   files = np.array(glob.glob(path + "*.png", recursive = True))
   print(np.shape(files))
