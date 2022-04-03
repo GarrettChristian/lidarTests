@@ -20,14 +20,14 @@ print(np.shape(X))
 imageGrey = ImageOps.grayscale(image)
 grey = np.array(imageGrey)
 print(np.shape(grey))
-print(grey)
+# print(grey)
 # image.show()
 
 newShape = np.expand_dims(grey, axis=2)
 print(np.shape(newShape))
-print(newShape)
+# print(newShape)
 
-undoExpandDims = newShape.reshape(1024, 64)
+undoExpandDims = newShape.reshape(64, 1024)
 print(np.shape(undoExpandDims))
 
 decodedImage = Image.fromarray(undoExpandDims)

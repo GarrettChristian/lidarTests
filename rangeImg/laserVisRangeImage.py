@@ -175,6 +175,8 @@ class LaserScanVis:
   """Class that creates and handles a visualizer for a pointcloud"""
 
   def __init__(self, scan, scan_name):
+    # for saving images
+    # vispy.use("osmesa")
     self.scan = scan
     self.scan_name = scan_name
 
