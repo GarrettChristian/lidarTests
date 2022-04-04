@@ -45,7 +45,7 @@ mask = (semantics != 10)
 noCars = pcd_arr[mask, :]
 
 # move cars z up by 10
-cars[:, 2] = cars[:, 2] + 1 
+cars[:, 2] = cars[:, 2] + 0.5
 print(np.shape(cars))
 
 # Rejoin cars
