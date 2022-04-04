@@ -1,0 +1,37 @@
+0 | unlabeled | all points with no special label.
+1 | outlier | all points which are outliers, i.e., caused by reflection, etc..
+10 | car | This includes cars, jeeps, SUVs, vans with a continuous body shape (i.e. the driver cabin and cargo compartment are one)
+11 | bicycle | Includes bicycles without the cyclist or possibly other passengers. The cyclist and passengers recieve the label cyclist.
+13 | bus | includes buses that are intended for 9+ persons for public or long-distance transport.
+15 | motorcycle | This includes motorcycles, mopeds without the driver or other passengers. Both driver and passengers recieve the label motorcyclist.
+16 | on rails | All vehicles moving on rails, e.g., trams, trains.
+18 | truck | This includes trucks, vans with a body that is separate from the driver cabin, pickup trucks, as well as their attached trailers
+20 | other-vehicle | Cravans, Trailers and fallback category for vehicles not explicitly defined otherwise in meta category level vehicle.
+30 | Person | Persons moving by their own legs, sitting, or any unusual pose, but not meant to drive a vehicle.
+31 | bicyclist | Humans driving a bicycle.
+32 | motorcyclist | Persons riding a motorcycle.
+40 | road | 
+44 | parking | 
+48 | sidewalk | Areas used mainly by pedestrians, bicycles, but not meant for driving.
+49 | other-ground | Other areas that are not used by pedestrians or meant for driving.
+50 | building | 
+51 | fence | 
+52 | other-structure | 
+60 | lane marking | 
+70 | vegetation | 
+71 | trunk | 
+72 | terrain | 
+80 | pole | 
+81 | traffic sign | 
+99 | other-object | 
+
+
+https://github.com/jbehley/point_labeler/blob/master/assets/labels.xml
+
+
+
+
+
+
+
+

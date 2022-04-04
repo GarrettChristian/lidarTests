@@ -31,8 +31,12 @@ def create_model():
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
   
   # Decoder 
+  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling2D((2, 2)))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
@@ -126,12 +130,13 @@ def main():
   autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
 
   # PATH TO THE TRAINING FILES
-  # path = "/media/garrett/Extreme SSD/semKitti/dataset/sequences/00/"
+  # path = "/media/garrett/Extreme SSD/rangeimgs/00/"
+  path = "/Volumes/Extreme SSD/rangeimgs/00/"
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
-  path = "/p/lidarrealism/data/rangeimgs/"
+  # path = "/p/lidarrealism/data/rangeimgs/"
 
-  files = np.array(glob.glob(path + "*/*.png", recursive = True))
+  files = np.array(glob.glob(path + "*.png", recursive = True))
   print(np.shape(files))
 
   # Parameters
@@ -147,7 +152,7 @@ def main():
   labels = np.ones(np.shape(files)[0]) # Labels we don't actually use these 
 
   train_data, test_data, train_labels, test_labels = train_test_split(
-      files, labels, test_size=0.2, random_state=21
+      files, labels, test_size=0.1, random_state=21
   )
 
   print(np.shape(train_data))
