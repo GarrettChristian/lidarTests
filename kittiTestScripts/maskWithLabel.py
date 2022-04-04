@@ -16,7 +16,7 @@ print(np.shape(pcd_arr))
 
 pcd_arr = pcd_arr.reshape((int(np.shape(pcd_arr)[0]) // 4, 4))
 print(np.shape(pcd_arr))
-pcd_arr = np.delete(pcd_arr, 3, 1)
+# pcd_arr = np.delete(pcd_arr, 3, 1)
 print(np.shape(pcd_arr))
 
 label_arr = np.fromfile(labelsFileName, dtype=np.int32)
@@ -36,24 +36,15 @@ print(labelInstance)
 
 
 # Only cars
-mask = (semantics == 10)
+mask = (semantics != 40)
 pcd_arr = pcd_arr[mask, :]
 
+print(np.shape(pcd_arr))
 
-# half = (int(np.shape(pcd_arr)[0]) // 2)
-# pcd_arr = np.delete(pcd_arr, np.s_[half::], 0)
+# pcd = o3d.geometry.PointCloud()
+# pcd.points = o3d.utility.Vector3dVector(pcd_arr)
+# o3d.visualization.draw_geometries([pcd])
 
-# mask = (pcd_arr[:, 0] < 0) # X AXIS CUT
-# mask = (pcd_arr[:, 1] < 0) # Y AXIS CUT
-# # mask = (pcd_arr[:, 2] < 0) # Z AXIS CUT
-# pcd_arr = pcd_arr[mask, :]
-
-# print(np.shape(pcd_arr))
-
-pcd = o3d.geometry.PointCloud()
-pcd.points = o3d.utility.Vector3dVector(pcd_arr)
-o3d.visualization.draw_geometries([pcd])
-
-# pcd_arr = pcd_arr.flatten()
-# print(np.shape(pcd_arr))
-# pcd_arr.tofile("removeHalfByYval.bin")
+pcd_arr = pcd_arr.flatten()
+print(np.shape(pcd_arr))
+pcd_arr.tofile("removeRoad00.bin")

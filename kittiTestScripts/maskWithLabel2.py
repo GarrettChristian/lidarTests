@@ -37,7 +37,7 @@ print(semantics)
 print(labelInstance)
 
 # Only cars
-mask = (semantics == 10)
+mask = (semantics != 10)
 pcd_arr = pcd_arr[mask, :]
 
 pcd_arr1 = np.fromfile(binFileName, dtype=np.float32)
