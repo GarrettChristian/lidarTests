@@ -36,8 +36,16 @@ print(labelInstance)
 
 
 # Only cars
-mask = (semantics != 40)
-pcd_arr = pcd_arr[mask, :]
+mask = (semantics == 10)
+cars = pcd_arr[mask, :]
+# cars removed
+mask = (semantics != 10)
+noCars = pcd_arr[mask, :]
+# move cars z up by 10
+cars[::3] = cars[::3] + 2 
+
+# Rejoin cars
+pcd_arr = np.vstack((noCars, cars))
 
 print(np.shape(pcd_arr))
 
@@ -47,4 +55,4 @@ print(np.shape(pcd_arr))
 
 pcd_arr = pcd_arr.flatten()
 print(np.shape(pcd_arr))
-pcd_arr.tofile("removeRoad00.bin")
+pcd_arr.tofile("carsUp2Z00.bin")
