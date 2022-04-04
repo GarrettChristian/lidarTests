@@ -45,7 +45,7 @@ mask = (semantics != 10)
 noCars = pcd_arr[mask, :]
 
 # move cars z up by 10
-cars[:, 2] = cars[:, 2] + 0.5
+cars[:, 2] = cars[:, 2] + 1
 print(np.shape(cars))
 
 # Rejoin cars
@@ -60,4 +60,4 @@ print(np.shape(pcd_arr))
 
 pcd_arr = pcd_arr.flatten()
 print(np.shape(pcd_arr))
-pcd_arr.tofile("carsUp2Z00.bin")
+pcd_arr.tofile("carsUp1Z00.bin")
