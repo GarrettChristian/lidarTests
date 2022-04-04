@@ -19,10 +19,12 @@ import struct
 # ----------------------------------------------------------------------------------------------------
 
 # https://blog.keras.io/building-autoencoders-in-keras.html
+# https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
 def create_model():
   model = Sequential()
 
   # Encoder
+  model.add(layers.Input(shape=(64, 1024, 1)))
   model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
@@ -31,12 +33,12 @@ def create_model():
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Flatten())
+  model.add(layers.Dense(9248, activation="sigmoid"))
   
   # Decoder 
-  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Dense(units=9248,activation='sigmoid'))
+  model.add(layers.Reshape((17,17,32)))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling2D((2, 2)))
   model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
@@ -127,9 +129,9 @@ def main():
 
   # PATH TO THE TRAINING FILES
   # path = "/media/garrett/Extreme SSD/rangeimgs/00/"
-  path = "/Volumes/Extreme SSD/rangeimgs/00/"
+  # path = "/Volumes/Extreme SSD/rangeimgs/00/"
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
-  # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
+  path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
   # path = "/p/lidarrealism/data/rangeimgs/"
 
   files = np.array(glob.glob(path + "*.png", recursive = True))
@@ -160,8 +162,10 @@ def main():
   # autoencoder = AnomalyDetector()
   autoencoder = create_model()
   autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+  print(autoencoder.summary())
 
-  history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20, use_multiprocessing=True)
+  history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20)
+  # history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20, use_multiprocessing=True)
 
   autoencoder.save("pcdModel")
 
