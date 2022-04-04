@@ -10,6 +10,7 @@ import open3d as o3d
 
 labelsFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/labels/000000.label"
 binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/velodyne/000000.bin"
+
 pcd_arr = np.fromfile(binFileName, dtype=np.float32)
 print(np.shape(pcd_arr))
 
@@ -33,12 +34,8 @@ labelInstance = label_arr >> 16
 print(semantics)
 print(labelInstance)
 
-# carMask = ma.masked_equal(semantics, 10)
-# carMask = np.ma.masked_where(semantics == 10, semantics)
-# print(carMask)
-# row_mask = (semantics == 10).all(axis=1)
-# new_pcd_arr = np.ma.masked_where(np.ma.getmask(carMask), pcd_arr)
 
+# Only cars
 mask = (semantics == 10)
 pcd_arr = pcd_arr[mask, :]
 
