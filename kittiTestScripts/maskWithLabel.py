@@ -38,14 +38,19 @@ print(labelInstance)
 # Only cars
 mask = (semantics == 10)
 cars = pcd_arr[mask, :]
+print(np.shape(cars))
+
 # cars removed
 mask = (semantics != 10)
 noCars = pcd_arr[mask, :]
+
 # move cars z up by 10
-cars[::3] = cars[::3] + 2 
+cars[:, 2] = cars[:, 2] + 2 
+print(np.shape(cars))
 
 # Rejoin cars
 pcd_arr = np.vstack((noCars, cars))
+# pcd_arr = cars
 
 print(np.shape(pcd_arr))
 
