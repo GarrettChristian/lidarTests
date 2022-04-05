@@ -135,9 +135,10 @@ def main():
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
   path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
   # path = "/p/lidarrealism/data/rangeimgs/"
+  # path = "/p/lidarrealism/data/rangeimgs/00/"
 
   # files = np.array(glob.glob(path + "*/*.png", recursive = True))
-  files = np.array(glob.glob(path + "*.png", recursive = True))
+  files = np.array(glob.glob(path + "00[0-1]*.png", recursive = True))
   print(np.shape(files))
 
   # Parameters
@@ -150,17 +151,17 @@ def main():
 
 
   # Datasets
-  labels = np.ones(np.shape(files)[0]) # Labels we don't actually use these 
 
-  train_data, test_data, train_labels, test_labels = train_test_split(
-      files, labels, test_size=0.1, random_state=21
-  )
+  # train_data, test_data, train_labels, test_labels = train_test_split(
+  #     files, labels, test_size=0.1, random_state=21
+  # )
 
-  print(np.shape(train_data))
+  # print(np.shape(train_data))
+  print(np.shape(files))
 
   # Generators
-  training_generator = DataGenerator(train_data, train_data, **params)
-  validation_generator = DataGenerator(test_data, test_data, **params)
+  training_generator = DataGenerator(files, files, **params)
+  validation_generator = DataGenerator(files, files, **params)
 
   # autoencoder = AnomalyDetector()
   autoencoder = create_model()
