@@ -25,13 +25,13 @@ def create_model():
 
   # Encoder
   model.add(layers.Input(shape=(64, 1024, 1)))
-  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=64, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 16
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=32, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=16, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(8, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=8, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
   model.add(layers.Flatten())
   model.add(layers.Dense(4096, activation="sigmoid"))
@@ -39,15 +39,15 @@ def create_model():
   # Decoder 
   model.add(layers.Dense(4096,activation='sigmoid'))
   model.add(layers.Reshape((4, 64, 16)))
-  model.add(layers.Conv2D(8, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=8, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=16, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=32, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=64, kernel_size=(3, 3), strides=(1,1), activation='relu', padding='same')) # orig 16
   model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same'))
+  model.add(layers.Conv2D(1, kernel_size=(3, 3), strides=(1,1), activation='sigmoid', padding='same'))
 
   return model
 

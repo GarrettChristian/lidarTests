@@ -1,0 +1,172 @@
+(sump-venv) [rda2tc@affogato13 11encoderCopy]$ python trainModel.py 
+(40000,)
+(36000,)
+2022-04-04 17:08:50.588285: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-04-04 17:08:56.056967: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 10417 MB memory:  -> device: 0, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:04:00.0, compute capability: 6.1
+2022-04-04 17:08:56.144332: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 10417 MB memory:  -> device: 1, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:0a:00.0, compute capability: 6.1
+2022-04-04 17:08:56.145436: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 10417 MB memory:  -> device: 2, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:84:00.0, compute capability: 6.1
+2022-04-04 17:08:56.146622: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 10417 MB memory:  -> device: 3, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:8a:00.0, compute capability: 6.1
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 64, 1024, 64)      640       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 32, 512, 64)      0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 32, 512, 32)       18464     
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 16, 256, 32)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 16, 256, 16)       4624      
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 8, 128, 16)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 8, 128, 8)         1160      
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 4, 64, 8)         0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 2048)              0         
+                                                                 
+ dense (Dense)               (None, 4096)              8392704   
+                                                                 
+ dense_1 (Dense)             (None, 4096)              16781312  
+                                                                 
+ reshape (Reshape)           (None, 4, 64, 16)         0         
+                                                                 
+ conv2d_4 (Conv2D)           (None, 4, 64, 8)          1160      
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 8, 128, 8)        0         
+ )                                                               
+                                                                 
+ conv2d_5 (Conv2D)           (None, 8, 128, 16)        1168      
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 16, 256, 16)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_6 (Conv2D)           (None, 16, 256, 32)       4640      
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 32, 512, 32)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 32, 512, 64)       18496     
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 64, 1024, 64)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 64, 1024, 1)       577       
+                                                                 
+=================================================================
+Total params: 25,224,945
+Trainable params: 25,224,945
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/20
+2022-04-04 17:09:08.559643: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+2022-04-04 17:09:28.011144: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.01GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-04-04 17:09:28.047210: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 1.58GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-04-04 17:09:28.047259: W tensorflow/core/kernels/gpu_utils.cc:50] Failed to allocate memory for convolution redzone checking; skipping this check. This is benign and only means that we won't check cudnn for out-of-bounds reads and writes. This message will only be printed once.
+2022-04-04 17:09:30.898441: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 1.58GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-04-04 17:09:30.948830: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.01GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+2022-04-04 17:09:31.193495: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.59GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+360/360 [==============================] - 762s 2s/step - loss: 0.5864 - val_loss: 0.5763
+Epoch 2/20
+360/360 [==============================] - 207s 572ms/step - loss: 0.5751 - val_loss: 0.5732
+Epoch 3/20
+360/360 [==============================] - 221s 611ms/step - loss: 0.5732 - val_loss: 0.5721
+Epoch 4/20
+360/360 [==============================] - 265s 735ms/step - loss: 0.5723 - val_loss: 0.5712
+Epoch 5/20
+360/360 [==============================] - 217s 600ms/step - loss: 0.5716 - val_loss: 0.5707
+Epoch 6/20
+360/360 [==============================] - 210s 580ms/step - loss: 0.5711 - val_loss: 0.5703
+Epoch 7/20
+360/360 [==============================] - 207s 574ms/step - loss: 0.5706 - val_loss: 0.5699
+Epoch 8/20
+360/360 [==============================] - 206s 571ms/step - loss: 0.5702 - val_loss: 0.5695
+Epoch 9/20
+360/360 [==============================] - 240s 665ms/step - loss: 0.5699 - val_loss: 0.5692
+Epoch 10/20
+360/360 [==============================] - 214s 594ms/step - loss: 0.5696 - val_loss: 0.5692
+Epoch 11/20
+360/360 [==============================] - 216s 598ms/step - loss: 0.5693 - val_loss: 0.5689
+Epoch 12/20
+360/360 [==============================] - 215s 596ms/step - loss: 0.5691 - val_loss: 0.5685
+Epoch 13/20
+360/360 [==============================] - 219s 606ms/step - loss: 0.5689 - val_loss: 0.5683
+Epoch 14/20
+360/360 [==============================] - 216s 599ms/step - loss: 0.5687 - val_loss: 0.5683
+Epoch 15/20
+360/360 [==============================] - 241s 668ms/step - loss: 0.5685 - val_loss: 0.5679
+Epoch 16/20
+360/360 [==============================] - 222s 614ms/step - loss: 0.5683 - val_loss: 0.5679
+Epoch 17/20
+360/360 [==============================] - 222s 615ms/step - loss: 0.5682 - val_loss: 0.5677
+Epoch 18/20
+360/360 [==============================] - 214s 592ms/step - loss: 0.5680 - val_loss: 0.5676
+Epoch 19/20
+360/360 [==============================] - 214s 593ms/step - loss: 0.5679 - val_loss: 0.5675
+Epoch 20/20
+360/360 [==============================] - 215s 596ms/step - loss: 0.5678 - val_loss: 0.5674
+2022-04-04 18:35:11.219836: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.
+[rda2tc@portal03 11encoderCopy]$ cat trainModel.py 
+import numpy as np
+import tensorflow as tf
+
+
+from tensorflow.keras import layers
+from tensorflow import keras
+from keras.models import Sequential
+
+from PIL import Image
+from PIL import ImageOps
+
+
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Model
+
+import glob, os
+import struct
+
+# ----------------------------------------------------------------------------------------------------
+
+# https://blog.keras.io/building-autoencoders-in-keras.html
+# https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
+def create_model():
+  model = Sequential()
+
+  # Encoder
+  model.add(layers.Input(shape=(64, 1024, 1)))
+  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(8, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Flatten())
+  model.add(layers.Dense(4096, activation="sigmoid"))
+  
+  # Decoder 
+  model.add(layers.Dense(units=4096,activation='sigmoid'))
+  model.add(layers.Reshape((4, 64, 16)))
+  model.add(layers.Conv2D(8, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same'))
+
+  return model
+
+

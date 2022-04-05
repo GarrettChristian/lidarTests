@@ -1,0 +1,203 @@
+(sump-venv) [rda2tc@cheetah01 11encoderDense]$ python trainModel.py 
+(40000,)
+(32000,)
+2022-04-04 19:07:38.315239: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-04-04 19:07:40.361926: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 35711 MB memory:  -> device: 0, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:01:00.0, compute capability: 8.0
+2022-04-04 19:07:40.363851: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 38420 MB memory:  -> device: 1, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:41:00.0, compute capability: 8.0
+2022-04-04 19:07:40.365642: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 38420 MB memory:  -> device: 2, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:81:00.0, compute capability: 8.0
+2022-04-04 19:07:40.367558: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 38420 MB memory:  -> device: 3, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:c1:00.0, compute capability: 8.0
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 64, 1024, 64)      640       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 32, 512, 64)      0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 32, 512, 32)       18464     
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 16, 256, 32)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 16, 256, 32)       9248      
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 8, 128, 32)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 8, 128, 32)        9248      
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 4, 64, 32)        0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 8192)              0         
+                                                                 
+ dense (Dense)               (None, 8192)              67117056  
+                                                                 
+ dense_1 (Dense)             (None, 8192)              67117056  
+                                                                 
+ reshape (Reshape)           (None, 4, 64, 32)         0         
+                                                                 
+ conv2d_4 (Conv2D)           (None, 4, 64, 32)         9248      
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 8, 128, 32)       0         
+ )                                                               
+                                                                 
+ conv2d_5 (Conv2D)           (None, 8, 128, 32)        9248      
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 16, 256, 32)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_6 (Conv2D)           (None, 16, 256, 32)       9248      
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 32, 512, 32)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 32, 512, 64)       18496     
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 64, 1024, 64)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 64, 1024, 1)       577       
+                                                                 
+=================================================================
+Total params: 134,318,529
+Trainable params: 134,318,529
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/100
+2022-04-04 19:07:43.367874: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+2022-04-04 19:07:46.384881: I tensorflow/stream_executor/cuda/cuda_blas.cc:1786] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+213/213 [==============================] - 95s 411ms/step - loss: 0.5881 - val_loss: 0.5787
+Epoch 2/100
+213/213 [==============================] - 89s 417ms/step - loss: 0.5764 - val_loss: 0.5744
+Epoch 3/100
+213/213 [==============================] - 89s 418ms/step - loss: 0.5735 - val_loss: 0.5726
+Epoch 4/100
+213/213 [==============================] - 89s 415ms/step - loss: 0.5723 - val_loss: 0.5718
+Epoch 5/100
+213/213 [==============================] - 89s 418ms/step - loss: 0.5714 - val_loss: 0.5708
+Epoch 6/100
+213/213 [==============================] - 88s 412ms/step - loss: 0.5707 - val_loss: 0.5703
+Epoch 7/100
+213/213 [==============================] - 88s 414ms/step - loss: 0.5701 - val_loss: 0.5697
+Epoch 8/100
+213/213 [==============================] - 88s 412ms/step - loss: 0.5695 - val_loss: 0.5693
+Epoch 9/100
+213/213 [==============================] - 89s 414ms/step - loss: 0.5690 - val_loss: 0.5687
+Epoch 10/100
+213/213 [==============================] - 88s 414ms/step - loss: 0.5686 - val_loss: 0.5684
+Epoch 11/100
+213/213 [==============================] - 89s 418ms/step - loss: 0.5682 - val_loss: 0.5682
+Epoch 12/100
+213/213 [==============================] - 89s 415ms/step - loss: 0.5679 - val_loss: 0.5678
+Epoch 13/100
+213/213 [==============================] - 89s 415ms/step - loss: 0.5676 - val_loss: 0.5676
+Epoch 14/100
+213/213 [==============================] - 90s 420ms/step - loss: 0.5673 - val_loss: 0.5674
+Epoch 15/100
+213/213 [==============================] - 78s 363ms/step - loss: 0.5671 - val_loss: 0.5671
+Epoch 16/100
+...
+Epoch 78/100
+213/213 [==============================] - 88s 412ms/step - loss: 0.5632 - val_loss: 0.5658
+Epoch 79/100
+213/213 [==============================] - 88s 411ms/step - loss: 0.5632 - val_loss: 0.5658
+Epoch 80/100
+213/213 [==============================] - 90s 419ms/step - loss: 0.5632 - val_loss: 0.5658
+Epoch 81/100
+213/213 [==============================] - 88s 413ms/step - loss: 0.5632 - val_loss: 0.5658
+Epoch 82/100
+213/213 [==============================] - 89s 417ms/step - loss: 0.5632 - val_loss: 0.5659
+Epoch 83/100
+213/213 [==============================] - 88s 413ms/step - loss: 0.5632 - val_loss: 0.5658
+Epoch 84/100
+213/213 [==============================] - 121s 558ms/step - loss: 0.5631 - val_loss: 0.5658
+Epoch 85/100
+213/213 [==============================] - 90s 420ms/step - loss: 0.5631 - val_loss: 0.5660
+Epoch 86/100
+213/213 [==============================] - 89s 416ms/step - loss: 0.5631 - val_loss: 0.5658
+Epoch 87/100
+213/213 [==============================] - 89s 416ms/step - loss: 0.5631 - val_loss: 0.5660
+Epoch 88/100
+213/213 [==============================] - 88s 413ms/step - loss: 0.5631 - val_loss: 0.5659
+Epoch 89/100
+213/213 [==============================] - 90s 419ms/step - loss: 0.5630 - val_loss: 0.5659
+Epoch 90/100
+213/213 [==============================] - 89s 416ms/step - loss: 0.5630 - val_loss: 0.5659
+Epoch 91/100
+213/213 [==============================] - 88s 412ms/step - loss: 0.5630 - val_loss: 0.5660
+Epoch 92/100
+213/213 [==============================] - 89s 415ms/step - loss: 0.5630 - val_loss: 0.5659
+Epoch 93/100
+213/213 [==============================] - 85s 395ms/step - loss: 0.5630 - val_loss: 0.5659
+Epoch 94/100
+213/213 [==============================] - 77s 361ms/step - loss: 0.5630 - val_loss: 0.5659
+Epoch 95/100
+213/213 [==============================] - 83s 387ms/step - loss: 0.5630 - val_loss: 0.5659
+Epoch 96/100
+213/213 [==============================] - 90s 420ms/step - loss: 0.5629 - val_loss: 0.5659
+Epoch 97/100
+213/213 [==============================] - 89s 415ms/step - loss: 0.5629 - val_loss: 0.5660
+Epoch 98/100
+213/213 [==============================] - 89s 416ms/step - loss: 0.5629 - val_loss: 0.5659
+Epoch 99/100
+213/213 [==============================] - 90s 420ms/step - loss: 0.5629 - val_loss: 0.5661
+Epoch 100/100
+213/213 [==============================] - 89s 418ms/step - loss: 0.5629 - val_loss: 0.5660
+2022-04-04 22:10:09.207470: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.
+(sump-venv) [rda2tc@cheetah01 11encoderDense]$ cat trainModel.py 
+import numpy as np
+import tensorflow as tf
+
+
+from tensorflow.keras import layers
+from tensorflow import keras
+from keras.models import Sequential
+
+from PIL import Image
+from PIL import ImageOps
+
+
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Model
+
+import glob, os
+import struct
+
+# ----------------------------------------------------------------------------------------------------
+
+# https://blog.keras.io/building-autoencoders-in-keras.html
+# https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
+def create_model():
+  model = Sequential()
+
+  # Encoder
+  model.add(layers.Input(shape=(64, 1024, 1)))
+  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Flatten())
+  model.add(layers.Dense(8192, activation="sigmoid"))
+  
+  # Decoder 
+  model.add(layers.Dense(units=8192,activation='sigmoid'))
+  model.add(layers.Reshape((4, 64, 32)))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same'))
+
+  return model
