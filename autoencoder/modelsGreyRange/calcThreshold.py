@@ -53,7 +53,7 @@ def getSampleSet(basePath, sampleCount):
 # ------------------------------------
 
 # Load model
-modelName = '5pcdModel'
+modelName = '6pcdModel'
 autoencoder = keras.models.load_model(modelName)
 print("Info for ", modelName)
 
