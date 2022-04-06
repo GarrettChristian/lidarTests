@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 
-from tensorflow.keras import layers
+from tensorflow.keras import layers, losses
 from tensorflow import keras
 from keras.models import Sequential
 
@@ -27,27 +27,27 @@ def create_model():
 
   # Encoder
   model.add(layers.Input(shape=(64, 1024, 1)))
-  model.add(layers.Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=64, kernel_size=(5, 5), strides=(1, 1), activation='relu', padding='same')) # orig 16
+  model.add(layers.MaxPooling2D((2, 2), padding='same'))
+  model.add(layers.Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
   model.add(layers.Conv2D(filters=32, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(filters=16, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=32, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
   model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(filters=8, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
-  model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Flatten())
-  model.add(layers.Dense(4096, activation="sigmoid"))
+  #model.add(layers.Flatten())
+  #model.add(layers.Dense(4096, activation="sigmoid"))
   
   # Decoder 
-  model.add(layers.Dense(4096,activation='sigmoid'))
-  model.add(layers.Reshape((4, 64, 16)))
-  model.add(layers.Conv2D(filters=8, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
-  model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(filters=16, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
+  #model.add(layers.Dense(4096,activation='sigmoid'))
+ # model.add(layers.Reshape((4, 64, 16)))
+  model.add(layers.Conv2D(filters=32, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling2D((2, 2)))
   model.add(layers.Conv2D(filters=32, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=64, kernel_size=(3, 3), strides=(1, 1), activation='relu', padding='same')) # orig 8
+  model.add(layers.UpSampling2D((2, 2)))
+  model.add(layers.Conv2D(filters=64, kernel_size=(5, 5), strides=(1, 1), activation='relu', padding='same')) # orig 16
   model.add(layers.UpSampling2D((2, 2)))
   model.add(layers.Conv2D(1, kernel_size=(3, 3), strides=(1, 1), activation='sigmoid', padding='same'))
 
@@ -133,9 +133,9 @@ def main():
   # path = "/media/garrett/Extreme SSD/rangeimgs/00/"
   # path = "/Volumes/Extreme SSD/rangeimgs/00/"
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
-  path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
+  # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
   # path = "/p/lidarrealism/data/rangeimgs/"
-  # path = "/p/lidarrealism/data/rangeimgs/00/"
+  path = "/p/lidarrealism/data/rangeimgs/00/"
 
   # files = np.array(glob.glob(path + "*/*.png", recursive = True))
   files = np.array(glob.glob(path + "00[0-1]*.png", recursive = True))
@@ -165,14 +165,16 @@ def main():
 
   # autoencoder = AnomalyDetector()
   autoencoder = create_model()
-  autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+  autoencoder.compile(optimizer='adam', loss=losses.MeanSquaredError())
+  # autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
   print(autoencoder.summary())
 
-  history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20)
-  # history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20, use_multiprocessing=True)
+  # history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20)
+  history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=400, use_multiprocessing=True)
 
   autoencoder.save("pcdModel")
 
 
 if __name__ == '__main__':
     main()
+

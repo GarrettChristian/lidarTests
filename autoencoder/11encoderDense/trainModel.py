@@ -25,29 +25,21 @@ def create_model():
 
   # Encoder
   model.add(layers.Input(shape=(64, 1024, 1)))
-  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
-  model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Conv2D(8, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.MaxPooling2D((2, 2), padding='same'))
-  model.add(layers.Flatten())
+  model.add(layers.Flatten()) # 65536
+  model.add(layers.Dense(65536, activation="sigmoid"))
+  model.add(layers.Dense(32768, activation="sigmoid"))
+  model.add(layers.Dense(16384, activation="sigmoid"))
+  model.add(layers.Dense(8192, activation="sigmoid"))
   model.add(layers.Dense(4096, activation="sigmoid"))
+  
   
   # Decoder 
   model.add(layers.Dense(4096,activation='sigmoid'))
-  model.add(layers.Reshape((4, 64, 16)))
-  model.add(layers.Conv2D(8, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(16, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(32, (3, 3), activation='relu', padding='same')) # orig 8
-  model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='same')) # orig 16
-  model.add(layers.UpSampling2D((2, 2)))
-  model.add(layers.Conv2D(1, (3, 3), activation='sigmoid', padding='same'))
+  model.add(layers.Dense(8192, activation="sigmoid"))
+  model.add(layers.Dense(16384, activation="sigmoid"))
+  model.add(layers.Dense(32768, activation="sigmoid"))  
+  model.add(layers.Dense(65536, activation="sigmoid"))
+  model.add(layers.Reshape((64, 1024, 1)))
 
   return model
 
@@ -133,9 +125,10 @@ def main():
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
   path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
   # path = "/p/lidarrealism/data/rangeimgs/"
+  path = "/p/lidarrealism/data/rangeimgs/00/"
 
   # files = np.array(glob.glob(path + "*/*.png", recursive = True))
-  files = np.array(glob.glob(path + "*.png", recursive = True))
+  files = np.array(glob.glob(path + "00[0-1]*.png", recursive = True))
   print(np.shape(files))
 
   # Parameters
@@ -150,15 +143,15 @@ def main():
   # Datasets
   labels = np.ones(np.shape(files)[0]) # Labels we don't actually use these 
 
-  train_data, test_data, train_labels, test_labels = train_test_split(
-      files, labels, test_size=0.1, random_state=21
-  )
+  # train_data, test_data, train_labels, test_labels = train_test_split(
+  #     files, labels, test_size=0.1, random_state=21
+  # )
 
-  print(np.shape(train_data))
+  # print(np.shape(train_data))
 
   # Generators
-  training_generator = DataGenerator(train_data, train_data, **params)
-  validation_generator = DataGenerator(test_data, test_data, **params)
+  training_generator = DataGenerator(files, files, **params)
+  validation_generator = DataGenerator(files, files, **params)
 
   # autoencoder = AnomalyDetector()
   autoencoder = create_model()

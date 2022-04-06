@@ -10,8 +10,6 @@ from tensorflow.keras import layers, losses
 from tensorflow.keras.datasets import fashion_mnist
 from tensorflow.keras.models import Model
 
-import open3d as o3d
-
 import matplotlib.pyplot as plt
 
 import glob

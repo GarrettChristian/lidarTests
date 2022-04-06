@@ -21,7 +21,7 @@ def SSIMLoss(y_true, y_pred):
   return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, max_val=1.0))
 
 # Load model
-modelName = '3pcdModel'
+modelName = '7pcdModel'
 autoencoder = keras.models.load_model(modelName)
 print("Info for ", modelName)
 print(autoencoder.summary())
