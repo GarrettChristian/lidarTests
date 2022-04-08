@@ -29,7 +29,7 @@ pcd.points = o3d.utility.Vector3dVector(np_arr)
 
 
 print('voxelization')
-voxel_grid = o3d.geometry.VoxelGrid.create_from_point_cloud(pcd, voxel_size=0.5)
+voxel_grid = o3d.geometry.VoxelGrid.create_from_point_cloud(pcd, voxel_size=0.4)
 
 print(voxel_grid)
 # print(voxel_grid.get_voxels())
@@ -37,7 +37,11 @@ print(voxel_grid)
 
 print("w/o bounds")
 count = 0
+
+voxelGridExtract = []
 for voxel in voxel_grid.get_voxels():
+    # print(voxel.grid_index[0])
+    voxelGridExtract.append([voxel.grid_index[0], voxel.grid_index[1], voxel.grid_index[2]])
     count += 1
 print("Voxels", count)
 print("dim", voxel_grid.dimension())
@@ -45,4 +49,30 @@ print("max", voxel_grid.get_max_bound())
 print("min", voxel_grid.get_min_bound())
 
 
-o3d.visualization.draw_geometries([voxel_grid])
+# o3d.visualization.draw_geometries([voxel_grid])
+
+
+voxGrid = np.asarray(voxelGridExtract)
+print(np.shape(voxGrid))
+print(voxGrid[0])
+
+
+
+# voxelExtractionFunc = lambda voxel: 
+
+# voxelExtractionFunc(voxGrid)
+
+
+print(np.shape(voxGrid))
+print(voxGrid[0])
+# Sort by x, y, z
+np.lexsort((voxGrid[:,0], voxGrid[:,1], voxGrid[:,2]))
+
+
+
+# Get point cloud back from vox grid
+pcd = o3d.geometry.PointCloud()
+pcd.points = o3d.utility.Vector3dVector(voxGrid)
+o3d.visualization.draw_geometries([pcd])
+
+

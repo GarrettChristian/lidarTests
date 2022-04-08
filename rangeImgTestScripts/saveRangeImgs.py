@@ -40,10 +40,9 @@ for x in range(0, 1):
         fileName = os.path.basename(file)
         fileName = fileName.replace(".bin", "")
         
-        isExist = os.path.exists(fileName)
+        saveAt = "rangeimgs/" + folderNum + "/" + fileName + ".png"
+        isExist = os.path.exists(saveAt)
         if not isExist:
-            saveAt = "rangeimgs/" + folderNum + "/" + fileName + ".png"
-
             
             vis.set_new_pcd(file)
             vis.save(saveAt)
