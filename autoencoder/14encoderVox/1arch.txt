@@ -1,0 +1,102 @@
+
+
+
+
+
+--------------------------------------------------
+
+
+(sump-venv) [rda2tc@cheetah01 14encoderVox2]$ python trainModel.py 
+(40000,)
+(32000,)
+2022-04-08 21:48:37.542691: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-04-08 21:48:39.942601: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 38420 MB memory:  -> device: 0, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:01:00.0, compute capability: 8.0
+2022-04-08 21:48:39.944528: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 38420 MB memory:  -> device: 1, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:41:00.0, compute capability: 8.0
+2022-04-08 21:48:39.945968: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 25625 MB memory:  -> device: 2, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:81:00.0, compute capability: 8.0
+2022-04-08 21:48:39.947536: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 23171 MB memory:  -> device: 3, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:c1:00.0, compute capability: 8.0
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 256, 256, 32)      320       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 128, 128, 32)     0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 128, 128, 32)      9248      
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 64, 64, 32)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 64, 64, 64)        18496     
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 32, 32, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 32, 32, 64)        36928     
+                                                                 
+ up_sampling3d (UpSampling3D  (None, 64, 64, 128)      0         
+ )                                                               
+                                                                 
+ conv2d_4 (Conv2D)           (None, 64, 64, 32)        36896     
+                                                                 
+ up_sampling3d_1 (UpSampling  (None, 128, 128, 64)     0         
+ 3D)                                                             
+                                                                 
+ conv2d_5 (Conv2D)           (None, 128, 128, 32)      18464     
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 256, 256, 32)     0         
+ )                                                               
+                                                                 
+ conv2d_6 (Conv2D)           (None, 256, 256, 1)       289       
+                                                                 
+=================================================================
+Total params: 120,641
+Trainable params: 120,641
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/20
+2022-04-08 21:48:45.665160: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+320/320 [==============================] - 598s 2s/step - loss: 0.2438 - val_loss: 0.2095
+Epoch 2/20
+320/320 [==============================] - 595s 2s/step - loss: 0.2017 - val_loss: 0.1977
+Epoch 3/20
+320/320 [==============================] - 595s 2s/step - loss: 0.1902 - val_loss: 0.1848
+Epoch 4/20
+320/320 [==============================] - 594s 2s/step - loss: 0.1809 - val_loss: 0.1767
+Epoch 5/20
+320/320 [==============================] - 597s 2s/step - loss: 0.1732 - val_loss: 0.1800
+Epoch 6/20
+320/320 [==============================] - 595s 2s/step - loss: 0.1681 - val_loss: 0.1660
+Epoch 7/20
+320/320 [==============================] - 596s 2s/step - loss: 0.1737 - val_loss: 0.2182
+Epoch 8/20
+320/320 [==============================] - 629s 2s/step - loss: 0.1832 - val_loss: 0.1725
+Epoch 9/20
+320/320 [==============================] - 600s 2s/step - loss: 0.1661 - val_loss: 0.1653
+Epoch 10/20
+320/320 [==============================] - 608s 2s/step - loss: 0.1610 - val_loss: 0.1626
+Epoch 11/20
+320/320 [==============================] - 594s 2s/step - loss: 0.1576 - val_loss: 0.1580
+Epoch 12/20
+320/320 [==============================] - 595s 2s/step - loss: 0.1553 - val_loss: 0.1550
+Epoch 13/20
+320/320 [==============================] - 596s 2s/step - loss: 0.1529 - val_loss: 0.1529
+Epoch 14/20
+320/320 [==============================] - 606s 2s/step - loss: 0.1509 - val_loss: 0.1509
+Epoch 15/20
+320/320 [==============================] - 596s 2s/step - loss: 0.1491 - val_loss: 0.1491
+Epoch 16/20
+320/320 [==============================] - 596s 2s/step - loss: 0.1476 - val_loss: 0.1477
+Epoch 17/20
+320/320 [==============================] - 596s 2s/step - loss: 0.1461 - val_loss: 0.1474
+Epoch 18/20
+320/320 [==============================] - 596s 2s/step - loss: 0.1453 - val_loss: 0.1451
+Epoch 19/20
+320/320 [==============================] - 594s 2s/step - loss: 0.1437 - val_loss: 0.1451
+Epoch 20/20
+320/320 [==============================] - 596s 2s/step - loss: 0.1426 - val_loss: 0.1426
+2022-04-09 01:08:42.932705: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.
+(sump-venv) [rda2tc@cheetah01 14encoderVox2]$ python trainModel.py client_loop: send disconnect: Broken pipe
