@@ -38,7 +38,7 @@ def create_model():
   #model.add(layers.Conv3D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 8
   #model.add(layers.MaxPooling3D(2, padding='same'))
   
-  
+
   # Decoder 
   #model.add(layers.Conv3D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 8
   #model.add(layers.UpSampling3D(2))

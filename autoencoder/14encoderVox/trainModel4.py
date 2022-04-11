@@ -24,48 +24,23 @@ def create_model():
   model = Sequential()
 
   # Encoder
-  model.add(layers.Input(shape=(256, 256, 1)))
-  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  model.add(layers.MaxPooling2D(2, padding='same'))
-  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  model.add(layers.MaxPooling2D(2, padding='same'))
-  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  model.add(layers.MaxPooling2D(2, padding='same'))
-  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  model.add(layers.MaxPooling2D(2, padding='same'))
-  #model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  #model.add(layers.MaxPooling3D(2, padding='same'))
-  #model.add(layers.Conv3D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  #model.add(layers.MaxPooling3D(2, padding='same'))
-  #model.add(layers.Conv3D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same'))
-  #model.add(layers.MaxPooling3D(2, padding='same'))
+  model.add(layers.Input(shape=(128, 128, 16, 1)))
+  model.add(layers.Conv3D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
+  model.add(layers.MaxPooling3D(2, padding='same'))
+  model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
+  model.add(layers.MaxPooling3D(2, padding='same'))
+  model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 8
+  model.add(layers.MaxPooling3D(2, padding='same'))
+  
 
-  model.add(layers.Flatten())
-  model.add(layers.Dense(4096, activation="sigmoid"))
-  
-  
-  model.add(layers.Dense(4096,activation='sigmoid'))
-  model.add(layers.Reshape((16, 16, 16)))
-  
-  
   # Decoder 
-  #model.add(layers.Conv3D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  #model.add(layers.UpSampling3D(2))
-  #model.add(layers.Conv3D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  #model.add(layers.UpSampling3D(2))
-  #model.add(layers.Conv3D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  #model.add(layers.UpSampling3D(2))
-  #model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  #model.add(layers.UpSampling3D(2))
-  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 8
   model.add(layers.UpSampling3D(2))
-  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
   model.add(layers.UpSampling3D(2))
-  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.Conv3D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
   model.add(layers.UpSampling3D(2))
-  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
-  model.add(layers.UpSampling2D(2))
-  model.add(layers.Conv2D(1, kernel_size=3, strides=1, activation='sigmoid', padding='same'))
+  model.add(layers.Conv3D(1, kernel_size=3, strides=1, activation='sigmoid', padding='same'))
   # model.add(layers.Reshape((256, 256, 32, 1)))
 
   return model
@@ -99,8 +74,8 @@ class DataGenerator(keras.utils.Sequence):
   def __data_generation(self, list_IDs_temp):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
     # Initialization
-    # np.empty((self.batch_size, *self.dim, self.n_channels))
-    X = np.empty((self.batch_size, *self.dim))
+    X = np.empty((self.batch_size, *self.dim, self.n_channels))
+    # X = np.empty((self.batch_size, *self.dim))
     # y = np.empty((self.batch_size), dtype=int)
 
     # Generate data
@@ -112,13 +87,12 @@ class DataGenerator(keras.utils.Sequence):
 
         xyzArray = fromFile.reshape((int(np.shape(fromFile)[0]) // 3, 3))
 
-        grid = np.zeros((256, 256), dtype=np.float32)
-#        grid = np.zeros((256, 256, 32), dtype=np.float32)
+        grid = np.zeros((128, 128, 16), dtype=np.float32)
 
         for xyz in xyzArray:
-            grid[xyz[0]][xyz[1]] = 1
+            grid[xyz[0]][xyz[1]][xyz[2]] = 1
 
-        X[i,] = np.expand_dims(grid, axis=2)
+        X[i,] = np.expand_dims(grid, axis=3)
 
     return X, X
 
@@ -152,9 +126,11 @@ def main():
   # path = "/p/lidarrealism/data/rangeimgs/"
   # path = "/p/lidarrealism/data/rangeimgs/00/"
   # path = "/p/lidarrealism/data/voxel4/00/"
-  path = "/p/lidarrealism/data/voxels2/"
+  path = "/p/lidarrealism/data/voxel4/"
+  # path = "/p/lidarrealism/data/voxels2/"
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/voxelTestScripts/voxels4/00/"
   # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/"
+  path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels4/00/"
   # path = ""
 
   files = np.array(glob.glob(path + "*/*.bin", recursive = True))
@@ -164,7 +140,7 @@ def main():
   # Parameters
   # 'dim': (65536,),
   # 'dim': (64, 1024, 1)
-  params = {'dim': (256, 256, 1),
+  params = {'dim': (128, 128, 16),
             'batch_size': 100,
             'n_channels': 1,
             'shuffle': True}
