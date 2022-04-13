@@ -1,0 +1,321 @@
+
+(sump-venv) [rda2tc@cheetah01 14encoderVox]$ cat trainModel3.py 
+import numpy as np
+import tensorflow as tf
+
+
+from tensorflow.keras import layers, losses
+from tensorflow import keras
+from keras.models import Sequential
+
+from PIL import Image
+from PIL import ImageOps
+
+
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Model
+
+import glob, os
+import struct
+
+# ----------------------------------------------------------------------------------------------------
+
+# https://blog.keras.io/building-autoencoders-in-keras.html
+# https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
+def create_model():
+  model = Sequential()
+
+  # Encoder
+  model.add(layers.Input(shape=(256, 256, 1)))
+  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.MaxPooling2D(2, padding='same'))
+  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.MaxPooling2D(2, padding='same'))
+  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.MaxPooling2D(2, padding='same'))
+  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.MaxPooling2D(2, padding='same'))
+  #model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.MaxPooling2D(2, padding='same'))
+  #model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.MaxPooling3D(2, padding='same'))
+  #model.add(layers.Conv3D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.MaxPooling3D(2, padding='same'))
+  #model.add(layers.Conv3D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same'))
+  #model.add(layers.MaxPooling3D(2, padding='same'))
+
+  model.add(layers.Flatten())
+  model.add(layers.Dense(16384, activation="sigmoid"))
+  
+  
+  model.add(layers.Dense(16384,activation='sigmoid'))
+  model.add(layers.Reshape((16, 16, 64)))
+  
+  
+  # Decoder 
+  #model.add(layers.Conv3D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.UpSampling3D(2))
+  #model.add(layers.Conv3D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.UpSampling3D(2))
+  #model.add(layers.Conv3D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.UpSampling3D(2))
+  #model.add(layers.Conv3D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.UpSampling3D(2))
+  #model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.UpSampling2D(2))
+  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same'))  
+  model.add(layers.UpSampling2D(2))
+  model.add(layers.Conv2D(filters=64, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.UpSampling2D(2))
+  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.UpSampling2D(2))
+  model.add(layers.Conv2D(filters=32, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.UpSampling2D(2))
+  model.add(layers.Conv2D(1, kernel_size=3, strides=1, activation='sigmoid', padding='same'))
+  # model.add(layers.Reshape((256, 256, 32, 1)))
+
+  return model
+
+  
+
+
+# ----------------------------------------------------------------------------------------------------
+
+# Adapted from this tutorial:
+# https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly
+# https://gist.github.com/twolodzko/aa4f4ad52f16c293df40342929b025a4?short_path=4d6ba34
+# one above is really cool example of how the noise version works
+class DataGenerator(keras.utils.Sequence):
+  def __init__(self, list_IDs, labels, batch_size=100, dim=(2070272), n_channels=1, shuffle=True):
+      'Initialization'
+      self.dim = dim
+      self.batch_size = batch_size
+      self.labels = labels
+      self.list_IDs = list_IDs
+      self.n_channels = n_channels
+      self.shuffle = shuffle
+      self.on_epoch_end()
+
+  def on_epoch_end(self):
+    'Updates indexes after each epoch'
+    self.indexes = np.arange(len(self.list_IDs))
+    if self.shuffle == True:
+        np.random.shuffle(self.indexes)
+
+  def __data_generation(self, list_IDs_temp):
+    'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
+    # Initialization
+    # np.empty((self.batch_size, *self.dim, self.n_channels))
+    X = np.empty((self.batch_size, *self.dim))
+    # y = np.empty((self.batch_size), dtype=int)
+
+    # Generate data
+    for i, ID in enumerate(list_IDs_temp):
+        # Store sample
+        # X[i,] = np.load(ID)
+
+        fromFile = np.fromfile(ID, dtype=np.ubyte)
+
+        xyzArray = fromFile.reshape((int(np.shape(fromFile)[0]) // 3, 3))
+
+        grid = np.zeros((256, 256), dtype=np.float32)
+#        grid = np.zeros((256, 256, 32), dtype=np.float32)
+
+        for xyz in xyzArray:
+            grid[xyz[0]][xyz[1]] = 1
+
+        X[i,] = np.expand_dims(grid, axis=2)
+
+    return X, X
+
+  def __len__(self):
+    'Denotes the number of batches per epoch'
+    return int(np.floor(len(self.list_IDs) / self.batch_size))
+
+  def __getitem__(self, index):
+    'Generate one batch of data'
+    # Generate indexes of the batch
+    indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+
+    # Find list of IDs
+    list_IDs_temp = [self.list_IDs[k] for k in indexes]
+
+    # Generate data
+    X, y = self.__data_generation(list_IDs_temp)
+
+    return X, y
+
+
+# ----------------------------------------------------------------------------------------------------
+
+def main():
+
+  # PATH TO THE TRAINING FILES
+  # path = "/media/garrett/Extreme SSD/rangeimgs/00/"
+  # path = "/Volumes/Extreme SSD/rangeimgs/00/"
+  # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
+  # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
+  # path = "/p/lidarrealism/data/rangeimgs/"
+  # path = "/p/lidarrealism/data/rangeimgs/00/"
+  # path = "/p/lidarrealism/data/voxel4/00/"
+  path = "/p/lidarrealism/data/voxels2/"
+  # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/voxelTestScripts/voxels4/00/"
+  # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/"
+  # path = ""
+
+  files = np.array(glob.glob(path + "*/*.bin", recursive = True))
+  # files = np.array(glob.glob(path + "*.bin", recursive = True))
+  print(np.shape(files))
+
+  # Parameters
+  # 'dim': (65536,),
+  # 'dim': (64, 1024, 1)
+  params = {'dim': (256, 256, 1),
+            'batch_size': 100,
+            'n_channels': 1,
+            'shuffle': True}
+
+
+  # Datasets
+  labels = np.ones(np.shape(files)[0]) # Labels we don't actually use these 
+
+  train_data, test_data, train_labels, test_labels = train_test_split(
+      files, labels, test_size=0.2, random_state=21
+  )
+
+  print(np.shape(train_data))
+
+  # Generators
+  training_generator = DataGenerator(train_data, train_data, **params)
+  validation_generator = DataGenerator(test_data, test_data, **params)
+
+  # autoencoder = AnomalyDetector()
+  autoencoder = create_model()
+  autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+  print(autoencoder.summary())
+
+  # history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20)
+  history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20, use_multiprocessing=True)
+
+  autoencoder.save("pcdModel")
+
+
+if __name__ == '__main__':
+    main()
+(sump-venv) [rda2tc@cheetah01 14encoderVox]$ 
+
+
+
+
+(sump-venv) [rda2tc@cheetah01 14encoderVox]$ python trainModel3.py 
+(40000,)
+(32000,)
+2022-04-12 15:57:10.360249: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-04-12 15:57:11.966463: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 36695 MB memory:  -> device: 0, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:01:00.0, compute capability: 8.0
+2022-04-12 15:57:11.968495: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 38420 MB memory:  -> device: 1, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:41:00.0, compute capability: 8.0
+2022-04-12 15:57:11.970370: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 38420 MB memory:  -> device: 2, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:81:00.0, compute capability: 8.0
+2022-04-12 15:57:11.972125: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 38420 MB memory:  -> device: 3, name: NVIDIA A100-PCIE-40GB, pci bus id: 0000:c1:00.0, compute capability: 8.0
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 256, 256, 32)      320       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 128, 128, 32)     0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 128, 128, 32)      9248      
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 64, 64, 32)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 64, 64, 64)        18496     
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 32, 32, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 32, 32, 64)        36928     
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 16, 16, 64)       0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 16384)             0         
+                                                                 
+ dense (Dense)               (None, 16384)             268451840 
+                                                                 
+ dense_1 (Dense)             (None, 16384)             268451840 
+                                                                 
+ reshape (Reshape)           (None, 16, 16, 64)        0         
+                                                                 
+ conv2d_4 (Conv2D)           (None, 16, 16, 64)        36928     
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 32, 32, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_5 (Conv2D)           (None, 32, 32, 64)        36928     
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 64, 64, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_6 (Conv2D)           (None, 64, 64, 32)        18464     
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 128, 128, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 128, 128, 32)      9248      
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 256, 256, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 256, 256, 1)       289       
+                                                                 
+=================================================================
+Total params: 537,070,529
+Trainable params: 537,070,529
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/20
+2022-04-12 15:57:20.706545: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+2022-04-12 15:57:22.420492: I tensorflow/stream_executor/cuda/cuda_blas.cc:1786] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+320/320 [==============================] - 1365s 4s/step - loss: 0.3759 - val_loss: 0.3408
+Epoch 2/20
+320/320 [==============================] - 623s 2s/step - loss: 0.3187 - val_loss: 0.3182
+Epoch 3/20
+320/320 [==============================] - 632s 2s/step - loss: 0.3017 - val_loss: 0.2972
+Epoch 4/20
+320/320 [==============================] - 625s 2s/step - loss: 0.2938 - val_loss: 0.2921
+Epoch 5/20
+320/320 [==============================] - 628s 2s/step - loss: 0.2884 - val_loss: 0.2874
+Epoch 6/20
+320/320 [==============================] - 620s 2s/step - loss: 0.2846 - val_loss: 0.2817
+Epoch 7/20
+320/320 [==============================] - 627s 2s/step - loss: 0.2798 - val_loss: 0.2795
+Epoch 8/20
+320/320 [==============================] - 620s 2s/step - loss: 0.2771 - val_loss: 0.2772
+Epoch 9/20
+320/320 [==============================] - 619s 2s/step - loss: 0.2742 - val_loss: 0.2742
+Epoch 10/20
+320/320 [==============================] - 623s 2s/step - loss: 0.2724 - val_loss: 0.2739
+Epoch 11/20
+320/320 [==============================] - 622s 2s/step - loss: 0.2693 - val_loss: 0.2738
+Epoch 12/20
+320/320 [==============================] - 620s 2s/step - loss: 0.2679 - val_loss: 0.2677
+Epoch 13/20
+320/320 [==============================] - 622s 2s/step - loss: 0.2659 - val_loss: 0.2693
+Epoch 14/20
+320/320 [==============================] - 620s 2s/step - loss: 0.2652 - val_loss: 0.2650
+Epoch 15/20
+320/320 [==============================] - 619s 2s/step - loss: 0.2634 - val_loss: 0.2642
+Epoch 16/20
+320/320 [==============================] - 627s 2s/step - loss: 0.2617 - val_loss: 0.2635
+Epoch 17/20
+320/320 [==============================] - 623s 2s/step - loss: 0.2606 - val_loss: 0.2633
+Epoch 18/20
+320/320 [==============================] - 625s 2s/step - loss: 0.2596 - val_loss: 0.2619
+Epoch 19/20
+320/320 [==============================] - 619s 2s/step - loss: 0.2588 - val_loss: 0.2599
+Epoch 20/20
+320/320 [==============================] - 622s 2s/step - loss: 0.2574 - val_loss: 0.2596
+2022-04-12 19:38:16.766858: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.

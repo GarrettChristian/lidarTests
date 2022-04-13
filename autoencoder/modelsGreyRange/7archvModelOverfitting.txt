@@ -340,7 +340,6 @@ def create_model():
   
 
 
-# ----------------------------------------------------------------------------------------------------
 
 # Adapted from this tutorial:
 # https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly
@@ -409,7 +408,7 @@ class DataGenerator(keras.utils.Sequence):
     return X, y
 
 
-# ----------------------------------------------------------------------------------------------------
+
 
 def main():
 
@@ -691,7 +690,7 @@ from tensorflow.keras.models import Model
 import glob, os
 import struct
 
-# ----------------------------------------------------------------------------------------------------
+
 
 # https://blog.keras.io/building-autoencoders-in-keras.html
 # https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
@@ -735,7 +734,6 @@ def create_model():
   
 
 
-# ----------------------------------------------------------------------------------------------------
 
 # Adapted from this tutorial:
 # https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly
@@ -931,7 +929,6 @@ from tensorflow.keras.models import Model
 import glob, os
 import struct
 
-# ----------------------------------------------------------------------------------------------------
 
 # https://blog.keras.io/building-autoencoders-in-keras.html
 # https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
@@ -1086,7 +1083,7 @@ from tensorflow.keras.models import Model
 import glob, os
 import struct
 
-# ----------------------------------------------------------------------------------------------------
+
 
 # https://blog.keras.io/building-autoencoders-in-keras.html
 # https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
@@ -1239,7 +1236,7 @@ from tensorflow.keras.models import Model
 import glob, os
 import struct
 
-# ----------------------------------------------------------------------------------------------------
+
 
 # https://blog.keras.io/building-autoencoders-in-keras.html
 # https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
@@ -1379,7 +1376,7 @@ from tensorflow.keras.models import Model
 import glob, os
 import struct
 
-# ----------------------------------------------------------------------------------------------------
+
 
 # https://blog.keras.io/building-autoencoders-in-keras.html
 # https://ai.stackexchange.com/questions/19891/how-to-add-a-dense-layer-after-a-2d-convolutional-layer-in-a-convolutional-autoe
@@ -1411,7 +1408,8 @@ def create_model():
   
 
 
-# ----------------------------------------------------------------------------------------------------
+
+
 
 # Adapted from this tutorial:
 # https://stanford.edu/~shervine/blog/keras-how-to-generate-data-on-the-fly
@@ -1480,7 +1478,8 @@ class DataGenerator(keras.utils.Sequence):
     return X, y
 
 
-# ----------------------------------------------------------------------------------------------------
+
+
 
 def main():
 

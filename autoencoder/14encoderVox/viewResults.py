@@ -21,7 +21,7 @@ def SSIMLoss(y_true, y_pred):
   return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, max_val=1.0))
 
 # Load model
-autoencoder = keras.models.load_model('1pcdModel')
+autoencoder = keras.models.load_model('4pcdModel')
 
 # Get test images
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
