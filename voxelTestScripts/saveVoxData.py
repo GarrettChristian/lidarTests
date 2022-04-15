@@ -10,7 +10,7 @@ import sys
 
 
 path = "/Volumes/Extreme SSD/semKitti/dataset/sequences/"
-saveBase = "voxels4"
+saveBase = "voxels8"
 
 
 # Set up directories if they don't exist
@@ -54,7 +54,7 @@ for x in range(0, 22):
             pcd = o3d.geometry.PointCloud()
             pcd.points = o3d.utility.Vector3dVector(np_arr)
 
-            voxel_grid = o3d.geometry.VoxelGrid.create_from_point_cloud(pcd, voxel_size=0.4)
+            voxel_grid = o3d.geometry.VoxelGrid.create_from_point_cloud(pcd, voxel_size=0.8)
 
             voxGrid = []
 
@@ -64,7 +64,7 @@ for x in range(0, 22):
                 y = voxel.grid_index[1]
                 z = voxel.grid_index[2]
 
-                if (x < 128 and y < 128 and z < 16):
+                if (x < 64 and y < 64 and z < 8):
 
                     voxGrid.append(x)
                     voxGrid.append(y)

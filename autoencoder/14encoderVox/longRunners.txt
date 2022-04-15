@@ -1,0 +1,501 @@
+
+NOTE 
+all these models ended up getting killed
+
+
+----------------------------------------
+Model 4 / lynx03 / 14encoderVox2
+11:11:07
+
+
+(sump-venv) [rda2tc@lynx03 14encoderVox2]$ python trainModel3.py 
+(40000,)
+(32000,)
+2022-04-13 22:09:19.096748: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-04-13 22:09:21.423708: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 10417 MB memory:  -> device: 0, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:04:00.0, compute capability: 6.1
+2022-04-13 22:09:21.425816: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 10417 MB memory:  -> device: 1, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:0a:00.0, compute capability: 6.1
+2022-04-13 22:09:21.427089: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 10417 MB memory:  -> device: 2, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:84:00.0, compute capability: 6.1
+2022-04-13 22:09:21.428781: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 10417 MB memory:  -> device: 3, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:8a:00.0, compute capability: 6.1
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 256, 256, 32)      320       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 128, 128, 32)     0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 128, 128, 32)      9248      
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 64, 64, 32)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 64, 64, 64)        18496     
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 32, 32, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 32, 32, 64)        36928     
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 16, 16, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_4 (Conv2D)           (None, 16, 16, 64)        36928     
+                                                                 
+ max_pooling2d_4 (MaxPooling  (None, 8, 8, 64)         0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 4096)              0         
+                                                                 
+ dense (Dense)               (None, 4096)              16781312  
+                                                                 
+ dense_1 (Dense)             (None, 4096)              16781312  
+                                                                 
+ reshape (Reshape)           (None, 8, 8, 64)          0         
+                                                                 
+ conv2d_5 (Conv2D)           (None, 8, 8, 64)          36928     
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 16, 16, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_6 (Conv2D)           (None, 16, 16, 64)        36928     
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 32, 32, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 32, 32, 64)        36928     
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 64, 64, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 64, 64, 32)        18464     
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 128, 128, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_9 (Conv2D)           (None, 128, 128, 32)      9248      
+                                                                 
+ up_sampling2d_4 (UpSampling  (None, 256, 256, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_10 (Conv2D)          (None, 256, 256, 1)       289       
+                                                                 
+=================================================================
+Total params: 33,803,329
+Trainable params: 33,803,329
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/100
+2022-04-13 22:09:31.819133: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+250/250 [==============================] - 1273s 5s/step - loss: 0.3483 - val_loss: 0.3235
+Epoch 2/100
+250/250 [==============================] - 634s 3s/step - loss: 0.3110 - val_loss: 0.3033
+Epoch 3/100
+250/250 [==============================] - 598s 2s/step - loss: 0.2989 - val_loss: 0.2996
+Epoch 4/100
+250/250 [==============================] - 584s 2s/step - loss: 0.2914 - val_loss: 0.2899
+Epoch 5/100
+250/250 [==============================] - 583s 2s/step - loss: 0.2856 - val_loss: 0.2850
+Epoch 6/100
+250/250 [==============================] - 604s 2s/step - loss: 0.2818 - val_loss: 0.2821
+Epoch 7/100
+250/250 [==============================] - 587s 2s/step - loss: 0.2790 - val_loss: 0.2782
+Epoch 8/100
+250/250 [==============================] - 595s 2s/step - loss: 0.2763 - val_loss: 0.2786
+Epoch 9/100
+250/250 [==============================] - 634s 3s/step - loss: 0.2742 - val_loss: 0.2754
+Epoch 10/100
+250/250 [==============================] - 629s 3s/step - loss: 0.2726 - val_loss: 0.2756
+Epoch 11/100
+250/250 [==============================] - 639s 3s/step - loss: 0.2709 - val_loss: 0.2719
+Epoch 12/100
+250/250 [==============================] - 621s 2s/step - loss: 0.2695 - val_loss: 0.2720
+Epoch 13/100
+250/250 [==============================] - 640s 3s/step - loss: 0.2682 - val_loss: 0.2694
+Epoch 14/100
+250/250 [==============================] - 642s 3s/step - loss: 0.2673 - val_loss: 0.2690
+Epoch 15/100
+250/250 [==============================] - 643s 3s/step - loss: 0.2660 - val_loss: 0.2700
+Epoch 16/100
+250/250 [==============================] - 642s 3s/step - loss: 0.2652 - val_loss: 0.2673
+Epoch 17/100
+250/250 [==============================] - 626s 3s/step - loss: 0.2642 - val_loss: 0.2667
+Epoch 18/100
+250/250 [==============================] - 617s 2s/step - loss: 0.2634 - val_loss: 0.2670
+Epoch 19/100
+250/250 [==============================] - 636s 3s/step - loss: 0.2627 - val_loss: 0.2654
+Epoch 20/100
+250/250 [==============================] - 621s 2s/step - loss: 0.2620 - val_loss: 0.2656
+Epoch 21/100
+250/250 [==============================] - 618s 2s/step - loss: 0.2610 - val_loss: 0.2644
+Epoch 22/100
+250/250 [==============================] - 604s 2s/step - loss: 0.2604 - val_loss: 0.2637
+Epoch 23/100
+250/250 [==============================] - 593s 2s/step - loss: 0.2598 - val_loss: 0.2631
+Epoch 24/100
+250/250 [==============================] - 678s 3s/step - loss: 0.2593 - val_loss: 0.2625
+Epoch 25/100
+250/250 [==============================] - 654s 3s/step - loss: 0.2588 - val_loss: 0.2622
+Epoch 26/100
+250/250 [==============================] - 604s 2s/step - loss: 0.2583 - val_loss: 0.2621
+Epoch 27/100
+250/250 [==============================] - 587s 2s/step - loss: 0.2574 - val_loss: 0.2620
+Epoch 28/100
+250/250 [==============================] - 605s 2s/step - loss: 0.2572 - val_loss: 0.2618
+Epoch 29/100
+250/250 [==============================] - 622s 2s/step - loss: 0.2564 - val_loss: 0.2614
+Epoch 30/100
+250/250 [==============================] - 605s 2s/step - loss: 0.2561 - val_loss: 0.2618
+Epoch 31/100
+250/250 [==============================] - 626s 2s/step - loss: 0.2554 - val_loss: 0.2608
+Epoch 32/100
+250/250 [==============================] - 583s 2s/step - loss: 0.2551 - val_loss: 0.2599
+Epoch 33/100
+250/250 [==============================] - 623s 2s/step - loss: 0.2545 - val_loss: 0.2624
+Epoch 34/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2543 - val_loss: 0.2597
+Epoch 35/100
+250/250 [==============================] - 580s 2s/step - loss: 0.2537 - val_loss: 0.2595
+Epoch 36/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2531 - val_loss: 0.2583
+Epoch 37/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2529 - val_loss: 0.2585
+Epoch 38/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2525 - val_loss: 0.2586
+Epoch 39/100
+250/250 [==============================] - 599s 2s/step - loss: 0.2521 - val_loss: 0.2582
+Epoch 40/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2516 - val_loss: 0.2583
+Epoch 41/100
+250/250 [==============================] - 598s 2s/step - loss: 0.2511 - val_loss: 0.2572
+Epoch 42/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2509 - val_loss: 0.2585
+Epoch 43/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2506 - val_loss: 0.2579
+Epoch 44/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2502 - val_loss: 0.2571
+Epoch 45/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2498 - val_loss: 0.2572
+Epoch 46/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2495 - val_loss: 0.2571
+Epoch 47/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2491 - val_loss: 0.2574
+Epoch 48/100
+250/250 [==============================] - 580s 2s/step - loss: 0.2488 - val_loss: 0.2573
+Epoch 49/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2485 - val_loss: 0.2565
+Epoch 50/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2481 - val_loss: 0.2578
+Epoch 51/100
+250/250 [==============================] - 580s 2s/step - loss: 0.2479 - val_loss: 0.2570
+Epoch 52/100
+250/250 [==============================] - 601s 2s/step - loss: 0.2475 - val_loss: 0.2560
+Epoch 53/100
+250/250 [==============================] - 601s 2s/step - loss: 0.2473 - val_loss: 0.2561
+Epoch 54/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2471 - val_loss: 0.2559
+Epoch 55/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2467 - val_loss: 0.2562
+Epoch 56/100
+250/250 [==============================] - 582s 2s/step - loss: 0.2463 - val_loss: 0.2557
+Epoch 57/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2461 - val_loss: 0.2558
+Epoch 58/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2459 - val_loss: 0.2561
+Epoch 59/100
+250/250 [==============================] - 600s 2s/step - loss: 0.2455 - val_loss: 0.2555
+Epoch 60/100
+250/250 [==============================] - 590s 2s/step - loss: 0.2453 - val_loss: 0.2569
+Epoch 61/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2452 - val_loss: 0.2561
+Epoch 62/100
+250/250 [==============================] - 601s 2s/step - loss: 0.2447 - val_loss: 0.2555
+Epoch 63/100
+250/250 [==============================] - 581s 2s/step - loss: 0.2446 - val_loss: 0.2549
+Epoch 64/100
+188/250 [=====================>........] - ETA: 1:52 - loss: 0.2443
+
+
+
+----------------------------------------
+Model 3 / lynx11 / 14encoderVox4
+11:32:34
+
+
+
+(sump-venv) [rda2tc@lynx11 14encoderVox4]$ python trainModel3.py 
+(40000,)
+(32000,)
+2022-04-13 21:50:24.222141: E tensorflow/stream_executor/cuda/cuda_driver.cc:271] failed call to cuInit: CUDA_ERROR_UNKNOWN: unknown error
+2022-04-13 21:50:24.222220: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:169] retrieving CUDA diagnostic information for host: lynx11
+2022-04-13 21:50:24.222238: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:176] hostname: lynx11
+2022-04-13 21:50:24.222370: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:200] libcuda reported version is: 418.87.0
+2022-04-13 21:50:24.222435: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:204] kernel reported version is: 418.87.0
+2022-04-13 21:50:24.222449: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:310] kernel version seems to match DSO: 418.87.0
+2022-04-13 21:50:24.223119: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network L
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 256, 256, 32)      320       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 128, 128, 32)     0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 128, 128, 32)      9248      
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 64, 64, 32)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 64, 64, 64)        18496     
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 32, 32, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 32, 32, 64)        36928     
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 16, 16, 64)       0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 16384)             0         
+                                                                 
+ dense (Dense)               (None, 16384)             268451840 
+                                                                 
+ dense_1 (Dense)             (None, 16384)             268451840 
+                                                                 
+ reshape (Reshape)           (None, 16, 16, 64)        0         
+                                                                 
+ conv2d_4 (Conv2D)           (None, 16, 16, 64)        36928     
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 32, 32, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_5 (Conv2D)           (None, 32, 32, 64)        36928     
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 64, 64, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_6 (Conv2D)           (None, 64, 64, 32)        18464     
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 128, 128, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 128, 128, 32)      9248      
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 256, 256, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 256, 256, 1)       289       
+                                                                 
+=================================================================
+Total params: 537,070,529
+Trainable params: 537,070,529
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/25
+125/125 [==============================] - 10317s 82s/step - loss: 0.3943 - val_loss: 0.3707
+Epoch 2/25
+125/125 [==============================] - 10255s 82s/step - loss: 0.3580 - val_loss: 0.3459
+Epoch 3/25
+125/125 [==============================] - 10273s 82s/step - loss: 0.3272 - val_loss: 0.3152
+Epoch 4/25
+125/125 [==============================] - 10278s 82s/step - loss: 0.3115 - val_loss: 0.3069
+Epoch 5/25
+
+
+
+
+----------------------------------------
+Model 2 / lynx12 / 12encoder2
+18:24:05
+
+
+(sump-venv) [rda2tc@lynx12 12encoder2]$ python trainModel.py 
+(40000,)
+(36000,)
+2022-04-13 14:56:10.428133: E tensorflow/stream_executor/cuda/cuda_driver.cc:271] failed call to cuInit: CUDA_ERROR_UNKNOWN: unknown error
+2022-04-13 14:56:10.428378: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:169] retrieving CUDA diagnostic information for host: lynx12
+2022-04-13 14:56:10.428399: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:176] hostname: lynx12
+2022-04-13 14:56:10.428682: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:200] libcuda reported version is: 418.87.0
+2022-04-13 14:56:10.428774: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:204] kernel reported version is: 418.87.0
+2022-04-13 14:56:10.428805: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:310] kernel version seems to match DSO: 418.87.0
+2022-04-13 14:56:10.429697: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 64, 1024, 32)      320       
+                                                                 
+ batch_normalization (BatchN  (None, 64, 1024, 32)     128       
+ ormalization)                                                   
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 32, 512, 32)      0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 32, 512, 64)       18496     
+                                                                 
+ batch_normalization_1 (Batc  (None, 32, 512, 64)      256       
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 16, 256, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 16, 256, 64)       36928     
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 8, 128, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 8, 128, 64)        36928     
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 4, 64, 64)        0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 16384)             0         
+                                                                 
+ dense (Dense)               (None, 16384)             268451840 
+                                                                 
+ dense_1 (Dense)             (None, 16384)             268451840 
+                                                                 
+ reshape (Reshape)           (None, 4, 64, 64)         0         
+                                                                 
+ conv2d_4 (Conv2D)           (None, 4, 64, 64)         36928     
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 8, 128, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_5 (Conv2D)           (None, 8, 128, 64)        36928     
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 16, 256, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_6 (Conv2D)           (None, 16, 256, 64)       36928     
+                                                                 
+ batch_normalization_2 (Batc  (None, 16, 256, 64)      256       
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 32, 512, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 32, 512, 32)       18464     
+                                                                 
+ batch_normalization_3 (Batc  (None, 32, 512, 32)      128       
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 64, 1024, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 64, 1024, 1)       289       
+                                                                 
+=================================================================
+Total params: 537,126,657
+Trainable params: 537,126,273
+Non-trainable params: 384
+_________________________________________________________________
+None
+Epoch 1/50
+140/140 [==============================] - 14630s 104s/step - loss: 0.5987 - val_loss: 0.5908
+Epoch 2/50
+140/140 [==============================] - 14561s 104s/step - loss: 0.5827 - val_loss: 0.5841
+Epoch 3/50
+140/140 [==============================] - 14558s 104s/step - loss: 0.5821 - val_loss: 0.5818
+Epoch 4/50
+140/140 [==============================] - 14557s 104s/step - loss: 0.5818 - val_loss: 0.5814
+Epoch 5/50
+ 75/140 [===============>..............] - ETA: 1:50:09 - loss: 0.5817
+
+
+
+----------------------------------------
+Model 1 / ai01 / 12encoderDreamBigger
+19:29:33
+
+(sump-venv) [rda2tc@ai01 12encoderDreamBigger]$ python trainModel.py 
+(40000,)
+(36000,)
+2022-04-13 14:13:41.235813: E tensorflow/stream_executor/cuda/cuda_driver.cc:271] failed call to cuInit: CUDA_ERROR_UNKNOWN: unknown error
+2022-04-13 14:13:41.235964: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:169] retrieving CUDA diagnostic information for host: ai01
+2022-04-13 14:13:41.236007: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:176] hostname: ai01
+2022-04-13 14:13:41.236148: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:200] libcuda reported version is: 470.57.2
+2022-04-13 14:13:41.236216: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:204] kernel reported version is: 470.57.2
+2022-04-13 14:13:41.236228: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:310] kernel version seems to match DSO: 470.57.2
+2022-04-13 14:13:41.236945: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 64, 1024, 32)      320       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 32, 512, 32)      0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 32, 512, 64)       18496     
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 16, 256, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 16, 256, 64)       36928     
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 8, 128, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 8, 128, 64)        36928     
+                                                                 
+ max_pooling2d_3 (MaxPooling  (None, 4, 64, 64)        0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 16384)             0         
+                                                                 
+ dense (Dense)               (None, 16384)             268451840 
+                                                                 
+ dense_1 (Dense)             (None, 16384)             268451840 
+                                                                 
+ reshape (Reshape)           (None, 4, 64, 64)         0         
+                                                                 
+ conv2d_4 (Conv2D)           (None, 4, 64, 64)         36928     
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 8, 128, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_5 (Conv2D)           (None, 8, 128, 64)        36928     
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 16, 256, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_6 (Conv2D)           (None, 16, 256, 64)       36928     
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 32, 512, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 32, 512, 32)       18464     
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 64, 1024, 32)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 64, 1024, 1)       289       
+                                                                 
+=================================================================
+Total params: 537,125,889
+Trainable params: 537,125,889
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/100
+140/140 [==============================] - 13068s 93s/step - loss: 0.5903 - val_loss: 0.5824
+Epoch 2/100
+140/140 [==============================] - 13025s 93s/step - loss: 0.5825 - val_loss: 0.5819
+Epoch 3/100
+140/140 [==============================] - 13869s 99s/step - loss: 0.5819 - val_loss: 0.5811
+Epoch 4/100
+140/140 [==============================] - 14104s 101s/step - loss: 0.5807 - val_loss: 0.5785
+Epoch 5/100
+140/140 [==============================] - 14128s 101s/step - loss: 0.5775 - val_loss: 0.5751
+Epoch 6/100
+  2/140 [..............................] - ETA: 3:47:19 - loss: 0.5763
+
+
