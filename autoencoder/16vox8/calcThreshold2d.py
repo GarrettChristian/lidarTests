@@ -29,7 +29,7 @@ def SSIMLoss(y_true, y_pred):
 def convertVox(path):
     fromFile = np.fromfile(path, dtype=np.ubyte)
     xyzArray = fromFile.reshape((int(np.shape(fromFile)[0]) // 3, 3))
-    grid = np.zeros((256, 256), dtype=np.float32)
+    grid = np.zeros((64, 64), dtype=np.float32)
     for xyz in xyzArray:
         grid[xyz[0]][xyz[1]] = 1
 
@@ -67,7 +67,7 @@ print("Info for ", modelName)
 # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/"
 # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/"
 # path = "/Volumes/Extreme SSD/rangeimgs/"
-path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/"
+path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels8/"
 samples = getSampleSet(path, 1000)
 
 # print(samples)
@@ -84,23 +84,23 @@ reconstructions = autoencoder.predict([samples])
 ssimLoss = SSIMLoss(samples, reconstructions)
 
 print("----------------------------------------")
-print("100 random of train/val section")
+print("1000 random of train/val section")
 print("Loss: ", ssimLoss)
 
 print("----------------------------------------")
-pathHidden = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/hiddenVox2/"
+pathHidden = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/hiddenVox8/"
 samplesHidden = getSampleSet(path, 1000)
 
 reconstructionsHidden = autoencoder.predict([samplesHidden])
 ssimLossHidden = SSIMLoss(samples, reconstructionsHidden)
 
 print(ssimLoss)
-print("100 random of train/val section")
+print("1000 random of train/val section")
 print("Loss: ", ssimLossHidden)
 
 print("----------------------------------------")
 
-path00 = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/000000.bin"
+path00 = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels8/00/000000.bin"
 controlImage = convertVox(path00)
 control = np.array([controlImage])
 
@@ -112,14 +112,19 @@ print("Loss: ", ssimLossControl)
 
 print("----------------------------------------")
 
-pathUn2 = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/vox2/noRoad00Vox2.bin"
-un2Image = convertVox(pathUn2)
+grid = np.ones((64, 64), dtype=np.float32)
+for x in range(0, 64):
+    for y in range(0, 64):
+        if (x % 2 == 0 and y % 2 == 0):
+            grid[x][y] = 0
+
+un2Image = np.expand_dims(grid, axis=2)
 un2 = np.array([un2Image])
 
 reconstructionsUn2 = autoencoder.predict([un2])
 ssimLossUn2 = SSIMLoss(un2, reconstructionsUn2)
 
-print("Loss on no road")
+print("Loss on noisy")
 print("Loss: ", ssimLossUn2)
 
 

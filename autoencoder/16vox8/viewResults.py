@@ -30,9 +30,11 @@ autoencoder = keras.models.load_model('4pcdModel')
 # testImage = "unrealistic1.png"
 # testImage = "/Volumes/Extreme SSD/rangeimgs/21/000000.png"
 # testImage = "/Volumes/Extreme SSD/rangeimgs/21/000000.png"
-binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/000000.bin"
+# binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/000000.bin"
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/21/000000.bin"
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/vox2/noRoad00Vox2.bin"
+# binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels8/00/000000.bin"
+binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/hiddenVox8/20/000000.bin"
 
 # binFileName = "test.bin"
 
@@ -41,7 +43,7 @@ fromFile = np.fromfile(binFileName, dtype=np.ubyte)
 
 xyzArray = fromFile.reshape((int(np.shape(fromFile)[0]) // 3, 3))
 
-grid = np.zeros((256, 256), dtype=np.float32)
+grid = np.zeros((64, 64), dtype=np.float32)
 #        grid = np.zeros((256, 256, 32), dtype=np.float32)s
 
 for xyz in xyzArray:
@@ -54,8 +56,8 @@ test_arr = np.array([test_arr])
 print(np.shape(test_arr))
 
 ogVoxArray = []
-for x in range (256):
-    for y in range (256):
+for x in range (64):
+    for y in range (64):
           if (test_arr[0][x][y][0] > 0.5):
                 ogVoxArray.append(x)
                 ogVoxArray.append(y)
@@ -82,8 +84,8 @@ decoded_data0 = decoded_data[0]
 # print(decoded_data0)
 
 voxArray = []
-for x in range (256):
-    for y in range (256):
+for x in range (64):
+    for y in range (64):
           if (decoded_data0[x][y][0] > 0.5):
                 voxArray.append(x)
                 voxArray.append(y)

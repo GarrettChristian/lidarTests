@@ -25,20 +25,43 @@ def create_model():
 
   # Encoder
   model.add(layers.Input(shape=(64, 64, 1)))
-  model.add(layers.Conv2D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same'))
+  model.add(layers.BatchNormalization())
+  model.add(layers.LeakyReLU(alpha=0.2))
   model.add(layers.MaxPooling2D(2, padding='same'))
-  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.BatchNormalization())
+  model.add(layers.LeakyReLU(alpha=0.2))
   model.add(layers.MaxPooling2D(2, padding='same'))
-  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 8
+  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.BatchNormalization())
+  model.add(layers.LeakyReLU(alpha=0.2))
   model.add(layers.MaxPooling2D(2, padding='same'))
-  
+  #model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.MaxPooling2D(2, padding='same'))
 
+  #model.add(layers.Flatten())
+  #model.add(layers.Dense(128, activation="sigmoid"))
+  #model.add(layers.Dense(64,activation='sigmoid'))
+
+  #model.add(layers.Dense(64,activation='sigmoid'))
+  #model.add(layers.Dense(128,activation='sigmoid'))
+  #model.add(layers.Reshape((4, 4, 8)))
+  
   # Decoder 
-  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 8
+  #model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  #model.add(layers.UpSampling2D(2))
+  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.BatchNormalization())
+  model.add(layers.LeakyReLU(alpha=0.2))
   model.add(layers.UpSampling2D(2))
-  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=8, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.BatchNormalization())
+  model.add(layers.LeakyReLU(alpha=0.2))
   model.add(layers.UpSampling2D(2))
-  model.add(layers.Conv2D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same')) # orig 16
+  model.add(layers.Conv2D(filters=16, kernel_size=3, strides=1, activation='relu', padding='same')) 
+  model.add(layers.BatchNormalization())
+  model.add(layers.LeakyReLU(alpha=0.2))
   model.add(layers.UpSampling2D(2))
   model.add(layers.Conv2D(1, kernel_size=3, strides=1, activation='sigmoid', padding='same'))
   # model.add(layers.Reshape((256, 256, 32, 1)))
@@ -144,7 +167,7 @@ def main():
   # 'dim': (65536,),
   # 'dim': (64, 1024, 1)
   params = {'dim': (64, 64,),
-            'batch_size': 128,
+            'batch_size': 32,
             'n_channels': 1,
             'shuffle': True}
 
@@ -167,8 +190,8 @@ def main():
   autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
   print(autoencoder.summary())
 
-  history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20)
-  # history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20, use_multiprocessing=True)
+  # history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=20)
+  history = autoencoder.fit(training_generator, validation_data=validation_generator, epochs=150, use_multiprocessing=True)
 
   autoencoder.save("pcdModel")
 

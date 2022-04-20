@@ -44,7 +44,7 @@ pcd.points = o3d.utility.Vector3dVector(np_arr)
 # print(np.shape(np_arr))
 # np_arr.tofile("removeHalfByYval.bin")
 
-voxel_grid = o3d.geometry.VoxelGrid.create_from_point_cloud(pcd, voxel_size=0.8)
+voxel_grid = o3d.geometry.VoxelGrid.create_from_point_cloud(pcd, voxel_size=0.2)
 # voxel_grid = o3d.geometry.VoxelGrid.create_from_point_cloud(pcd, voxel_size=0.8)
 
 

@@ -2,18 +2,19 @@
 
 import tensorflow as tf
 from tensorflow import keras    
-
-from tensorflow.keras.models import load_weights
+import numpy as np
 
 # vae = load_model('vaeExample.h5', custom_objects={'latent_dim': latent_dim, 'epsilon_std': epsilon_std, 'vae_loss': vae_loss})
-vae = load_weights('vaeExample.h5')
-vae.summary()
-
+# vae = load_weights('vaeExample.h5')
+# vae.summary()
+encoder = tf.keras.models.load_model("model_keras_example_encoder") 
+decoder = tf.keras.models.load_model("model_keras_example_decoder")
+# vae = VAE(encoder, decoder)
 
 import matplotlib.pyplot as plt
 
 
-def plot_latent_space(vae, n=30, figsize=15):
+def plot_latent_space(decoder, n=30, figsize=15):
     # display a n*n 2D manifold of digits
     digit_size = 28
     scale = 1.0
@@ -26,7 +27,7 @@ def plot_latent_space(vae, n=30, figsize=15):
     for i, yi in enumerate(grid_y):
         for j, xi in enumerate(grid_x):
             z_sample = np.array([[xi, yi]])
-            x_decoded = vae.decoder.predict(z_sample)
+            x_decoded = decoder.predict(z_sample)
             digit = x_decoded[0].reshape(digit_size, digit_size)
             figure[
                 i * digit_size : (i + 1) * digit_size,
@@ -47,16 +48,16 @@ def plot_latent_space(vae, n=30, figsize=15):
     plt.show()
 
 
-plot_latent_space(vae)
+plot_latent_space(decoder)
 
 """
 ## Display how the latent space clusters different digit classes
 """
 
 
-def plot_label_clusters(vae, data, labels):
+def plot_label_clusters(encoder, data, labels):
     # display a 2D plot of the digit classes in the latent space
-    z_mean, _, _ = vae.encoder.predict(data)
+    z_mean, _, _ = encoder.predict(data)
     plt.figure(figsize=(12, 10))
     plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)
     plt.colorbar()
@@ -68,4 +69,4 @@ def plot_label_clusters(vae, data, labels):
 (x_train, y_train), _ = keras.datasets.mnist.load_data()
 x_train = np.expand_dims(x_train, -1).astype("float32") / 255
 
-plot_label_clusters(vae, x_train, y_train)
+plot_label_clusters(encoder, x_train, y_train)

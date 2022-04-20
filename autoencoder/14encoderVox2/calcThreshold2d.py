@@ -29,7 +29,7 @@ def SSIMLoss(y_true, y_pred):
 def convertVox(path):
     fromFile = np.fromfile(path, dtype=np.ubyte)
     xyzArray = fromFile.reshape((int(np.shape(fromFile)[0]) // 3, 3))
-    grid = np.zeros((64, 64), dtype=np.float32)
+    grid = np.zeros((256, 256), dtype=np.float32)
     for xyz in xyzArray:
         grid[xyz[0]][xyz[1]] = 1
 
@@ -57,7 +57,7 @@ def getSampleSet(basePath, sampleCount):
 # ------------------------------------
 
 # Load model
-modelName = '4pcdModel'
+modelName = '5pcdModel'
 autoencoder = keras.models.load_model(modelName)
 print("Info for ", modelName)
 

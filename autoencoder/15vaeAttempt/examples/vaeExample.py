@@ -120,8 +120,10 @@ vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
 vae.fit(mnist_digits, epochs=1, batch_size=128)
 
+# https://www.reddit.com/r/tensorflow/comments/szqsgd/keras_how_to_save_the_vae_from_the_official/
 
-vae.save_weights('vaeExample2.h5')
+vae.encoder.save('model_keras_example_encoder')
+vae.decoder.save('model_keras_example_decoder')
 
 """
 ## Display a grid of sampled digits

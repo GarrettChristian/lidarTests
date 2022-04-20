@@ -21,22 +21,15 @@ def SSIMLoss(y_true, y_pred):
   return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, max_val=1.0))
 
 # Load model
-modelName = '13pcdModel'
-autoencoder = keras.models.load_model(modelName)
-print("Info for ", modelName)
-print(autoencoder.summary())
+encoder = tf.keras.models.load_model("encoderVaeModel") 
+decoder = tf.keras.models.load_model("decoderVaeModel")
 
 # Get test images
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
-testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
+# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
 # testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
 # testImage = "unrealistic1.png"
-# testImage = "/Volumes/Extreme SSD/hiddenRangeImgs/21/000000.png"
-# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/00rotate180.png"
-# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/removeHalfByYval.png"
-# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/removeRoad00.png"
-# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/removeCars00.png"
-# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/carsUp1Z00.png"
+testImage = "/Volumes/Extreme SSD/rangeimgs/00/000000.png"
 
 image = Image.open(testImage)
 imageGrey = ImageOps.grayscale(image)
@@ -49,7 +42,10 @@ print(np.shape(test_arr))
 
 # ---
 
-decoded_data = autoencoder.predict([test_arr])
+z_mean, _, _ = encoder.predict([test_arr])
+print("VAE encoder results:")
+print(z_mean)
+decoded_data = decoder.predict(z_mean)
 
 # print(decoded_data)
 print(np.shape(decoded_data))

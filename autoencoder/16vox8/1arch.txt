@@ -1,0 +1,87 @@
+(sum_proj) autoencoder/16smallerModels - [main] » python trainModel4.py
+(40000,)
+(32000,)
+2022-04-15 16:52:04.334350: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 64, 64, 16)        160       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 32, 32, 16)       0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 32, 32, 8)         1160      
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 16, 16, 8)        0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 16, 16, 8)         584       
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 8, 8, 8)          0         
+ 2D)                                                             
+                                                                 
+ conv2d_3 (Conv2D)           (None, 8, 8, 8)           584       
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 16, 16, 8)        0         
+ )                                                               
+                                                                 
+ conv2d_4 (Conv2D)           (None, 16, 16, 8)         584       
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 32, 32, 8)        0         
+ 2D)                                                             
+                                                                 
+ conv2d_5 (Conv2D)           (None, 32, 32, 16)        1168      
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 64, 64, 16)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_6 (Conv2D)           (None, 64, 64, 1)         145       
+                                                                 
+=================================================================
+Total params: 4,385
+Trainable params: 4,385
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/20
+250/250 [==============================] - 104s 401ms/step - loss: 0.3753 - val_loss: 0.3029
+Epoch 2/20
+250/250 [==============================] - 100s 389ms/step - loss: 0.2900 - val_loss: 0.2825
+Epoch 3/20
+250/250 [==============================] - 111s 432ms/step - loss: 0.2786 - val_loss: 0.2749
+Epoch 4/20
+250/250 [==============================] - 103s 400ms/step - loss: 0.2721 - val_loss: 0.2695
+Epoch 5/20
+250/250 [==============================] - 115s 449ms/step - loss: 0.2673 - val_loss: 0.2654
+Epoch 6/20
+250/250 [==============================] - 111s 432ms/step - loss: 0.2639 - val_loss: 0.2622
+Epoch 7/20
+250/250 [==============================] - 111s 434ms/step - loss: 0.2611 - val_loss: 0.2598
+Epoch 8/20
+250/250 [==============================] - 111s 432ms/step - loss: 0.2590 - val_loss: 0.2578
+Epoch 9/20
+250/250 [==============================] - 114s 442ms/step - loss: 0.2571 - val_loss: 0.2562
+Epoch 10/20
+250/250 [==============================] - 140s 548ms/step - loss: 0.2555 - val_loss: 0.2551
+Epoch 11/20
+250/250 [==============================] - 132s 514ms/step - loss: 0.2541 - val_loss: 0.2540
+Epoch 12/20
+250/250 [==============================] - 162s 635ms/step - loss: 0.2527 - val_loss: 0.2518
+Epoch 13/20
+250/250 [==============================] - 162s 634ms/step - loss: 0.2515 - val_loss: 0.2507
+Epoch 14/20
+250/250 [==============================] - 149s 582ms/step - loss: 0.2505 - val_loss: 0.2497
+Epoch 15/20
+250/250 [==============================] - 186s 729ms/step - loss: 0.2494 - val_loss: 0.2486
+Epoch 16/20
+250/250 [==============================] - 169s 657ms/step - loss: 0.2485 - val_loss: 0.2484
+Epoch 17/20
+250/250 [==============================] - 177s 695ms/step - loss: 0.2478 - val_loss: 0.2474
+Epoch 18/20
+250/250 [==============================] - 163s 636ms/step - loss: 0.2469 - val_loss: 0.2463
+Epoch 19/20
+250/250 [==============================] - 188s 741ms/step - loss: 0.2463 - val_loss: 0.2463
+Epoch 20/20
+250/250 [==============================] - 173s 682ms/step - loss: 0.2457 - val_loss: 0.2452

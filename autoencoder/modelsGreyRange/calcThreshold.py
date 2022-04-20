@@ -53,7 +53,7 @@ def getSampleSet(basePath, sampleCount):
 # ------------------------------------
 
 # Load model
-modelName = '6pcdModel'
+modelName = '13pcdModel'
 autoencoder = keras.models.load_model(modelName)
 print("Info for ", modelName)
 
@@ -62,7 +62,8 @@ print("Info for ", modelName)
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
 # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/"
 # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/"
-path = "/Volumes/Extreme SSD/rangeimgs/"
+# path = "/Volumes/Extreme SSD/rangeimgs/"
+path = "/Volumes/Extreme SSD/rangeimgs2/"
 samples = getSampleSet(path, 1000)
 
 # print(samples)
@@ -83,7 +84,8 @@ print("100 random of train/val section")
 print("Loss: ", ssimLoss)
 
 print("----------------------------------------")
-pathHidden = "/Volumes/Extreme SSD/hiddenRangeImgs/"
+# pathHidden = "/Volumes/Extreme SSD/hiddenRangeImgs/"
+pathHidden = "/Volumes/Extreme SSD/hiddenRangeImgs2/"
 samplesHidden = getSampleSet(path, 1000)
 
 reconstructionsHidden = autoencoder.predict([samplesHidden])

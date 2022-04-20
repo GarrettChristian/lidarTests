@@ -9,7 +9,8 @@ import numpy as np
 from tensorflow.keras import layers
 import glob
 from sklearn.model_selection import train_test_split
-
+from PIL import Image
+from PIL import ImageOps
 
 # sampling layer
 class Sampling(layers.Layer):
@@ -110,16 +111,11 @@ class DataGenerator(keras.utils.Sequence):
         # Store sample
         # X[i,] = np.load(ID)
 
-        fromFile = np.fromfile(ID, dtype=np.ubyte)
-
-        xyzArray = fromFile.reshape((int(np.shape(fromFile)[0]) // 3, 3))
-
-        grid = np.zeros((256, 256), dtype=np.float32)
-
-        for xyz in xyzArray:
-            grid[xyz[0]][xyz[1]] = 1
-
-        X[i,] = np.expand_dims(grid, axis=2)
+        image = Image.open(ID)
+        imageGrey = ImageOps.grayscale(image)
+        imageGreyArray = np.array(imageGrey)
+        imageGreyArrayNorm = imageGreyArray.astype('float32') / 255
+        X[i,] = np.expand_dims(imageGreyArrayNorm, axis=2)
 
     return X
 
@@ -129,33 +125,31 @@ def main():
 
     # PATH TO THE TRAINING FILES
     # path = "/media/garrett/Extreme SSD/rangeimgs/00/"
-    # path = "/Volumes/Extreme SSD/rangeimgs/00/"
+    path = "/Volumes/Extreme SSD/rangeimgs/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
     # path = "/p/lidarrealism/data/rangeimgs/"
     # path = "/p/lidarrealism/data/rangeimgs/00/"
     # path = "/p/lidarrealism/data/voxel4/00/"
     # path = "/p/lidarrealism/data/voxel4/"
-    path = "/p/lidarrealism/data/voxels2/"
+    # path = "/p/lidarrealism/data/voxels2/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/voxelTestScripts/voxels4/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/"
     # path = ""
 
-    files = np.array(glob.glob(path + "*/*.bin", recursive = True))
-    # files = np.array(glob.glob(path + "*.bin", recursive = True))
+    # files = np.array(glob.glob(path + "*/*.png", recursive = True))
+    files = np.array(glob.glob(path + "*.png", recursive = True))
     print(np.shape(files))
-
-
 
 
     # Parameters
     # 'dim': (65536,),
     # 'dim': (64, 1024, 1)
-    params = {'dim': (256, 256),
-                'batch_size': 128,
-                'n_channels': 1,
-                'shuffle': True}
+    params = {'dim': (64, 1024),
+            'batch_size': 32,
+            'n_channels': 1,
+            'shuffle': True}
 
 
     # Datasets
@@ -177,7 +171,7 @@ def main():
     latent_dim = 2
     
     # Encoder
-    encoder_inputs = keras.Input(shape=(256, 256, 1))
+    encoder_inputs = keras.Input(shape=(64, 1024, 1))
     x = layers.Conv2D(32, 3, activation="relu", strides=2, padding="same")(encoder_inputs)
     # x = layers.MaxPooling2D(2, padding='same')(x)
     x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
@@ -197,7 +191,7 @@ def main():
     # Decoder
     latent_inputs = keras.Input(shape=(latent_dim,))
     x = layers.Dense(16384, activation="relu")(latent_inputs)
-    x = layers.Reshape((16, 16, 64))(x)
+    x = layers.Reshape((4, 64, 64))(x)
     x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
     # x = layers.UpSampling2D(2)(x)
     x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
@@ -215,11 +209,13 @@ def main():
     vae.compile(optimizer=keras.optimizers.Adam())
     # print(vae.summary())
 
-    history = vae.fit(training_generator, epochs=20, use_multiprocessing=True)
+    history = vae.fit(training_generator, epochs=20)
+    # history = vae.fit(training_generator, epochs=20, use_multiprocessing=True)
     # history = vae.fit(training_generator, validation_data=validation_generator, epochs=20)
     # history = vae.fit(training_generator, validation_data=validation_generator, epochs=20, use_multiprocessing=True)
 
-    vae.save("pcdModel")
+    vae.encoder.save('encoderVaeModel')
+    vae.decoder.save('decoderVaeModel')
 
 
 if __name__ == '__main__':
