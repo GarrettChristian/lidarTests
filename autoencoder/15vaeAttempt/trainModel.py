@@ -125,10 +125,10 @@ def main():
 
     # PATH TO THE TRAINING FILES
     # path = "/media/garrett/Extreme SSD/rangeimgs/00/"
-    path = "/Volumes/Extreme SSD/rangeimgs/00/"
+    # path = "/Volumes/Extreme SSD/rangeimgs/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
-    # path = "/p/lidarrealism/data/rangeimgs/"
+    path = "/p/lidarrealism/data/rangeimgs/"
     # path = "/p/lidarrealism/data/rangeimgs/00/"
     # path = "/p/lidarrealism/data/voxel4/00/"
     # path = "/p/lidarrealism/data/voxel4/"
@@ -138,8 +138,8 @@ def main():
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/voxels2/00/"
     # path = ""
 
-    # files = np.array(glob.glob(path + "*/*.png", recursive = True))
-    files = np.array(glob.glob(path + "*.png", recursive = True))
+    files = np.array(glob.glob(path + "*/*.png", recursive = True))
+    # files = np.array(glob.glob(path + "*.png", recursive = True))
     print(np.shape(files))
 
 
@@ -172,14 +172,14 @@ def main():
     
     # Encoder
     encoder_inputs = keras.Input(shape=(64, 1024, 1))
-    x = layers.Conv2D(32, 3, activation="relu", strides=2, padding="same")(encoder_inputs)
-    # x = layers.MaxPooling2D(2, padding='same')(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
-    # x = layers.MaxPooling2D(2, padding='same')(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
-    # x = layers.MaxPooling2D(2, padding='same')(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
-    # x = layers.MaxPooling2D(2, padding='same')(x)
+    x = layers.Conv2D(32, 3, activation="relu", strides=1, padding="same")(encoder_inputs)
+    x = layers.MaxPooling2D(2, padding='same')(x)
+    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.MaxPooling2D(2, padding='same')(x)
+    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.MaxPooling2D(2, padding='same')(x)
+    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.MaxPooling2D(2, padding='same')(x)
     x = layers.Flatten()(x)
     x = layers.Dense(16384, activation="relu")(x)
     z_mean = layers.Dense(latent_dim, name="z_mean")(x)
@@ -192,14 +192,14 @@ def main():
     latent_inputs = keras.Input(shape=(latent_dim,))
     x = layers.Dense(16384, activation="relu")(latent_inputs)
     x = layers.Reshape((4, 64, 64))(x)
-    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
-    # x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
-    # x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
-    # x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")(x)
-    # x = layers.UpSampling2D(2)(x)
+    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.UpSampling2D(2)(x)
+    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.UpSampling2D(2)(x)
+    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.UpSampling2D(2)(x)
+    x = layers.Conv2DTranspose(32, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.UpSampling2D(2)(x)
     decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
     decoder = keras.Model(latent_inputs, decoder_outputs, name="decoder")
     print(decoder.summary())
