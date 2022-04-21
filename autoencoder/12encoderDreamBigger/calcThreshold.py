@@ -37,7 +37,7 @@ def convertImage(imagePath):
 
 def getSampleSet(basePath, sampleCount):
     results = np.array([])
-    files = np.array(glob.glob(path + "*/*.png", recursive = True))
+    files = np.array(glob.glob(basePath + "*/*.png", recursive = True))
 
     for i in range(sampleCount):
         fileLoc = random.choice(files)

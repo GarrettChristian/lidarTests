@@ -21,8 +21,8 @@ def SSIMLoss(y_true, y_pred):
   return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, max_val=1.0))
 
 # Load model
-encoder = tf.keras.models.load_model("encoderVaeModel") 
-decoder = tf.keras.models.load_model("decoderVaeModel")
+encoder = tf.keras.models.load_model("1encoderVaeModel") 
+decoder = tf.keras.models.load_model("1decoderVaeModel")
 
 # Get test images
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
