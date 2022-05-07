@@ -1,0 +1,2107 @@
+(sp_venv) [rda2tc@affogato13 15vaeAttempt]$ python trainModel2.py 
+(40000,)
+2022-04-29 10:19:49.747080: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-04-29 10:19:52.117794: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 10417 MB memory:  -> device: 0, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:04:00.0, compute capability: 6.1
+2022-04-29 10:19:52.119540: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 10417 MB memory:  -> device: 1, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:0a:00.0, compute capability: 6.1
+2022-04-29 10:19:52.120607: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 10417 MB memory:  -> device: 2, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:84:00.0, compute capability: 6.1
+2022-04-29 10:19:52.122211: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 10417 MB memory:  -> device: 3, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:8a:00.0, compute capability: 6.1
+Model: "encoder"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_1 (InputLayer)           [(None, 64, 1024, 1  0           []                               
+                                )]                                                                
+                                                                                                  
+ conv2d (Conv2D)                (None, 32, 512, 8)   208         ['input_1[0][0]']                
+                                                                                                  
+ conv2d_1 (Conv2D)              (None, 32, 512, 16)  1168        ['conv2d[0][0]']                 
+                                                                                                  
+ max_pooling2d (MaxPooling2D)   (None, 16, 256, 16)  0           ['conv2d_1[0][0]']               
+                                                                                                  
+ conv2d_2 (Conv2D)              (None, 16, 256, 32)  4640        ['max_pooling2d[0][0]']          
+                                                                                                  
+ max_pooling2d_1 (MaxPooling2D)  (None, 8, 128, 32)  0           ['conv2d_2[0][0]']               
+                                                                                                  
+ conv2d_3 (Conv2D)              (None, 8, 128, 64)   18496       ['max_pooling2d_1[0][0]']        
+                                                                                                  
+ max_pooling2d_2 (MaxPooling2D)  (None, 4, 64, 64)   0           ['conv2d_3[0][0]']               
+                                                                                                  
+ conv2d_4 (Conv2D)              (None, 4, 64, 64)    36928       ['max_pooling2d_2[0][0]']        
+                                                                                                  
+ max_pooling2d_3 (MaxPooling2D)  (None, 2, 32, 64)   0           ['conv2d_4[0][0]']               
+                                                                                                  
+ conv2d_5 (Conv2D)              (None, 2, 32, 64)    36928       ['max_pooling2d_3[0][0]']        
+                                                                                                  
+ max_pooling2d_4 (MaxPooling2D)  (None, 1, 16, 64)   0           ['conv2d_5[0][0]']               
+                                                                                                  
+ flatten (Flatten)              (None, 1024)         0           ['max_pooling2d_4[0][0]']        
+                                                                                                  
+ dense (Dense)                  (None, 1024)         1049600     ['flatten[0][0]']                
+                                                                                                  
+ z_mean (Dense)                 (None, 2)            2050        ['dense[0][0]']                  
+                                                                                                  
+ z_log_var (Dense)              (None, 2)            2050        ['dense[0][0]']                  
+                                                                                                  
+ sampling (Sampling)            (None, 2)            0           ['z_mean[0][0]',                 
+                                                                  'z_log_var[0][0]']              
+                                                                                                  
+==================================================================================================
+Total params: 1,152,068
+Trainable params: 1,152,068
+Non-trainable params: 0
+__________________________________________________________________________________________________
+None
+Model: "decoder"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_2 (InputLayer)        [(None, 2)]               0         
+                                                                 
+ dense_1 (Dense)             (None, 1024)              3072      
+                                                                 
+ reshape (Reshape)           (None, 1, 16, 64)         0         
+                                                                 
+ conv2d_6 (Conv2D)           (None, 1, 16, 64)         36928     
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 2, 32, 64)        0         
+ )                                                               
+                                                                 
+ conv2d_7 (Conv2D)           (None, 2, 32, 64)         36928     
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 4, 64, 64)        0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 4, 64, 64)         36928     
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 8, 128, 64)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_9 (Conv2D)           (None, 8, 128, 64)        36928     
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 16, 256, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_10 (Conv2D)          (None, 16, 256, 64)       36928     
+                                                                 
+ up_sampling2d_4 (UpSampling  (None, 32, 512, 64)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_transpose (Conv2DTra  (None, 64, 1024, 32)     51232     
+ nspose)                                                         
+                                                                 
+ conv2d_transpose_1 (Conv2DT  (None, 64, 1024, 1)      289       
+ ranspose)                                                       
+                                                                 
+=================================================================
+Total params: 239,233
+Trainable params: 239,233
+Non-trainable params: 0
+_________________________________________________________________
+None
+Epoch 1/1000
+2022-04-29 10:20:02.321644: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+156/156 [==============================] - 127s 720ms/step - loss: 40884.8696 - reconstruction_loss: 39374.0508 - kl_loss: 0.5211
+Epoch 2/1000
+156/156 [==============================] - 112s 697ms/step - loss: 38226.3645 - reconstruction_loss: 38161.6328 - kl_loss: 5.3209
+Epoch 3/1000
+156/156 [==============================] - 112s 695ms/step - loss: 38023.1072 - reconstruction_loss: 38006.6562 - kl_loss: 7.3876
+Epoch 4/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37990.5362 - reconstruction_loss: 37975.1406 - kl_loss: 7.0189
+Epoch 5/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37963.2883 - reconstruction_loss: 37942.5117 - kl_loss: 6.9682
+Epoch 6/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37928.1290 - reconstruction_loss: 37916.1133 - kl_loss: 6.9406
+Epoch 7/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37909.0794 - reconstruction_loss: 37904.6250 - kl_loss: 6.7670
+Epoch 8/1000
+156/156 [==============================] - 117s 722ms/step - loss: 37903.6125 - reconstruction_loss: 37894.4805 - kl_loss: 6.6540
+Epoch 9/1000
+156/156 [==============================] - 114s 705ms/step - loss: 37901.4606 - reconstruction_loss: 37887.2148 - kl_loss: 6.6058
+Epoch 10/1000
+156/156 [==============================] - 117s 691ms/step - loss: 37891.4610 - reconstruction_loss: 37878.1953 - kl_loss: 6.5589
+Epoch 11/1000
+156/156 [==============================] - 113s 697ms/step - loss: 37883.0367 - reconstruction_loss: 37873.7930 - kl_loss: 6.4919
+Epoch 12/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37874.5181 - reconstruction_loss: 37867.4727 - kl_loss: 6.5047
+Epoch 13/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37870.8111 - reconstruction_loss: 37862.6289 - kl_loss: 6.5031
+Epoch 14/1000
+156/156 [==============================] - 117s 717ms/step - loss: 37862.9546 - reconstruction_loss: 37857.9531 - kl_loss: 6.4571
+Epoch 15/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37861.6779 - reconstruction_loss: 37854.8867 - kl_loss: 6.4549
+Epoch 16/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37863.4375 - reconstruction_loss: 37850.5625 - kl_loss: 6.4489
+Epoch 17/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37852.1991 - reconstruction_loss: 37849.4492 - kl_loss: 6.4690
+Epoch 18/1000
+156/156 [==============================] - 113s 689ms/step - loss: 37849.6162 - reconstruction_loss: 37843.5273 - kl_loss: 6.4978
+Epoch 19/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37847.2821 - reconstruction_loss: 37839.3477 - kl_loss: 6.5519
+Epoch 20/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37839.2844 - reconstruction_loss: 37837.5547 - kl_loss: 6.5617
+Epoch 21/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37844.2438 - reconstruction_loss: 37834.2812 - kl_loss: 6.6113
+Epoch 22/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37837.6508 - reconstruction_loss: 37830.7266 - kl_loss: 6.6322
+Epoch 23/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37831.2109 - reconstruction_loss: 37828.3477 - kl_loss: 6.6810
+Epoch 24/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37835.0847 - reconstruction_loss: 37825.2031 - kl_loss: 6.7183
+Epoch 25/1000
+156/156 [==============================] - 114s 699ms/step - loss: 37829.9252 - reconstruction_loss: 37823.8125 - kl_loss: 6.7994
+Epoch 26/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37832.8191 - reconstruction_loss: 37818.9062 - kl_loss: 6.8437
+Epoch 27/1000
+156/156 [==============================] - 112s 704ms/step - loss: 37825.6395 - reconstruction_loss: 37817.9727 - kl_loss: 6.9149
+Epoch 28/1000
+156/156 [==============================] - 116s 686ms/step - loss: 37820.6192 - reconstruction_loss: 37817.2852 - kl_loss: 6.9005
+Epoch 29/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37813.7441 - reconstruction_loss: 37813.3477 - kl_loss: 6.9434
+Epoch 30/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37818.8558 - reconstruction_loss: 37811.3594 - kl_loss: 7.0374
+Epoch 31/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37822.2925 - reconstruction_loss: 37809.4570 - kl_loss: 7.0378
+Epoch 32/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37820.4979 - reconstruction_loss: 37806.5352 - kl_loss: 7.1002
+Epoch 33/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37812.6726 - reconstruction_loss: 37804.7695 - kl_loss: 7.1655
+Epoch 34/1000
+156/156 [==============================] - 117s 695ms/step - loss: 37806.6155 - reconstruction_loss: 37803.8867 - kl_loss: 7.1807
+Epoch 35/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37812.6976 - reconstruction_loss: 37801.0625 - kl_loss: 7.2657
+Epoch 36/1000
+156/156 [==============================] - 118s 695ms/step - loss: 37803.1041 - reconstruction_loss: 37799.6992 - kl_loss: 7.2882
+Epoch 37/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37802.8209 - reconstruction_loss: 37798.2578 - kl_loss: 7.2960
+Epoch 38/1000
+156/156 [==============================] - 112s 703ms/step - loss: 37801.0216 - reconstruction_loss: 37795.6211 - kl_loss: 7.3745
+Epoch 39/1000
+156/156 [==============================] - 113s 690ms/step - loss: 37804.2127 - reconstruction_loss: 37794.6562 - kl_loss: 7.3712
+Epoch 40/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37797.5206 - reconstruction_loss: 37791.4375 - kl_loss: 7.4276
+Epoch 41/1000
+156/156 [==============================] - 119s 733ms/step - loss: 37802.4277 - reconstruction_loss: 37790.1445 - kl_loss: 7.4343
+Epoch 42/1000
+156/156 [==============================] - 119s 740ms/step - loss: 37788.4665 - reconstruction_loss: 37791.2422 - kl_loss: 7.5016
+Epoch 43/1000
+156/156 [==============================] - 117s 731ms/step - loss: 37796.8710 - reconstruction_loss: 37787.9570 - kl_loss: 7.5192
+Epoch 44/1000
+156/156 [==============================] - 117s 732ms/step - loss: 37795.5742 - reconstruction_loss: 37787.5195 - kl_loss: 7.5165
+Epoch 45/1000
+156/156 [==============================] - 123s 751ms/step - loss: 37793.6681 - reconstruction_loss: 37784.5977 - kl_loss: 7.5531
+Epoch 46/1000
+156/156 [==============================] - 117s 733ms/step - loss: 37789.3188 - reconstruction_loss: 37783.7422 - kl_loss: 7.6099
+Epoch 47/1000
+156/156 [==============================] - 118s 724ms/step - loss: 37786.5187 - reconstruction_loss: 37781.0469 - kl_loss: 7.6405
+Epoch 48/1000
+156/156 [==============================] - 118s 730ms/step - loss: 37793.8541 - reconstruction_loss: 37780.8125 - kl_loss: 7.6819
+Epoch 49/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37789.3329 - reconstruction_loss: 37779.5039 - kl_loss: 7.6774
+Epoch 50/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37779.3831 - reconstruction_loss: 37778.1953 - kl_loss: 7.7277
+Epoch 51/1000
+156/156 [==============================] - 119s 737ms/step - loss: 37786.8709 - reconstruction_loss: 37776.1680 - kl_loss: 7.7574
+Epoch 52/1000
+156/156 [==============================] - 123s 723ms/step - loss: 37789.6474 - reconstruction_loss: 37776.1914 - kl_loss: 7.7738
+Epoch 53/1000
+156/156 [==============================] - 120s 743ms/step - loss: 37785.4009 - reconstruction_loss: 37775.1133 - kl_loss: 7.7955
+Epoch 54/1000
+156/156 [==============================] - 124s 744ms/step - loss: 37778.2067 - reconstruction_loss: 37771.0039 - kl_loss: 7.8709
+Epoch 55/1000
+156/156 [==============================] - 123s 734ms/step - loss: 37786.1070 - reconstruction_loss: 37771.1797 - kl_loss: 7.8575
+Epoch 56/1000
+156/156 [==============================] - 118s 741ms/step - loss: 37772.1767 - reconstruction_loss: 37770.6172 - kl_loss: 7.8789
+Epoch 57/1000
+156/156 [==============================] - 118s 726ms/step - loss: 37780.2325 - reconstruction_loss: 37769.3320 - kl_loss: 7.9112
+Epoch 58/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37775.0344 - reconstruction_loss: 37767.9102 - kl_loss: 7.9423
+Epoch 59/1000
+156/156 [==============================] - 118s 731ms/step - loss: 37772.3838 - reconstruction_loss: 37764.9180 - kl_loss: 7.9735
+Epoch 60/1000
+156/156 [==============================] - 118s 726ms/step - loss: 37775.3382 - reconstruction_loss: 37765.6680 - kl_loss: 7.9826
+Epoch 61/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37769.9371 - reconstruction_loss: 37762.8750 - kl_loss: 8.0687
+Epoch 62/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37771.8412 - reconstruction_loss: 37761.6875 - kl_loss: 8.0620
+Epoch 63/1000
+156/156 [==============================] - 120s 737ms/step - loss: 37771.7592 - reconstruction_loss: 37761.1523 - kl_loss: 8.0846
+Epoch 64/1000
+156/156 [==============================] - 119s 736ms/step - loss: 37765.6429 - reconstruction_loss: 37760.9570 - kl_loss: 8.1012
+Epoch 65/1000
+156/156 [==============================] - 117s 732ms/step - loss: 37769.4036 - reconstruction_loss: 37759.0430 - kl_loss: 8.1007
+Epoch 66/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37765.2144 - reconstruction_loss: 37757.9062 - kl_loss: 8.1226
+Epoch 67/1000
+156/156 [==============================] - 118s 738ms/step - loss: 37763.6955 - reconstruction_loss: 37757.6445 - kl_loss: 8.1264
+Epoch 68/1000
+156/156 [==============================] - 118s 731ms/step - loss: 37770.9918 - reconstruction_loss: 37757.8125 - kl_loss: 8.1556
+Epoch 69/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37757.3043 - reconstruction_loss: 37755.3125 - kl_loss: 8.1724
+Epoch 70/1000
+156/156 [==============================] - 118s 724ms/step - loss: 37760.1840 - reconstruction_loss: 37752.6250 - kl_loss: 8.1996
+Epoch 71/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37769.8774 - reconstruction_loss: 37753.8125 - kl_loss: 8.1970
+Epoch 72/1000
+156/156 [==============================] - 118s 727ms/step - loss: 37774.2908 - reconstruction_loss: 37755.0625 - kl_loss: 8.2290
+Epoch 73/1000
+156/156 [==============================] - 118s 726ms/step - loss: 37759.4793 - reconstruction_loss: 37752.2266 - kl_loss: 8.2316
+Epoch 74/1000
+156/156 [==============================] - 123s 727ms/step - loss: 37756.3002 - reconstruction_loss: 37749.3398 - kl_loss: 8.2577
+Epoch 75/1000
+156/156 [==============================] - 118s 721ms/step - loss: 37750.2226 - reconstruction_loss: 37748.3125 - kl_loss: 8.2755
+Epoch 76/1000
+156/156 [==============================] - 122s 756ms/step - loss: 37744.1387 - reconstruction_loss: 37747.3008 - kl_loss: 8.3566
+Epoch 77/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37757.0016 - reconstruction_loss: 37747.0391 - kl_loss: 8.3236
+Epoch 78/1000
+156/156 [==============================] - 118s 726ms/step - loss: 37757.7633 - reconstruction_loss: 37745.4453 - kl_loss: 8.3410
+Epoch 79/1000
+156/156 [==============================] - 118s 730ms/step - loss: 37744.9296 - reconstruction_loss: 37747.0195 - kl_loss: 8.3417
+Epoch 80/1000
+156/156 [==============================] - 120s 747ms/step - loss: 37754.3596 - reconstruction_loss: 37744.8086 - kl_loss: 8.3387
+Epoch 81/1000
+156/156 [==============================] - 119s 726ms/step - loss: 37747.3739 - reconstruction_loss: 37744.6953 - kl_loss: 8.3547
+Epoch 82/1000
+156/156 [==============================] - 120s 740ms/step - loss: 37761.2750 - reconstruction_loss: 37744.0078 - kl_loss: 8.4112
+Epoch 83/1000
+156/156 [==============================] - 119s 729ms/step - loss: 37751.6807 - reconstruction_loss: 37742.0977 - kl_loss: 8.4107
+Epoch 84/1000
+156/156 [==============================] - 119s 728ms/step - loss: 37755.0178 - reconstruction_loss: 37743.1602 - kl_loss: 8.3755
+Epoch 85/1000
+156/156 [==============================] - 120s 734ms/step - loss: 37751.8176 - reconstruction_loss: 37739.8828 - kl_loss: 8.4708
+Epoch 86/1000
+156/156 [==============================] - 119s 732ms/step - loss: 37742.4061 - reconstruction_loss: 37739.4180 - kl_loss: 8.4669
+Epoch 87/1000
+156/156 [==============================] - 120s 730ms/step - loss: 37745.6236 - reconstruction_loss: 37739.9297 - kl_loss: 8.4896
+Epoch 88/1000
+156/156 [==============================] - 119s 745ms/step - loss: 37743.4202 - reconstruction_loss: 37739.1367 - kl_loss: 8.4708
+Epoch 89/1000
+156/156 [==============================] - 120s 732ms/step - loss: 37747.9748 - reconstruction_loss: 37737.2773 - kl_loss: 8.4651
+Epoch 90/1000
+156/156 [==============================] - 118s 738ms/step - loss: 37748.5473 - reconstruction_loss: 37737.5078 - kl_loss: 8.5276
+Epoch 91/1000
+156/156 [==============================] - 119s 731ms/step - loss: 37746.5662 - reconstruction_loss: 37737.1914 - kl_loss: 8.5307
+Epoch 92/1000
+156/156 [==============================] - 124s 728ms/step - loss: 37748.9479 - reconstruction_loss: 37735.0312 - kl_loss: 8.5465
+Epoch 93/1000
+156/156 [==============================] - 119s 742ms/step - loss: 37739.5756 - reconstruction_loss: 37735.5820 - kl_loss: 8.5331
+Epoch 94/1000
+156/156 [==============================] - 119s 736ms/step - loss: 37738.4869 - reconstruction_loss: 37734.0430 - kl_loss: 8.5666
+Epoch 95/1000
+156/156 [==============================] - 119s 743ms/step - loss: 37734.7058 - reconstruction_loss: 37734.0625 - kl_loss: 8.5772
+Epoch 96/1000
+156/156 [==============================] - 119s 732ms/step - loss: 37746.6128 - reconstruction_loss: 37733.0273 - kl_loss: 8.5911
+Epoch 97/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37735.9357 - reconstruction_loss: 37733.2695 - kl_loss: 8.5844
+Epoch 98/1000
+156/156 [==============================] - 118s 731ms/step - loss: 37740.1220 - reconstruction_loss: 37731.9102 - kl_loss: 8.6111
+Epoch 99/1000
+156/156 [==============================] - 119s 745ms/step - loss: 37739.7880 - reconstruction_loss: 37731.2930 - kl_loss: 8.6195
+Epoch 100/1000
+156/156 [==============================] - 119s 739ms/step - loss: 37737.2880 - reconstruction_loss: 37730.4375 - kl_loss: 8.6123
+Epoch 101/1000
+156/156 [==============================] - 119s 731ms/step - loss: 37739.1964 - reconstruction_loss: 37729.6875 - kl_loss: 8.6332
+Epoch 102/1000
+156/156 [==============================] - 119s 742ms/step - loss: 37733.5580 - reconstruction_loss: 37730.3477 - kl_loss: 8.6483
+Epoch 103/1000
+156/156 [==============================] - 118s 728ms/step - loss: 37739.5187 - reconstruction_loss: 37728.2070 - kl_loss: 8.6941
+Epoch 104/1000
+156/156 [==============================] - 119s 736ms/step - loss: 37737.3959 - reconstruction_loss: 37727.5352 - kl_loss: 8.6884
+Epoch 105/1000
+156/156 [==============================] - 119s 740ms/step - loss: 37743.2109 - reconstruction_loss: 37726.5234 - kl_loss: 8.6776
+Epoch 106/1000
+156/156 [==============================] - 119s 740ms/step - loss: 37733.5461 - reconstruction_loss: 37726.8750 - kl_loss: 8.6869
+Epoch 107/1000
+156/156 [==============================] - 124s 742ms/step - loss: 37731.5700 - reconstruction_loss: 37727.1992 - kl_loss: 8.6802
+Epoch 108/1000
+156/156 [==============================] - 119s 738ms/step - loss: 37734.3431 - reconstruction_loss: 37726.0000 - kl_loss: 8.7223
+Epoch 109/1000
+156/156 [==============================] - 121s 745ms/step - loss: 37734.6240 - reconstruction_loss: 37725.9688 - kl_loss: 8.7276
+Epoch 110/1000
+156/156 [==============================] - 122s 743ms/step - loss: 37730.2644 - reconstruction_loss: 37726.0312 - kl_loss: 8.7253
+Epoch 111/1000
+156/156 [==============================] - 120s 732ms/step - loss: 37736.8409 - reconstruction_loss: 37723.4922 - kl_loss: 8.7604
+Epoch 112/1000
+156/156 [==============================] - 119s 746ms/step - loss: 37727.8010 - reconstruction_loss: 37722.6953 - kl_loss: 8.7803
+Epoch 113/1000
+156/156 [==============================] - 119s 744ms/step - loss: 37729.7855 - reconstruction_loss: 37721.9180 - kl_loss: 8.7671
+Epoch 114/1000
+156/156 [==============================] - 119s 745ms/step - loss: 37725.0642 - reconstruction_loss: 37722.7617 - kl_loss: 8.7571
+Epoch 115/1000
+156/156 [==============================] - 119s 742ms/step - loss: 37728.8696 - reconstruction_loss: 37722.9805 - kl_loss: 8.7724
+Epoch 116/1000
+156/156 [==============================] - 120s 743ms/step - loss: 37726.6514 - reconstruction_loss: 37720.5039 - kl_loss: 8.7893
+Epoch 117/1000
+156/156 [==============================] - 120s 751ms/step - loss: 37726.9117 - reconstruction_loss: 37721.5625 - kl_loss: 8.7873
+Epoch 118/1000
+156/156 [==============================] - 125s 743ms/step - loss: 37728.8053 - reconstruction_loss: 37720.9141 - kl_loss: 8.8026
+Epoch 119/1000
+156/156 [==============================] - 119s 744ms/step - loss: 37725.5937 - reconstruction_loss: 37720.8828 - kl_loss: 8.7990
+Epoch 120/1000
+156/156 [==============================] - 120s 746ms/step - loss: 37735.3979 - reconstruction_loss: 37719.2344 - kl_loss: 8.7976
+Epoch 121/1000
+156/156 [==============================] - 120s 734ms/step - loss: 37733.6914 - reconstruction_loss: 37720.7734 - kl_loss: 8.8133
+Epoch 122/1000
+156/156 [==============================] - 121s 746ms/step - loss: 37720.6567 - reconstruction_loss: 37718.9844 - kl_loss: 8.8450
+Epoch 123/1000
+156/156 [==============================] - 125s 764ms/step - loss: 37725.5938 - reconstruction_loss: 37717.3047 - kl_loss: 8.8372
+Epoch 124/1000
+156/156 [==============================] - 120s 743ms/step - loss: 37727.6450 - reconstruction_loss: 37718.1680 - kl_loss: 8.8496
+Epoch 125/1000
+156/156 [==============================] - 120s 744ms/step - loss: 37725.0124 - reconstruction_loss: 37718.2422 - kl_loss: 8.8539
+Epoch 126/1000
+156/156 [==============================] - 120s 749ms/step - loss: 37723.6694 - reconstruction_loss: 37716.2344 - kl_loss: 8.9153
+Epoch 127/1000
+156/156 [==============================] - 120s 750ms/step - loss: 37723.8350 - reconstruction_loss: 37717.3477 - kl_loss: 8.8646
+Epoch 128/1000
+156/156 [==============================] - 120s 749ms/step - loss: 37728.5886 - reconstruction_loss: 37716.9727 - kl_loss: 8.8476
+Epoch 129/1000
+156/156 [==============================] - 120s 743ms/step - loss: 37726.0024 - reconstruction_loss: 37715.5898 - kl_loss: 8.8563
+Epoch 130/1000
+156/156 [==============================] - 125s 753ms/step - loss: 37719.5659 - reconstruction_loss: 37715.7227 - kl_loss: 8.8872
+Epoch 131/1000
+156/156 [==============================] - 118s 718ms/step - loss: 37723.8750 - reconstruction_loss: 37715.3555 - kl_loss: 8.9076
+Epoch 132/1000
+156/156 [==============================] - 119s 733ms/step - loss: 37726.5780 - reconstruction_loss: 37715.2812 - kl_loss: 8.8989
+Epoch 133/1000
+156/156 [==============================] - 118s 738ms/step - loss: 37720.9518 - reconstruction_loss: 37713.6719 - kl_loss: 8.9119
+Epoch 134/1000
+156/156 [==============================] - 119s 725ms/step - loss: 37722.1482 - reconstruction_loss: 37715.0820 - kl_loss: 8.9276
+Epoch 135/1000
+156/156 [==============================] - 119s 736ms/step - loss: 37719.8587 - reconstruction_loss: 37714.2773 - kl_loss: 8.9035
+Epoch 136/1000
+156/156 [==============================] - 120s 739ms/step - loss: 37715.9755 - reconstruction_loss: 37714.1094 - kl_loss: 8.9192
+Epoch 137/1000
+156/156 [==============================] - 118s 733ms/step - loss: 37722.1059 - reconstruction_loss: 37712.8242 - kl_loss: 8.9626
+Epoch 138/1000
+156/156 [==============================] - 119s 743ms/step - loss: 37716.4994 - reconstruction_loss: 37712.4727 - kl_loss: 8.9554
+Epoch 139/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37724.0383 - reconstruction_loss: 37711.8594 - kl_loss: 8.9572
+Epoch 140/1000
+156/156 [==============================] - 120s 739ms/step - loss: 37727.7980 - reconstruction_loss: 37712.4297 - kl_loss: 8.9665
+Epoch 141/1000
+156/156 [==============================] - 120s 746ms/step - loss: 37721.4971 - reconstruction_loss: 37711.6953 - kl_loss: 8.9726
+Epoch 142/1000
+156/156 [==============================] - 121s 741ms/step - loss: 37725.5206 - reconstruction_loss: 37711.0977 - kl_loss: 8.9848
+Epoch 143/1000
+156/156 [==============================] - 121s 740ms/step - loss: 37715.0971 - reconstruction_loss: 37711.0625 - kl_loss: 8.9751
+Epoch 144/1000
+156/156 [==============================] - 119s 744ms/step - loss: 37720.4976 - reconstruction_loss: 37710.0391 - kl_loss: 8.9848
+Epoch 145/1000
+156/156 [==============================] - 120s 749ms/step - loss: 37715.6782 - reconstruction_loss: 37709.9922 - kl_loss: 8.9905
+Epoch 146/1000
+156/156 [==============================] - 120s 736ms/step - loss: 37720.2488 - reconstruction_loss: 37709.8711 - kl_loss: 8.9789
+Epoch 147/1000
+156/156 [==============================] - 120s 741ms/step - loss: 37722.9852 - reconstruction_loss: 37708.6133 - kl_loss: 8.9963
+Epoch 148/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37718.6926 - reconstruction_loss: 37709.0703 - kl_loss: 9.0190
+Epoch 149/1000
+156/156 [==============================] - 117s 712ms/step - loss: 37728.3179 - reconstruction_loss: 37708.8984 - kl_loss: 8.9738
+Epoch 150/1000
+156/156 [==============================] - 117s 728ms/step - loss: 37712.4970 - reconstruction_loss: 37709.0156 - kl_loss: 9.0010
+Epoch 151/1000
+156/156 [==============================] - 117s 728ms/step - loss: 37716.6504 - reconstruction_loss: 37709.0703 - kl_loss: 9.0446
+Epoch 152/1000
+156/156 [==============================] - 118s 728ms/step - loss: 37715.8344 - reconstruction_loss: 37708.2383 - kl_loss: 9.0286
+Epoch 153/1000
+156/156 [==============================] - 117s 722ms/step - loss: 37712.8531 - reconstruction_loss: 37707.6523 - kl_loss: 9.0386
+Epoch 154/1000
+156/156 [==============================] - 117s 729ms/step - loss: 37715.8786 - reconstruction_loss: 37706.8125 - kl_loss: 9.0480
+Epoch 155/1000
+156/156 [==============================] - 117s 732ms/step - loss: 37721.5119 - reconstruction_loss: 37707.3203 - kl_loss: 9.0136
+Epoch 156/1000
+156/156 [==============================] - 118s 732ms/step - loss: 37718.0126 - reconstruction_loss: 37706.2461 - kl_loss: 9.0444
+Epoch 157/1000
+156/156 [==============================] - 118s 725ms/step - loss: 37717.7736 - reconstruction_loss: 37705.3398 - kl_loss: 9.0304
+Epoch 158/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37716.5151 - reconstruction_loss: 37707.9062 - kl_loss: 9.0501
+Epoch 159/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37714.4178 - reconstruction_loss: 37705.6484 - kl_loss: 9.0788
+Epoch 160/1000
+156/156 [==============================] - 118s 720ms/step - loss: 37710.6207 - reconstruction_loss: 37705.5547 - kl_loss: 9.0496
+Epoch 161/1000
+156/156 [==============================] - 122s 721ms/step - loss: 37719.9707 - reconstruction_loss: 37707.2031 - kl_loss: 9.0397
+Epoch 162/1000
+156/156 [==============================] - 117s 728ms/step - loss: 37708.7314 - reconstruction_loss: 37703.7070 - kl_loss: 9.0880
+Epoch 163/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37716.5221 - reconstruction_loss: 37705.0078 - kl_loss: 9.0809
+Epoch 164/1000
+156/156 [==============================] - 123s 733ms/step - loss: 37716.8061 - reconstruction_loss: 37705.2773 - kl_loss: 9.0958
+Epoch 165/1000
+156/156 [==============================] - 122s 746ms/step - loss: 37709.1558 - reconstruction_loss: 37704.8711 - kl_loss: 9.1037
+Epoch 166/1000
+156/156 [==============================] - 118s 721ms/step - loss: 37704.2041 - reconstruction_loss: 37704.8633 - kl_loss: 9.1251
+Epoch 167/1000
+156/156 [==============================] - 113s 706ms/step - loss: 37721.1422 - reconstruction_loss: 37704.6211 - kl_loss: 9.1179
+Epoch 168/1000
+156/156 [==============================] - 114s 706ms/step - loss: 37708.1464 - reconstruction_loss: 37704.4688 - kl_loss: 9.1075
+Epoch 169/1000
+156/156 [==============================] - 114s 706ms/step - loss: 37703.5726 - reconstruction_loss: 37704.0078 - kl_loss: 9.1003
+Epoch 170/1000
+156/156 [==============================] - 114s 714ms/step - loss: 37710.6981 - reconstruction_loss: 37703.1172 - kl_loss: 9.1294
+Epoch 171/1000
+156/156 [==============================] - 116s 697ms/step - loss: 37713.1454 - reconstruction_loss: 37702.9453 - kl_loss: 9.1369
+Epoch 172/1000
+156/156 [==============================] - 113s 703ms/step - loss: 37717.0393 - reconstruction_loss: 37702.7344 - kl_loss: 9.1093
+Epoch 173/1000
+156/156 [==============================] - 120s 744ms/step - loss: 37712.3791 - reconstruction_loss: 37703.5508 - kl_loss: 9.1081
+Epoch 174/1000
+156/156 [==============================] - 113s 699ms/step - loss: 37709.4535 - reconstruction_loss: 37700.9766 - kl_loss: 9.1544
+Epoch 175/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37712.0998 - reconstruction_loss: 37702.3320 - kl_loss: 9.1246
+Epoch 176/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37699.1897 - reconstruction_loss: 37700.8555 - kl_loss: 9.1401
+Epoch 177/1000
+156/156 [==============================] - 111s 688ms/step - loss: 37706.4977 - reconstruction_loss: 37701.3320 - kl_loss: 9.1378
+Epoch 178/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37710.7629 - reconstruction_loss: 37701.1484 - kl_loss: 9.1371
+Epoch 179/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37704.6469 - reconstruction_loss: 37699.5898 - kl_loss: 9.1625
+Epoch 180/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37710.1553 - reconstruction_loss: 37700.6641 - kl_loss: 9.1342
+Epoch 181/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37703.1271 - reconstruction_loss: 37700.3477 - kl_loss: 9.1602
+Epoch 182/1000
+156/156 [==============================] - 117s 697ms/step - loss: 37702.6608 - reconstruction_loss: 37700.2266 - kl_loss: 9.1807
+Epoch 183/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37706.3638 - reconstruction_loss: 37699.3047 - kl_loss: 9.1814
+Epoch 184/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37710.0204 - reconstruction_loss: 37700.8750 - kl_loss: 9.1478
+Epoch 185/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37708.7884 - reconstruction_loss: 37701.4648 - kl_loss: 9.1479
+Epoch 186/1000
+156/156 [==============================] - 114s 706ms/step - loss: 37698.6572 - reconstruction_loss: 37699.4688 - kl_loss: 9.1539
+Epoch 187/1000
+156/156 [==============================] - 114s 701ms/step - loss: 37704.8150 - reconstruction_loss: 37699.0195 - kl_loss: 9.1829
+Epoch 188/1000
+156/156 [==============================] - 113s 691ms/step - loss: 37708.3949 - reconstruction_loss: 37698.5391 - kl_loss: 9.2012
+Epoch 189/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37703.6207 - reconstruction_loss: 37698.8477 - kl_loss: 9.1825
+Epoch 190/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37711.8462 - reconstruction_loss: 37698.5703 - kl_loss: 9.2054
+Epoch 191/1000
+156/156 [==============================] - 115s 717ms/step - loss: 37700.2682 - reconstruction_loss: 37698.1641 - kl_loss: 9.1865
+Epoch 192/1000
+156/156 [==============================] - 123s 733ms/step - loss: 37708.5050 - reconstruction_loss: 37697.8828 - kl_loss: 9.1859
+Epoch 193/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37703.6901 - reconstruction_loss: 37696.3516 - kl_loss: 9.1941
+Epoch 194/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37708.9287 - reconstruction_loss: 37696.9922 - kl_loss: 9.1767
+Epoch 195/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37702.7162 - reconstruction_loss: 37698.1328 - kl_loss: 9.2328
+Epoch 196/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37704.5812 - reconstruction_loss: 37697.9805 - kl_loss: 9.2208
+Epoch 197/1000
+156/156 [==============================] - 119s 741ms/step - loss: 37708.8521 - reconstruction_loss: 37697.2422 - kl_loss: 9.2099
+Epoch 198/1000
+156/156 [==============================] - 118s 730ms/step - loss: 37705.5466 - reconstruction_loss: 37696.3906 - kl_loss: 9.2152
+Epoch 199/1000
+156/156 [==============================] - 118s 732ms/step - loss: 37705.4954 - reconstruction_loss: 37695.8398 - kl_loss: 9.2305
+Epoch 200/1000
+156/156 [==============================] - 118s 728ms/step - loss: 37703.8574 - reconstruction_loss: 37697.3281 - kl_loss: 9.2208
+Epoch 201/1000
+156/156 [==============================] - 118s 728ms/step - loss: 37704.7076 - reconstruction_loss: 37695.5391 - kl_loss: 9.2146
+Epoch 202/1000
+156/156 [==============================] - 121s 749ms/step - loss: 37695.3669 - reconstruction_loss: 37695.6797 - kl_loss: 9.2510
+Epoch 203/1000
+156/156 [==============================] - 118s 739ms/step - loss: 37707.0817 - reconstruction_loss: 37696.2812 - kl_loss: 9.2505
+Epoch 204/1000
+156/156 [==============================] - 119s 724ms/step - loss: 37707.3659 - reconstruction_loss: 37696.6211 - kl_loss: 9.2471
+Epoch 205/1000
+156/156 [==============================] - 118s 738ms/step - loss: 37710.1187 - reconstruction_loss: 37696.1328 - kl_loss: 9.2476
+Epoch 206/1000
+156/156 [==============================] - 124s 754ms/step - loss: 37690.5613 - reconstruction_loss: 37694.7148 - kl_loss: 9.2467
+Epoch 207/1000
+156/156 [==============================] - 117s 733ms/step - loss: 37704.1162 - reconstruction_loss: 37695.2305 - kl_loss: 9.2484
+Epoch 208/1000
+156/156 [==============================] - 118s 725ms/step - loss: 37703.3783 - reconstruction_loss: 37694.7188 - kl_loss: 9.2470
+Epoch 209/1000
+156/156 [==============================] - 118s 731ms/step - loss: 37706.1645 - reconstruction_loss: 37695.8281 - kl_loss: 9.2512
+Epoch 210/1000
+156/156 [==============================] - 118s 720ms/step - loss: 37706.5802 - reconstruction_loss: 37693.6445 - kl_loss: 9.2629
+Epoch 211/1000
+156/156 [==============================] - 118s 723ms/step - loss: 37704.8555 - reconstruction_loss: 37693.9375 - kl_loss: 9.2793
+Epoch 212/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37696.6567 - reconstruction_loss: 37694.0039 - kl_loss: 9.2918
+Epoch 213/1000
+156/156 [==============================] - 120s 748ms/step - loss: 37707.8235 - reconstruction_loss: 37693.4258 - kl_loss: 9.2675
+Epoch 214/1000
+156/156 [==============================] - 118s 737ms/step - loss: 37701.6367 - reconstruction_loss: 37693.3320 - kl_loss: 9.2817
+Epoch 215/1000
+156/156 [==============================] - 119s 741ms/step - loss: 37700.2406 - reconstruction_loss: 37694.5391 - kl_loss: 9.3009
+Epoch 216/1000
+156/156 [==============================] - 117s 718ms/step - loss: 37704.5355 - reconstruction_loss: 37694.4023 - kl_loss: 9.2736
+Epoch 217/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37701.5387 - reconstruction_loss: 37693.3164 - kl_loss: 9.2978
+Epoch 218/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37707.6755 - reconstruction_loss: 37693.1992 - kl_loss: 9.2830
+Epoch 219/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37703.6850 - reconstruction_loss: 37693.5273 - kl_loss: 9.2666
+Epoch 220/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37701.6330 - reconstruction_loss: 37692.9102 - kl_loss: 9.2937
+Epoch 221/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37697.6277 - reconstruction_loss: 37691.4141 - kl_loss: 9.3136
+Epoch 222/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37702.3054 - reconstruction_loss: 37692.9609 - kl_loss: 9.3123
+Epoch 223/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37705.3351 - reconstruction_loss: 37691.3047 - kl_loss: 9.3144
+Epoch 224/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37696.4150 - reconstruction_loss: 37693.1680 - kl_loss: 9.2785
+Epoch 225/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37703.4065 - reconstruction_loss: 37692.8398 - kl_loss: 9.2796
+Epoch 226/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37707.1313 - reconstruction_loss: 37693.6211 - kl_loss: 9.2997
+Epoch 227/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37698.6560 - reconstruction_loss: 37691.3477 - kl_loss: 9.3120
+Epoch 228/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37694.0246 - reconstruction_loss: 37690.4688 - kl_loss: 9.3215
+Epoch 229/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37701.6212 - reconstruction_loss: 37690.9492 - kl_loss: 9.3305
+Epoch 230/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37695.9919 - reconstruction_loss: 37689.9727 - kl_loss: 9.3194
+Epoch 231/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37695.1769 - reconstruction_loss: 37691.0117 - kl_loss: 9.3307
+Epoch 232/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37708.4559 - reconstruction_loss: 37691.1523 - kl_loss: 9.3345
+Epoch 233/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37696.4094 - reconstruction_loss: 37690.4922 - kl_loss: 9.3244
+Epoch 234/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37697.7889 - reconstruction_loss: 37690.6875 - kl_loss: 9.3379
+Epoch 235/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37697.0753 - reconstruction_loss: 37689.9023 - kl_loss: 9.3305
+Epoch 236/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37692.3608 - reconstruction_loss: 37689.6211 - kl_loss: 9.3508
+Epoch 237/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37704.2748 - reconstruction_loss: 37691.1211 - kl_loss: 9.3449
+Epoch 238/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37703.3961 - reconstruction_loss: 37689.6719 - kl_loss: 9.3529
+Epoch 239/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37694.6755 - reconstruction_loss: 37689.6875 - kl_loss: 9.3460
+Epoch 240/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37692.8283 - reconstruction_loss: 37691.4453 - kl_loss: 9.3469
+Epoch 241/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37698.3371 - reconstruction_loss: 37688.7148 - kl_loss: 9.3290
+Epoch 242/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37695.7689 - reconstruction_loss: 37688.0273 - kl_loss: 9.3607
+Epoch 243/1000
+156/156 [==============================] - 111s 691ms/step - loss: 37694.9982 - reconstruction_loss: 37691.4023 - kl_loss: 9.3320
+Epoch 244/1000
+156/156 [==============================] - 113s 690ms/step - loss: 37690.0416 - reconstruction_loss: 37689.1328 - kl_loss: 9.3556
+Epoch 245/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37692.3552 - reconstruction_loss: 37688.0469 - kl_loss: 9.3702
+Epoch 246/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37696.1637 - reconstruction_loss: 37689.0156 - kl_loss: 9.3578
+Epoch 247/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37698.2048 - reconstruction_loss: 37688.3945 - kl_loss: 9.3516
+Epoch 248/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37695.5651 - reconstruction_loss: 37689.5508 - kl_loss: 9.3563
+Epoch 249/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37701.8946 - reconstruction_loss: 37688.4180 - kl_loss: 9.3824
+Epoch 250/1000
+156/156 [==============================] - 116s 714ms/step - loss: 37696.1658 - reconstruction_loss: 37687.5156 - kl_loss: 9.3626
+Epoch 251/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37701.2101 - reconstruction_loss: 37688.5977 - kl_loss: 9.3528
+Epoch 252/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37692.4686 - reconstruction_loss: 37687.6875 - kl_loss: 9.3788
+Epoch 253/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37699.9392 - reconstruction_loss: 37688.9023 - kl_loss: 9.4019
+Epoch 254/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37704.4360 - reconstruction_loss: 37688.6133 - kl_loss: 9.3684
+Epoch 255/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37693.9564 - reconstruction_loss: 37687.3320 - kl_loss: 9.3667
+Epoch 256/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37695.0606 - reconstruction_loss: 37688.4141 - kl_loss: 9.3805
+Epoch 257/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37695.0020 - reconstruction_loss: 37687.1758 - kl_loss: 9.4066
+Epoch 258/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37698.6457 - reconstruction_loss: 37686.9336 - kl_loss: 9.3807
+Epoch 259/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37697.7110 - reconstruction_loss: 37688.8125 - kl_loss: 9.3813
+Epoch 260/1000
+156/156 [==============================] - 117s 715ms/step - loss: 37691.9723 - reconstruction_loss: 37686.4883 - kl_loss: 9.4025
+Epoch 261/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37702.9454 - reconstruction_loss: 37686.9375 - kl_loss: 9.3878
+Epoch 262/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37693.5005 - reconstruction_loss: 37686.4922 - kl_loss: 9.3958
+Epoch 263/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37689.3783 - reconstruction_loss: 37685.7461 - kl_loss: 9.4023
+Epoch 264/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37691.5081 - reconstruction_loss: 37686.2305 - kl_loss: 9.4172
+Epoch 265/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37696.4732 - reconstruction_loss: 37685.7344 - kl_loss: 9.4027
+Epoch 266/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37688.3186 - reconstruction_loss: 37685.5117 - kl_loss: 9.4200
+Epoch 267/1000
+156/156 [==============================] - 117s 689ms/step - loss: 37696.6690 - reconstruction_loss: 37686.2812 - kl_loss: 9.3962
+Epoch 268/1000
+156/156 [==============================] - 113s 696ms/step - loss: 37699.5845 - reconstruction_loss: 37687.1211 - kl_loss: 9.3995
+Epoch 269/1000
+156/156 [==============================] - 113s 701ms/step - loss: 37702.7255 - reconstruction_loss: 37686.4023 - kl_loss: 9.4284
+Epoch 270/1000
+156/156 [==============================] - 111s 693ms/step - loss: 37692.2197 - reconstruction_loss: 37687.3984 - kl_loss: 9.3959
+Epoch 271/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37695.6184 - reconstruction_loss: 37686.6328 - kl_loss: 9.4069
+Epoch 272/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37694.0333 - reconstruction_loss: 37685.6016 - kl_loss: 9.4244
+Epoch 273/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37693.3761 - reconstruction_loss: 37686.4570 - kl_loss: 9.4122
+Epoch 274/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37691.2865 - reconstruction_loss: 37684.7656 - kl_loss: 9.4430
+Epoch 275/1000
+156/156 [==============================] - 114s 704ms/step - loss: 37687.8327 - reconstruction_loss: 37685.0391 - kl_loss: 9.4224
+Epoch 276/1000
+156/156 [==============================] - 112s 703ms/step - loss: 37694.9950 - reconstruction_loss: 37685.4883 - kl_loss: 9.4264
+Epoch 277/1000
+156/156 [==============================] - 116s 704ms/step - loss: 37694.7543 - reconstruction_loss: 37684.2227 - kl_loss: 9.4425
+Epoch 278/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37692.5280 - reconstruction_loss: 37685.1133 - kl_loss: 9.4448
+Epoch 279/1000
+156/156 [==============================] - 114s 711ms/step - loss: 37695.0014 - reconstruction_loss: 37685.2734 - kl_loss: 9.4288
+Epoch 280/1000
+156/156 [==============================] - 117s 696ms/step - loss: 37695.7799 - reconstruction_loss: 37684.9453 - kl_loss: 9.4373
+Epoch 281/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37696.1741 - reconstruction_loss: 37684.6172 - kl_loss: 9.4379
+Epoch 282/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37695.3433 - reconstruction_loss: 37683.8555 - kl_loss: 9.4416
+Epoch 283/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37696.2468 - reconstruction_loss: 37683.9727 - kl_loss: 9.4327
+Epoch 284/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37695.2907 - reconstruction_loss: 37684.1875 - kl_loss: 9.4533
+Epoch 285/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37696.8063 - reconstruction_loss: 37684.1523 - kl_loss: 9.4410
+Epoch 286/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37693.6625 - reconstruction_loss: 37682.4375 - kl_loss: 9.4560
+Epoch 287/1000
+156/156 [==============================] - 113s 686ms/step - loss: 37693.8135 - reconstruction_loss: 37683.7383 - kl_loss: 9.4396
+Epoch 288/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37694.7893 - reconstruction_loss: 37684.8320 - kl_loss: 9.4232
+Epoch 289/1000
+156/156 [==============================] - 117s 701ms/step - loss: 37694.4803 - reconstruction_loss: 37684.3945 - kl_loss: 9.4568
+Epoch 290/1000
+156/156 [==============================] - 117s 704ms/step - loss: 37690.6674 - reconstruction_loss: 37684.0156 - kl_loss: 9.4374
+Epoch 291/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37683.3255 - reconstruction_loss: 37683.3945 - kl_loss: 9.4456
+Epoch 292/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37696.2369 - reconstruction_loss: 37682.2734 - kl_loss: 9.4443
+Epoch 293/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37696.5951 - reconstruction_loss: 37683.7461 - kl_loss: 9.4740
+Epoch 294/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37694.7616 - reconstruction_loss: 37682.2188 - kl_loss: 9.4522
+Epoch 295/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37689.0993 - reconstruction_loss: 37685.6406 - kl_loss: 9.4391
+Epoch 296/1000
+156/156 [==============================] - 111s 693ms/step - loss: 37694.4169 - reconstruction_loss: 37682.9648 - kl_loss: 9.4467
+Epoch 297/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37689.8682 - reconstruction_loss: 37682.2969 - kl_loss: 9.4826
+Epoch 298/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37687.5977 - reconstruction_loss: 37682.7617 - kl_loss: 9.4477
+Epoch 299/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37693.5265 - reconstruction_loss: 37682.2539 - kl_loss: 9.4866
+Epoch 300/1000
+156/156 [==============================] - 117s 700ms/step - loss: 37690.4906 - reconstruction_loss: 37682.6211 - kl_loss: 9.4637
+Epoch 301/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37686.3094 - reconstruction_loss: 37682.7656 - kl_loss: 9.4608
+Epoch 302/1000
+156/156 [==============================] - 113s 703ms/step - loss: 37690.2510 - reconstruction_loss: 37682.1602 - kl_loss: 9.4672
+Epoch 303/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37686.7498 - reconstruction_loss: 37681.6680 - kl_loss: 9.4772
+Epoch 304/1000
+156/156 [==============================] - 116s 689ms/step - loss: 37692.0315 - reconstruction_loss: 37682.6719 - kl_loss: 9.4692
+Epoch 305/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37691.5789 - reconstruction_loss: 37682.4414 - kl_loss: 9.4887
+Epoch 306/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37686.3872 - reconstruction_loss: 37682.9727 - kl_loss: 9.4487
+Epoch 307/1000
+156/156 [==============================] - 111s 688ms/step - loss: 37686.7784 - reconstruction_loss: 37681.0195 - kl_loss: 9.4794
+Epoch 308/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37696.5747 - reconstruction_loss: 37682.6172 - kl_loss: 9.4633
+Epoch 309/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37692.5439 - reconstruction_loss: 37682.2773 - kl_loss: 9.5013
+Epoch 310/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37689.6374 - reconstruction_loss: 37681.0273 - kl_loss: 9.4894
+Epoch 311/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37692.6043 - reconstruction_loss: 37681.1484 - kl_loss: 9.4877
+Epoch 312/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37690.5621 - reconstruction_loss: 37681.3125 - kl_loss: 9.5026
+Epoch 313/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37690.8596 - reconstruction_loss: 37680.9414 - kl_loss: 9.4820
+Epoch 314/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37692.2463 - reconstruction_loss: 37682.2500 - kl_loss: 9.4617
+Epoch 315/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37694.0602 - reconstruction_loss: 37681.5078 - kl_loss: 9.5183
+Epoch 316/1000
+156/156 [==============================] - 116s 701ms/step - loss: 37692.8989 - reconstruction_loss: 37679.7773 - kl_loss: 9.4793
+Epoch 317/1000
+156/156 [==============================] - 118s 705ms/step - loss: 37690.5088 - reconstruction_loss: 37680.7188 - kl_loss: 9.4908
+Epoch 318/1000
+156/156 [==============================] - 120s 731ms/step - loss: 37694.6524 - reconstruction_loss: 37679.9141 - kl_loss: 9.5069
+Epoch 319/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37693.6242 - reconstruction_loss: 37679.8242 - kl_loss: 9.5175
+Epoch 320/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37682.5926 - reconstruction_loss: 37679.5156 - kl_loss: 9.5226
+Epoch 321/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37689.9125 - reconstruction_loss: 37680.3516 - kl_loss: 9.5029
+Epoch 322/1000
+156/156 [==============================] - 112s 703ms/step - loss: 37691.9884 - reconstruction_loss: 37681.1914 - kl_loss: 9.5122
+Epoch 323/1000
+156/156 [==============================] - 116s 701ms/step - loss: 37688.9931 - reconstruction_loss: 37679.5703 - kl_loss: 9.5088
+Epoch 324/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37683.5194 - reconstruction_loss: 37678.6602 - kl_loss: 9.5209
+Epoch 325/1000
+156/156 [==============================] - 116s 688ms/step - loss: 37689.0256 - reconstruction_loss: 37680.3672 - kl_loss: 9.4993
+Epoch 326/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37692.4041 - reconstruction_loss: 37680.5117 - kl_loss: 9.5068
+Epoch 327/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37684.3049 - reconstruction_loss: 37678.4375 - kl_loss: 9.5179
+Epoch 328/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37690.7649 - reconstruction_loss: 37680.3555 - kl_loss: 9.5362
+Epoch 329/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37687.4551 - reconstruction_loss: 37679.9258 - kl_loss: 9.5301
+Epoch 330/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37688.2292 - reconstruction_loss: 37680.7812 - kl_loss: 9.5046
+Epoch 331/1000
+156/156 [==============================] - 113s 688ms/step - loss: 37694.2920 - reconstruction_loss: 37679.9727 - kl_loss: 9.5246
+Epoch 332/1000
+156/156 [==============================] - 111s 692ms/step - loss: 37688.2507 - reconstruction_loss: 37679.6875 - kl_loss: 9.5342
+Epoch 333/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37688.2454 - reconstruction_loss: 37679.1719 - kl_loss: 9.5266
+Epoch 334/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37687.3384 - reconstruction_loss: 37679.2383 - kl_loss: 9.5343
+Epoch 335/1000
+156/156 [==============================] - 117s 703ms/step - loss: 37688.3988 - reconstruction_loss: 37678.8125 - kl_loss: 9.5357
+Epoch 336/1000
+156/156 [==============================] - 115s 717ms/step - loss: 37682.3941 - reconstruction_loss: 37678.1172 - kl_loss: 9.5387
+Epoch 337/1000
+156/156 [==============================] - 111s 682ms/step - loss: 37690.0648 - reconstruction_loss: 37678.7422 - kl_loss: 9.5469
+Epoch 338/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37685.3363 - reconstruction_loss: 37679.8711 - kl_loss: 9.4997
+Epoch 339/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37699.2153 - reconstruction_loss: 37678.7930 - kl_loss: 9.5642
+Epoch 340/1000
+156/156 [==============================] - 111s 691ms/step - loss: 37682.2910 - reconstruction_loss: 37677.4648 - kl_loss: 9.5491
+Epoch 341/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37687.8906 - reconstruction_loss: 37679.0664 - kl_loss: 9.5254
+Epoch 342/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37682.3947 - reconstruction_loss: 37679.0547 - kl_loss: 9.5039
+Epoch 343/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37689.4489 - reconstruction_loss: 37678.8477 - kl_loss: 9.5440
+Epoch 344/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37692.4514 - reconstruction_loss: 37678.6875 - kl_loss: 9.5097
+Epoch 345/1000
+156/156 [==============================] - 111s 691ms/step - loss: 37687.0344 - reconstruction_loss: 37678.2930 - kl_loss: 9.5482
+Epoch 346/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37685.2430 - reconstruction_loss: 37678.1484 - kl_loss: 9.5311
+Epoch 347/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37686.8868 - reconstruction_loss: 37677.5156 - kl_loss: 9.5709
+Epoch 348/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37688.1127 - reconstruction_loss: 37680.5430 - kl_loss: 9.5210
+Epoch 349/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37686.4747 - reconstruction_loss: 37678.7227 - kl_loss: 9.5533
+Epoch 350/1000
+156/156 [==============================] - 114s 709ms/step - loss: 37686.7677 - reconstruction_loss: 37677.7734 - kl_loss: 9.5411
+Epoch 351/1000
+156/156 [==============================] - 123s 724ms/step - loss: 37689.3947 - reconstruction_loss: 37676.9453 - kl_loss: 9.5583
+Epoch 352/1000
+156/156 [==============================] - 123s 754ms/step - loss: 37681.1955 - reconstruction_loss: 37677.2773 - kl_loss: 9.5672
+Epoch 353/1000
+156/156 [==============================] - 117s 713ms/step - loss: 37691.2171 - reconstruction_loss: 37677.1523 - kl_loss: 9.5515
+Epoch 354/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37685.4905 - reconstruction_loss: 37676.8945 - kl_loss: 9.5482
+Epoch 355/1000
+156/156 [==============================] - 116s 723ms/step - loss: 37683.3406 - reconstruction_loss: 37677.2891 - kl_loss: 9.5551
+Epoch 356/1000
+156/156 [==============================] - 113s 701ms/step - loss: 37684.8647 - reconstruction_loss: 37678.0898 - kl_loss: 9.5459
+Epoch 357/1000
+156/156 [==============================] - 114s 700ms/step - loss: 37684.8190 - reconstruction_loss: 37677.7031 - kl_loss: 9.5590
+Epoch 358/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37684.7725 - reconstruction_loss: 37677.4141 - kl_loss: 9.5597
+Epoch 359/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37690.0999 - reconstruction_loss: 37677.0859 - kl_loss: 9.5513
+Epoch 360/1000
+156/156 [==============================] - 116s 694ms/step - loss: 37690.8667 - reconstruction_loss: 37675.6289 - kl_loss: 9.5682
+Epoch 361/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37683.3614 - reconstruction_loss: 37676.9531 - kl_loss: 9.5626
+Epoch 362/1000
+156/156 [==============================] - 117s 689ms/step - loss: 37687.7540 - reconstruction_loss: 37678.3047 - kl_loss: 9.5536
+Epoch 363/1000
+156/156 [==============================] - 113s 703ms/step - loss: 37690.3201 - reconstruction_loss: 37677.3047 - kl_loss: 9.5389
+Epoch 364/1000
+156/156 [==============================] - 121s 724ms/step - loss: 37678.5620 - reconstruction_loss: 37675.4492 - kl_loss: 9.5962
+Epoch 365/1000
+156/156 [==============================] - 122s 726ms/step - loss: 37683.8119 - reconstruction_loss: 37676.5820 - kl_loss: 9.5692
+Epoch 366/1000
+156/156 [==============================] - 114s 703ms/step - loss: 37689.9666 - reconstruction_loss: 37676.6055 - kl_loss: 9.5769
+Epoch 367/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37687.5770 - reconstruction_loss: 37677.4453 - kl_loss: 9.5908
+Epoch 368/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37685.8901 - reconstruction_loss: 37676.9531 - kl_loss: 9.5816
+Epoch 369/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37680.5452 - reconstruction_loss: 37675.6641 - kl_loss: 9.5720
+Epoch 370/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37681.8854 - reconstruction_loss: 37676.1406 - kl_loss: 9.5851
+Epoch 371/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37677.9692 - reconstruction_loss: 37676.3086 - kl_loss: 9.5714
+Epoch 372/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37688.9472 - reconstruction_loss: 37676.0312 - kl_loss: 9.5791
+Epoch 373/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37685.0287 - reconstruction_loss: 37675.5273 - kl_loss: 9.5982
+Epoch 374/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37680.7998 - reconstruction_loss: 37676.9727 - kl_loss: 9.5620
+Epoch 375/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37696.7416 - reconstruction_loss: 37677.5703 - kl_loss: 9.5445
+Epoch 376/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37685.9591 - reconstruction_loss: 37675.6992 - kl_loss: 9.5950
+Epoch 377/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37684.2936 - reconstruction_loss: 37675.7812 - kl_loss: 9.5921
+Epoch 378/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37689.2543 - reconstruction_loss: 37674.8047 - kl_loss: 9.6009
+Epoch 379/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37691.5482 - reconstruction_loss: 37674.4727 - kl_loss: 9.5846
+Epoch 380/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37683.1411 - reconstruction_loss: 37675.9570 - kl_loss: 9.6143
+Epoch 381/1000
+156/156 [==============================] - 111s 689ms/step - loss: 37679.3306 - reconstruction_loss: 37674.5781 - kl_loss: 9.6058
+Epoch 382/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37688.0750 - reconstruction_loss: 37676.1914 - kl_loss: 9.5690
+Epoch 383/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37689.3484 - reconstruction_loss: 37674.5859 - kl_loss: 9.6110
+Epoch 384/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37685.4935 - reconstruction_loss: 37675.5469 - kl_loss: 9.5989
+Epoch 385/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37687.7032 - reconstruction_loss: 37674.2773 - kl_loss: 9.5575
+Epoch 386/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37682.3773 - reconstruction_loss: 37674.9023 - kl_loss: 9.5930
+Epoch 387/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37684.9855 - reconstruction_loss: 37675.4180 - kl_loss: 9.6139
+Epoch 388/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37680.5102 - reconstruction_loss: 37674.5078 - kl_loss: 9.6030
+Epoch 389/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37690.5887 - reconstruction_loss: 37675.1211 - kl_loss: 9.5963
+Epoch 390/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37680.1462 - reconstruction_loss: 37674.7773 - kl_loss: 9.5803
+Epoch 391/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37681.9889 - reconstruction_loss: 37674.7344 - kl_loss: 9.6108
+Epoch 392/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37686.7887 - reconstruction_loss: 37675.0430 - kl_loss: 9.5939
+Epoch 393/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37692.1675 - reconstruction_loss: 37675.0273 - kl_loss: 9.6043
+Epoch 394/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37677.4389 - reconstruction_loss: 37674.0703 - kl_loss: 9.6212
+Epoch 395/1000
+156/156 [==============================] - 111s 683ms/step - loss: 37681.2019 - reconstruction_loss: 37674.3477 - kl_loss: 9.6149
+Epoch 396/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37689.7727 - reconstruction_loss: 37675.0820 - kl_loss: 9.6129
+Epoch 397/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37685.8304 - reconstruction_loss: 37673.8984 - kl_loss: 9.6059
+Epoch 398/1000
+156/156 [==============================] - 113s 695ms/step - loss: 37680.3848 - reconstruction_loss: 37673.3828 - kl_loss: 9.6202
+Epoch 399/1000
+156/156 [==============================] - 117s 692ms/step - loss: 37683.6956 - reconstruction_loss: 37673.0078 - kl_loss: 9.6249
+Epoch 400/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37682.7631 - reconstruction_loss: 37675.1836 - kl_loss: 9.6204
+Epoch 401/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37688.1101 - reconstruction_loss: 37674.6445 - kl_loss: 9.6020
+Epoch 402/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37689.4482 - reconstruction_loss: 37673.4727 - kl_loss: 9.6087
+Epoch 403/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37679.2640 - reconstruction_loss: 37673.8359 - kl_loss: 9.6054
+Epoch 404/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37675.6115 - reconstruction_loss: 37673.2227 - kl_loss: 9.6290
+Epoch 405/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37681.3886 - reconstruction_loss: 37673.5078 - kl_loss: 9.6573
+Epoch 406/1000
+156/156 [==============================] - 117s 687ms/step - loss: 37685.8928 - reconstruction_loss: 37673.7227 - kl_loss: 9.6348
+Epoch 407/1000
+156/156 [==============================] - 116s 695ms/step - loss: 37679.4442 - reconstruction_loss: 37674.0078 - kl_loss: 9.6168
+Epoch 408/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37687.8277 - reconstruction_loss: 37673.6719 - kl_loss: 9.5883
+Epoch 409/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37683.8848 - reconstruction_loss: 37672.2031 - kl_loss: 9.6450
+Epoch 410/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37680.1866 - reconstruction_loss: 37673.5312 - kl_loss: 9.6449
+Epoch 411/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37677.3557 - reconstruction_loss: 37671.9727 - kl_loss: 9.6547
+Epoch 412/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37673.9213 - reconstruction_loss: 37672.9023 - kl_loss: 9.6435
+Epoch 413/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37687.6659 - reconstruction_loss: 37674.4727 - kl_loss: 9.6364
+Epoch 414/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37688.9962 - reconstruction_loss: 37673.4414 - kl_loss: 9.6393
+Epoch 415/1000
+156/156 [==============================] - 111s 690ms/step - loss: 37688.3203 - reconstruction_loss: 37674.0898 - kl_loss: 9.6348
+Epoch 416/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37688.5449 - reconstruction_loss: 37673.4688 - kl_loss: 9.6177
+Epoch 417/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37681.5100 - reconstruction_loss: 37672.4375 - kl_loss: 9.6437
+Epoch 418/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37686.6536 - reconstruction_loss: 37671.9219 - kl_loss: 9.6268
+Epoch 419/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37680.7805 - reconstruction_loss: 37672.4297 - kl_loss: 9.6470
+Epoch 420/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37682.9377 - reconstruction_loss: 37672.3438 - kl_loss: 9.6381
+Epoch 421/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37681.8964 - reconstruction_loss: 37672.7852 - kl_loss: 9.6197
+Epoch 422/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37679.2380 - reconstruction_loss: 37673.9180 - kl_loss: 9.6263
+Epoch 423/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37672.7320 - reconstruction_loss: 37671.5547 - kl_loss: 9.6657
+Epoch 424/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37678.4911 - reconstruction_loss: 37673.2305 - kl_loss: 9.6224
+Epoch 425/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37677.9953 - reconstruction_loss: 37671.8672 - kl_loss: 9.6521
+Epoch 426/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37686.0642 - reconstruction_loss: 37671.7109 - kl_loss: 9.6475
+Epoch 427/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37683.4420 - reconstruction_loss: 37672.3477 - kl_loss: 9.6220
+Epoch 428/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37677.6369 - reconstruction_loss: 37672.0273 - kl_loss: 9.6579
+Epoch 429/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37675.6678 - reconstruction_loss: 37672.3242 - kl_loss: 9.6651
+Epoch 430/1000
+156/156 [==============================] - 113s 705ms/step - loss: 37679.5926 - reconstruction_loss: 37672.3281 - kl_loss: 9.6636
+Epoch 431/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37678.2140 - reconstruction_loss: 37671.4375 - kl_loss: 9.6504
+Epoch 432/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37688.9202 - reconstruction_loss: 37672.5195 - kl_loss: 9.6173
+Epoch 433/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37686.2835 - reconstruction_loss: 37672.6172 - kl_loss: 9.6448
+Epoch 434/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37684.5953 - reconstruction_loss: 37672.6094 - kl_loss: 9.6562
+Epoch 435/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37674.9070 - reconstruction_loss: 37671.7773 - kl_loss: 9.6921
+Epoch 436/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37678.3046 - reconstruction_loss: 37672.1523 - kl_loss: 9.6710
+Epoch 437/1000
+156/156 [==============================] - 111s 685ms/step - loss: 37684.0298 - reconstruction_loss: 37671.7773 - kl_loss: 9.6655
+Epoch 438/1000
+156/156 [==============================] - 116s 699ms/step - loss: 37682.1517 - reconstruction_loss: 37672.2539 - kl_loss: 9.6697
+Epoch 439/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37677.6366 - reconstruction_loss: 37672.1641 - kl_loss: 9.6709
+Epoch 440/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37686.3327 - reconstruction_loss: 37671.6328 - kl_loss: 9.6726
+Epoch 441/1000
+156/156 [==============================] - 117s 691ms/step - loss: 37686.9756 - reconstruction_loss: 37672.8750 - kl_loss: 9.6643
+Epoch 442/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37669.1110 - reconstruction_loss: 37670.2578 - kl_loss: 9.6680
+Epoch 443/1000
+156/156 [==============================] - 113s 688ms/step - loss: 37673.8213 - reconstruction_loss: 37670.2656 - kl_loss: 9.6750
+Epoch 444/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37687.1264 - reconstruction_loss: 37670.5391 - kl_loss: 9.6987
+Epoch 445/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37682.2343 - reconstruction_loss: 37672.7617 - kl_loss: 9.6427
+Epoch 446/1000
+156/156 [==============================] - 116s 718ms/step - loss: 37688.5927 - reconstruction_loss: 37671.6758 - kl_loss: 9.6613
+Epoch 447/1000
+156/156 [==============================] - 116s 723ms/step - loss: 37682.8785 - reconstruction_loss: 37670.1875 - kl_loss: 9.6817
+Epoch 448/1000
+156/156 [==============================] - 119s 721ms/step - loss: 37692.9373 - reconstruction_loss: 37669.7812 - kl_loss: 9.6748
+Epoch 449/1000
+156/156 [==============================] - 116s 715ms/step - loss: 37681.4282 - reconstruction_loss: 37670.6836 - kl_loss: 9.6823
+Epoch 450/1000
+156/156 [==============================] - 117s 723ms/step - loss: 37682.9118 - reconstruction_loss: 37671.2773 - kl_loss: 9.6691
+Epoch 451/1000
+156/156 [==============================] - 117s 722ms/step - loss: 37678.8013 - reconstruction_loss: 37670.7773 - kl_loss: 9.6941
+Epoch 452/1000
+156/156 [==============================] - 114s 707ms/step - loss: 37678.9056 - reconstruction_loss: 37670.6133 - kl_loss: 9.6871
+Epoch 453/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37676.3703 - reconstruction_loss: 37670.2656 - kl_loss: 9.6727
+Epoch 454/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37680.2132 - reconstruction_loss: 37670.6406 - kl_loss: 9.6781
+Epoch 455/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37676.6227 - reconstruction_loss: 37670.3047 - kl_loss: 9.6884
+Epoch 456/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37677.0561 - reconstruction_loss: 37669.2148 - kl_loss: 9.6806
+Epoch 457/1000
+156/156 [==============================] - 118s 706ms/step - loss: 37676.5548 - reconstruction_loss: 37671.1914 - kl_loss: 9.6782
+Epoch 458/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37680.9487 - reconstruction_loss: 37670.2930 - kl_loss: 9.6888
+Epoch 459/1000
+156/156 [==============================] - 117s 691ms/step - loss: 37676.0744 - reconstruction_loss: 37669.2227 - kl_loss: 9.6816
+Epoch 460/1000
+156/156 [==============================] - 117s 709ms/step - loss: 37684.2252 - reconstruction_loss: 37671.2422 - kl_loss: 9.6760
+Epoch 461/1000
+156/156 [==============================] - 119s 738ms/step - loss: 37682.4895 - reconstruction_loss: 37671.5508 - kl_loss: 9.6692
+Epoch 462/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37680.8911 - reconstruction_loss: 37670.3203 - kl_loss: 9.6918
+Epoch 463/1000
+156/156 [==============================] - 116s 687ms/step - loss: 37677.8911 - reconstruction_loss: 37670.1914 - kl_loss: 9.6840
+Epoch 464/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37687.2690 - reconstruction_loss: 37669.8281 - kl_loss: 9.6829
+Epoch 465/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37674.3374 - reconstruction_loss: 37669.5312 - kl_loss: 9.6760
+Epoch 466/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37682.9923 - reconstruction_loss: 37669.7930 - kl_loss: 9.7113
+Epoch 467/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37670.1713 - reconstruction_loss: 37669.5625 - kl_loss: 9.7035
+Epoch 468/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37682.7955 - reconstruction_loss: 37670.3750 - kl_loss: 9.6953
+Epoch 469/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37676.0860 - reconstruction_loss: 37670.6133 - kl_loss: 9.6663
+Epoch 470/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37680.2093 - reconstruction_loss: 37670.2344 - kl_loss: 9.6915
+Epoch 471/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37676.7309 - reconstruction_loss: 37668.5703 - kl_loss: 9.7043
+Epoch 472/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37679.6446 - reconstruction_loss: 37670.5430 - kl_loss: 9.7150
+Epoch 473/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37684.3016 - reconstruction_loss: 37670.0625 - kl_loss: 9.6882
+Epoch 474/1000
+156/156 [==============================] - 111s 693ms/step - loss: 37683.5927 - reconstruction_loss: 37669.0664 - kl_loss: 9.7036
+Epoch 475/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37678.9402 - reconstruction_loss: 37668.8516 - kl_loss: 9.7098
+Epoch 476/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37677.3570 - reconstruction_loss: 37668.7266 - kl_loss: 9.7140
+Epoch 477/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37675.3064 - reconstruction_loss: 37669.8672 - kl_loss: 9.7077
+Epoch 478/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37679.9804 - reconstruction_loss: 37670.9844 - kl_loss: 9.6955
+Epoch 479/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37679.2824 - reconstruction_loss: 37667.9258 - kl_loss: 9.7164
+Epoch 480/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37675.2767 - reconstruction_loss: 37668.9102 - kl_loss: 9.7207
+Epoch 481/1000
+156/156 [==============================] - 111s 689ms/step - loss: 37675.5764 - reconstruction_loss: 37669.0898 - kl_loss: 9.6976
+Epoch 482/1000
+156/156 [==============================] - 116s 704ms/step - loss: 37682.5274 - reconstruction_loss: 37669.6133 - kl_loss: 9.7145
+Epoch 483/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37680.6134 - reconstruction_loss: 37668.6875 - kl_loss: 9.7183
+Epoch 484/1000
+156/156 [==============================] - 117s 696ms/step - loss: 37677.1723 - reconstruction_loss: 37669.8828 - kl_loss: 9.6815
+Epoch 485/1000
+156/156 [==============================] - 117s 699ms/step - loss: 37683.1506 - reconstruction_loss: 37669.4961 - kl_loss: 9.7104
+Epoch 486/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37675.7370 - reconstruction_loss: 37668.2734 - kl_loss: 9.7178
+Epoch 487/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37677.1536 - reconstruction_loss: 37667.7227 - kl_loss: 9.7395
+Epoch 488/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37673.7389 - reconstruction_loss: 37668.6680 - kl_loss: 9.7054
+Epoch 489/1000
+156/156 [==============================] - 117s 697ms/step - loss: 37684.5111 - reconstruction_loss: 37668.8789 - kl_loss: 9.7199
+Epoch 490/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37683.4817 - reconstruction_loss: 37669.3672 - kl_loss: 9.6962
+Epoch 491/1000
+156/156 [==============================] - 111s 696ms/step - loss: 37677.3772 - reconstruction_loss: 37668.8438 - kl_loss: 9.7393
+Epoch 492/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37676.9648 - reconstruction_loss: 37668.7773 - kl_loss: 9.7146
+Epoch 493/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37677.4071 - reconstruction_loss: 37667.2930 - kl_loss: 9.7285
+Epoch 494/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37679.8702 - reconstruction_loss: 37667.8398 - kl_loss: 9.7210
+Epoch 495/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37678.9150 - reconstruction_loss: 37667.7227 - kl_loss: 9.7259
+Epoch 496/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37677.8905 - reconstruction_loss: 37668.5156 - kl_loss: 9.7221
+Epoch 497/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37669.1859 - reconstruction_loss: 37669.9219 - kl_loss: 9.6903
+Epoch 498/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37670.6386 - reconstruction_loss: 37669.0820 - kl_loss: 9.7182
+Epoch 499/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37675.8115 - reconstruction_loss: 37666.9297 - kl_loss: 9.7389
+Epoch 500/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37679.2590 - reconstruction_loss: 37669.8125 - kl_loss: 9.7080
+Epoch 501/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37677.5275 - reconstruction_loss: 37667.8242 - kl_loss: 9.7118
+Epoch 502/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37675.3722 - reconstruction_loss: 37668.0820 - kl_loss: 9.7169
+Epoch 503/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37679.7736 - reconstruction_loss: 37668.0664 - kl_loss: 9.7160
+Epoch 504/1000
+156/156 [==============================] - 117s 710ms/step - loss: 37677.4215 - reconstruction_loss: 37667.7930 - kl_loss: 9.7267
+Epoch 505/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37678.6088 - reconstruction_loss: 37669.0781 - kl_loss: 9.7296
+Epoch 506/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37680.4406 - reconstruction_loss: 37667.4297 - kl_loss: 9.7351
+Epoch 507/1000
+156/156 [==============================] - 113s 694ms/step - loss: 37681.2098 - reconstruction_loss: 37667.8164 - kl_loss: 9.7503
+Epoch 508/1000
+156/156 [==============================] - 111s 684ms/step - loss: 37675.7050 - reconstruction_loss: 37668.8320 - kl_loss: 9.7102
+Epoch 509/1000
+156/156 [==============================] - 113s 704ms/step - loss: 37671.3664 - reconstruction_loss: 37666.7422 - kl_loss: 9.7370
+Epoch 510/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37678.7670 - reconstruction_loss: 37666.6953 - kl_loss: 9.7293
+Epoch 511/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37679.0625 - reconstruction_loss: 37668.0000 - kl_loss: 9.7213
+Epoch 512/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37675.1497 - reconstruction_loss: 37667.9570 - kl_loss: 9.7181
+Epoch 513/1000
+156/156 [==============================] - 113s 705ms/step - loss: 37672.5604 - reconstruction_loss: 37667.2734 - kl_loss: 9.7163
+Epoch 514/1000
+156/156 [==============================] - 113s 697ms/step - loss: 37669.2731 - reconstruction_loss: 37667.3438 - kl_loss: 9.7349
+Epoch 515/1000
+156/156 [==============================] - 111s 693ms/step - loss: 37681.0775 - reconstruction_loss: 37666.9766 - kl_loss: 9.7291
+Epoch 516/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37668.4996 - reconstruction_loss: 37666.5664 - kl_loss: 9.7490
+Epoch 517/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37664.7691 - reconstruction_loss: 37666.2344 - kl_loss: 9.7462
+Epoch 518/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37676.9958 - reconstruction_loss: 37667.1836 - kl_loss: 9.7307
+Epoch 519/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37673.5808 - reconstruction_loss: 37667.0430 - kl_loss: 9.7323
+Epoch 520/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37676.5140 - reconstruction_loss: 37666.3477 - kl_loss: 9.7397
+Epoch 521/1000
+156/156 [==============================] - 113s 689ms/step - loss: 37673.9839 - reconstruction_loss: 37667.6914 - kl_loss: 9.7338
+Epoch 522/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37671.9238 - reconstruction_loss: 37668.7891 - kl_loss: 9.7348
+Epoch 523/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37680.3408 - reconstruction_loss: 37665.9844 - kl_loss: 9.7576
+Epoch 524/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37673.3378 - reconstruction_loss: 37666.8242 - kl_loss: 9.7388
+Epoch 525/1000
+156/156 [==============================] - 112s 703ms/step - loss: 37675.6875 - reconstruction_loss: 37666.7070 - kl_loss: 9.7296
+Epoch 526/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37677.9853 - reconstruction_loss: 37665.9336 - kl_loss: 9.7529
+Epoch 527/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37681.0869 - reconstruction_loss: 37665.9727 - kl_loss: 9.7409
+Epoch 528/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37676.4115 - reconstruction_loss: 37667.3203 - kl_loss: 9.7466
+Epoch 529/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37677.6919 - reconstruction_loss: 37666.5625 - kl_loss: 9.7491
+Epoch 530/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37673.0135 - reconstruction_loss: 37666.8477 - kl_loss: 9.7271
+Epoch 531/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37675.5951 - reconstruction_loss: 37666.9180 - kl_loss: 9.7667
+Epoch 532/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37681.2578 - reconstruction_loss: 37665.6289 - kl_loss: 9.7524
+Epoch 533/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37676.4802 - reconstruction_loss: 37667.0938 - kl_loss: 9.7602
+Epoch 534/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37673.1637 - reconstruction_loss: 37667.1953 - kl_loss: 9.7567
+Epoch 535/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37678.1819 - reconstruction_loss: 37666.0391 - kl_loss: 9.7368
+Epoch 536/1000
+156/156 [==============================] - 113s 691ms/step - loss: 37676.0010 - reconstruction_loss: 37666.5312 - kl_loss: 9.7439
+Epoch 537/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37670.9247 - reconstruction_loss: 37665.7891 - kl_loss: 9.7675
+Epoch 538/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37674.1885 - reconstruction_loss: 37666.5391 - kl_loss: 9.7329
+Epoch 539/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37682.3839 - reconstruction_loss: 37667.4180 - kl_loss: 9.7575
+Epoch 540/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37669.9706 - reconstruction_loss: 37665.9258 - kl_loss: 9.7518
+Epoch 541/1000
+156/156 [==============================] - 117s 685ms/step - loss: 37674.3290 - reconstruction_loss: 37667.5938 - kl_loss: 9.7289
+Epoch 542/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37675.1767 - reconstruction_loss: 37666.0898 - kl_loss: 9.7534
+Epoch 543/1000
+156/156 [==============================] - 111s 693ms/step - loss: 37670.8168 - reconstruction_loss: 37666.3125 - kl_loss: 9.7406
+Epoch 544/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37673.1745 - reconstruction_loss: 37664.5781 - kl_loss: 9.7828
+Epoch 545/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37672.8811 - reconstruction_loss: 37666.8086 - kl_loss: 9.7543
+Epoch 546/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37670.8908 - reconstruction_loss: 37664.8281 - kl_loss: 9.7754
+Epoch 547/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37677.1718 - reconstruction_loss: 37664.7852 - kl_loss: 9.7342
+Epoch 548/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37674.3261 - reconstruction_loss: 37666.1094 - kl_loss: 9.7908
+Epoch 549/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37669.9563 - reconstruction_loss: 37665.4922 - kl_loss: 9.7238
+Epoch 550/1000
+156/156 [==============================] - 111s 683ms/step - loss: 37675.6798 - reconstruction_loss: 37666.0195 - kl_loss: 9.7446
+Epoch 551/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37675.6730 - reconstruction_loss: 37667.0820 - kl_loss: 9.7437
+Epoch 552/1000
+156/156 [==============================] - 117s 710ms/step - loss: 37673.5537 - reconstruction_loss: 37665.5547 - kl_loss: 9.7445
+Epoch 553/1000
+156/156 [==============================] - 111s 698ms/step - loss: 37679.2765 - reconstruction_loss: 37665.0977 - kl_loss: 9.7519
+Epoch 554/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37674.0704 - reconstruction_loss: 37665.3242 - kl_loss: 9.7601
+Epoch 555/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37678.6977 - reconstruction_loss: 37665.4727 - kl_loss: 9.7730
+Epoch 556/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37673.4220 - reconstruction_loss: 37665.7695 - kl_loss: 9.7845
+Epoch 557/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37674.5308 - reconstruction_loss: 37664.8242 - kl_loss: 9.7783
+Epoch 558/1000
+156/156 [==============================] - 113s 688ms/step - loss: 37675.1755 - reconstruction_loss: 37665.6680 - kl_loss: 9.7885
+Epoch 559/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37679.0199 - reconstruction_loss: 37665.9805 - kl_loss: 9.7623
+Epoch 560/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37675.9123 - reconstruction_loss: 37667.5078 - kl_loss: 9.7362
+Epoch 561/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37674.9378 - reconstruction_loss: 37665.5391 - kl_loss: 9.7675
+Epoch 562/1000
+156/156 [==============================] - 113s 689ms/step - loss: 37677.0219 - reconstruction_loss: 37666.0195 - kl_loss: 9.7781
+Epoch 563/1000
+156/156 [==============================] - 117s 695ms/step - loss: 37676.3932 - reconstruction_loss: 37665.4688 - kl_loss: 9.7554
+Epoch 564/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37675.3232 - reconstruction_loss: 37664.4180 - kl_loss: 9.7858
+Epoch 565/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37680.5785 - reconstruction_loss: 37664.2422 - kl_loss: 9.7659
+Epoch 566/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37674.2600 - reconstruction_loss: 37666.1953 - kl_loss: 9.7894
+Epoch 567/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37668.0487 - reconstruction_loss: 37665.3555 - kl_loss: 9.7700
+Epoch 568/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37676.2685 - reconstruction_loss: 37664.8633 - kl_loss: 9.7947
+Epoch 569/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37674.0363 - reconstruction_loss: 37665.2266 - kl_loss: 9.7945
+Epoch 570/1000
+156/156 [==============================] - 113s 699ms/step - loss: 37676.3776 - reconstruction_loss: 37664.0234 - kl_loss: 9.7735
+Epoch 571/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37679.8707 - reconstruction_loss: 37664.5977 - kl_loss: 9.7862
+Epoch 572/1000
+156/156 [==============================] - 113s 687ms/step - loss: 37678.4878 - reconstruction_loss: 37664.1172 - kl_loss: 9.7763
+Epoch 573/1000
+156/156 [==============================] - 113s 686ms/step - loss: 37670.6143 - reconstruction_loss: 37664.5820 - kl_loss: 9.8021
+Epoch 574/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37668.7759 - reconstruction_loss: 37665.3086 - kl_loss: 9.7639
+Epoch 575/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37673.3756 - reconstruction_loss: 37664.3672 - kl_loss: 9.7806
+Epoch 576/1000
+156/156 [==============================] - 111s 695ms/step - loss: 37674.2069 - reconstruction_loss: 37663.9023 - kl_loss: 9.7964
+Epoch 577/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37669.0729 - reconstruction_loss: 37664.5625 - kl_loss: 9.7972
+Epoch 578/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37676.6351 - reconstruction_loss: 37663.6484 - kl_loss: 9.8034
+Epoch 579/1000
+156/156 [==============================] - 113s 687ms/step - loss: 37674.7520 - reconstruction_loss: 37666.3008 - kl_loss: 9.7632
+Epoch 580/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37676.2190 - reconstruction_loss: 37664.7773 - kl_loss: 9.7919
+Epoch 581/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37667.4405 - reconstruction_loss: 37663.3203 - kl_loss: 9.7855
+Epoch 582/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37679.9841 - reconstruction_loss: 37665.0000 - kl_loss: 9.7908
+Epoch 583/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37672.3488 - reconstruction_loss: 37663.6836 - kl_loss: 9.7981
+Epoch 584/1000
+156/156 [==============================] - 112s 681ms/step - loss: 37676.8916 - reconstruction_loss: 37664.8203 - kl_loss: 9.7951
+Epoch 585/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37665.4216 - reconstruction_loss: 37663.8984 - kl_loss: 9.8027
+Epoch 586/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37661.6702 - reconstruction_loss: 37664.4297 - kl_loss: 9.7816
+Epoch 587/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37679.3582 - reconstruction_loss: 37664.2773 - kl_loss: 9.7886
+Epoch 588/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37682.6656 - reconstruction_loss: 37663.5820 - kl_loss: 9.7704
+Epoch 589/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37674.6180 - reconstruction_loss: 37664.6875 - kl_loss: 9.7961
+Epoch 590/1000
+156/156 [==============================] - 113s 700ms/step - loss: 37666.4931 - reconstruction_loss: 37664.0273 - kl_loss: 9.7754
+Epoch 591/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37677.0794 - reconstruction_loss: 37663.2500 - kl_loss: 9.7972
+Epoch 592/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37676.4230 - reconstruction_loss: 37663.4258 - kl_loss: 9.7908
+Epoch 593/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37674.2699 - reconstruction_loss: 37665.1172 - kl_loss: 9.7879
+Epoch 594/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37675.7188 - reconstruction_loss: 37665.3594 - kl_loss: 9.7980
+Epoch 595/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37673.7791 - reconstruction_loss: 37664.0977 - kl_loss: 9.8062
+Epoch 596/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37669.3295 - reconstruction_loss: 37663.4609 - kl_loss: 9.7898
+Epoch 597/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37672.5499 - reconstruction_loss: 37662.2422 - kl_loss: 9.8052
+Epoch 598/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37670.6058 - reconstruction_loss: 37663.9727 - kl_loss: 9.7927
+Epoch 599/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37672.3802 - reconstruction_loss: 37663.6875 - kl_loss: 9.7969
+Epoch 600/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37677.5321 - reconstruction_loss: 37663.4570 - kl_loss: 9.7716
+Epoch 601/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37673.6382 - reconstruction_loss: 37662.8633 - kl_loss: 9.8042
+Epoch 602/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37673.9992 - reconstruction_loss: 37662.4180 - kl_loss: 9.7997
+Epoch 603/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37669.9669 - reconstruction_loss: 37662.9180 - kl_loss: 9.8000
+Epoch 604/1000
+156/156 [==============================] - 116s 694ms/step - loss: 37674.2746 - reconstruction_loss: 37664.8242 - kl_loss: 9.7971
+Epoch 605/1000
+156/156 [==============================] - 111s 692ms/step - loss: 37673.4632 - reconstruction_loss: 37663.1953 - kl_loss: 9.8092
+Epoch 606/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37674.8040 - reconstruction_loss: 37664.4375 - kl_loss: 9.7886
+Epoch 607/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37670.2421 - reconstruction_loss: 37663.9570 - kl_loss: 9.8156
+Epoch 608/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37673.3749 - reconstruction_loss: 37663.0430 - kl_loss: 9.8064
+Epoch 609/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37672.3260 - reconstruction_loss: 37663.2266 - kl_loss: 9.8240
+Epoch 610/1000
+156/156 [==============================] - 117s 713ms/step - loss: 37671.7002 - reconstruction_loss: 37664.7227 - kl_loss: 9.8025
+Epoch 611/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37670.6795 - reconstruction_loss: 37663.0430 - kl_loss: 9.8130
+Epoch 612/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37681.4569 - reconstruction_loss: 37663.7070 - kl_loss: 9.7985
+Epoch 613/1000
+156/156 [==============================] - 114s 708ms/step - loss: 37670.6946 - reconstruction_loss: 37663.9844 - kl_loss: 9.7909
+Epoch 614/1000
+156/156 [==============================] - 114s 706ms/step - loss: 37675.5359 - reconstruction_loss: 37662.9219 - kl_loss: 9.8174
+Epoch 615/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37674.1611 - reconstruction_loss: 37663.1094 - kl_loss: 9.8203
+Epoch 616/1000
+156/156 [==============================] - 122s 754ms/step - loss: 37675.0312 - reconstruction_loss: 37662.3711 - kl_loss: 9.7870
+Epoch 617/1000
+156/156 [==============================] - 113s 697ms/step - loss: 37671.2995 - reconstruction_loss: 37662.0469 - kl_loss: 9.8002
+Epoch 618/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37679.0769 - reconstruction_loss: 37664.0977 - kl_loss: 9.8027
+Epoch 619/1000
+156/156 [==============================] - 114s 699ms/step - loss: 37669.2683 - reconstruction_loss: 37661.5273 - kl_loss: 9.8304
+Epoch 620/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37676.6777 - reconstruction_loss: 37663.0938 - kl_loss: 9.7942
+Epoch 621/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37675.0763 - reconstruction_loss: 37662.2773 - kl_loss: 9.8289
+Epoch 622/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37664.8526 - reconstruction_loss: 37662.7773 - kl_loss: 9.8027
+Epoch 623/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37665.7547 - reconstruction_loss: 37663.7383 - kl_loss: 9.7929
+Epoch 624/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37673.8222 - reconstruction_loss: 37665.4805 - kl_loss: 9.7894
+Epoch 625/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37671.8611 - reconstruction_loss: 37662.7305 - kl_loss: 9.8108
+Epoch 626/1000
+156/156 [==============================] - 111s 685ms/step - loss: 37664.4251 - reconstruction_loss: 37662.7930 - kl_loss: 9.8184
+Epoch 627/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37674.3790 - reconstruction_loss: 37663.0117 - kl_loss: 9.8280
+Epoch 628/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37673.1109 - reconstruction_loss: 37661.8906 - kl_loss: 9.8120
+Epoch 629/1000
+156/156 [==============================] - 116s 700ms/step - loss: 37671.5774 - reconstruction_loss: 37661.8945 - kl_loss: 9.8189
+Epoch 630/1000
+156/156 [==============================] - 113s 699ms/step - loss: 37670.9180 - reconstruction_loss: 37661.7227 - kl_loss: 9.8482
+Epoch 631/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37674.5848 - reconstruction_loss: 37661.8633 - kl_loss: 9.7974
+Epoch 632/1000
+156/156 [==============================] - 113s 692ms/step - loss: 37674.5721 - reconstruction_loss: 37662.3594 - kl_loss: 9.8308
+Epoch 633/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37674.6408 - reconstruction_loss: 37662.6172 - kl_loss: 9.8302
+Epoch 634/1000
+156/156 [==============================] - 113s 699ms/step - loss: 37668.9361 - reconstruction_loss: 37661.9727 - kl_loss: 9.8313
+Epoch 635/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37670.2429 - reconstruction_loss: 37661.6328 - kl_loss: 9.8149
+Epoch 636/1000
+156/156 [==============================] - 111s 682ms/step - loss: 37668.3944 - reconstruction_loss: 37663.0391 - kl_loss: 9.8327
+Epoch 637/1000
+156/156 [==============================] - 119s 730ms/step - loss: 37669.8138 - reconstruction_loss: 37662.2578 - kl_loss: 9.7894
+Epoch 638/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37670.5600 - reconstruction_loss: 37661.8008 - kl_loss: 9.8473
+Epoch 639/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37669.5553 - reconstruction_loss: 37663.2930 - kl_loss: 9.8197
+Epoch 640/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37670.4997 - reconstruction_loss: 37662.7422 - kl_loss: 9.8224
+Epoch 641/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37673.7395 - reconstruction_loss: 37662.7539 - kl_loss: 9.8342
+Epoch 642/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37677.6766 - reconstruction_loss: 37661.7188 - kl_loss: 9.8388
+Epoch 643/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37672.7335 - reconstruction_loss: 37663.3672 - kl_loss: 9.8008
+Epoch 644/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37675.1338 - reconstruction_loss: 37661.5977 - kl_loss: 9.8257
+Epoch 645/1000
+156/156 [==============================] - 111s 689ms/step - loss: 37671.5989 - reconstruction_loss: 37662.5742 - kl_loss: 9.8372
+Epoch 646/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37669.1182 - reconstruction_loss: 37661.9922 - kl_loss: 9.8215
+Epoch 647/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37670.6576 - reconstruction_loss: 37661.2930 - kl_loss: 9.8228
+Epoch 648/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37670.2833 - reconstruction_loss: 37662.0273 - kl_loss: 9.8356
+Epoch 649/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37670.4162 - reconstruction_loss: 37663.0391 - kl_loss: 9.7950
+Epoch 650/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37670.7587 - reconstruction_loss: 37663.0547 - kl_loss: 9.8080
+Epoch 651/1000
+156/156 [==============================] - 113s 691ms/step - loss: 37671.3830 - reconstruction_loss: 37661.8984 - kl_loss: 9.8160
+Epoch 652/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37670.9575 - reconstruction_loss: 37661.3281 - kl_loss: 9.8380
+Epoch 653/1000
+156/156 [==============================] - 117s 703ms/step - loss: 37667.7799 - reconstruction_loss: 37661.5742 - kl_loss: 9.8441
+Epoch 654/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37668.9232 - reconstruction_loss: 37661.2031 - kl_loss: 9.8354
+Epoch 655/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37676.1535 - reconstruction_loss: 37661.5625 - kl_loss: 9.8471
+Epoch 656/1000
+156/156 [==============================] - 117s 712ms/step - loss: 37667.4962 - reconstruction_loss: 37660.5078 - kl_loss: 9.8331
+Epoch 657/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37665.1960 - reconstruction_loss: 37661.0586 - kl_loss: 9.8538
+Epoch 658/1000
+156/156 [==============================] - 111s 696ms/step - loss: 37665.9247 - reconstruction_loss: 37661.4570 - kl_loss: 9.8419
+Epoch 659/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37665.4528 - reconstruction_loss: 37660.3516 - kl_loss: 9.8558
+Epoch 660/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37666.7974 - reconstruction_loss: 37661.6992 - kl_loss: 9.8342
+Epoch 661/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37669.2540 - reconstruction_loss: 37663.3047 - kl_loss: 9.8340
+Epoch 662/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37672.0127 - reconstruction_loss: 37661.2578 - kl_loss: 9.8223
+Epoch 663/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37665.9302 - reconstruction_loss: 37660.9375 - kl_loss: 9.8482
+Epoch 664/1000
+156/156 [==============================] - 117s 687ms/step - loss: 37660.3782 - reconstruction_loss: 37661.3828 - kl_loss: 9.8182
+Epoch 665/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37668.7544 - reconstruction_loss: 37661.7070 - kl_loss: 9.8383
+Epoch 666/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37672.4700 - reconstruction_loss: 37661.9414 - kl_loss: 9.8323
+Epoch 667/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37677.2510 - reconstruction_loss: 37662.0547 - kl_loss: 9.8485
+Epoch 668/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37670.5934 - reconstruction_loss: 37660.0508 - kl_loss: 9.8307
+Epoch 669/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37665.5577 - reconstruction_loss: 37661.6875 - kl_loss: 9.8564
+Epoch 670/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37671.6339 - reconstruction_loss: 37661.2461 - kl_loss: 9.8575
+Epoch 671/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37666.6540 - reconstruction_loss: 37661.2891 - kl_loss: 9.8323
+Epoch 672/1000
+156/156 [==============================] - 117s 700ms/step - loss: 37668.5058 - reconstruction_loss: 37661.1680 - kl_loss: 9.8524
+Epoch 673/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37667.5795 - reconstruction_loss: 37661.0273 - kl_loss: 9.8537
+Epoch 674/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37675.0338 - reconstruction_loss: 37661.0547 - kl_loss: 9.8756
+Epoch 675/1000
+156/156 [==============================] - 117s 731ms/step - loss: 37675.1246 - reconstruction_loss: 37663.8164 - kl_loss: 9.8029
+Epoch 676/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37667.1207 - reconstruction_loss: 37660.6133 - kl_loss: 9.8302
+Epoch 677/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37667.6777 - reconstruction_loss: 37660.3242 - kl_loss: 9.8464
+Epoch 678/1000
+156/156 [==============================] - 113s 692ms/step - loss: 37665.5145 - reconstruction_loss: 37660.1836 - kl_loss: 9.8501
+Epoch 679/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37672.1379 - reconstruction_loss: 37660.2070 - kl_loss: 9.8400
+Epoch 680/1000
+156/156 [==============================] - 117s 693ms/step - loss: 37669.5839 - reconstruction_loss: 37660.4141 - kl_loss: 9.8801
+Epoch 681/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37671.8629 - reconstruction_loss: 37661.1211 - kl_loss: 9.8587
+Epoch 682/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37676.3270 - reconstruction_loss: 37661.0664 - kl_loss: 9.8496
+Epoch 683/1000
+156/156 [==============================] - 111s 695ms/step - loss: 37675.9082 - reconstruction_loss: 37662.5156 - kl_loss: 9.8562
+Epoch 684/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37669.7873 - reconstruction_loss: 37660.7500 - kl_loss: 9.8409
+Epoch 685/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37672.5719 - reconstruction_loss: 37660.8398 - kl_loss: 9.8503
+Epoch 686/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37671.8939 - reconstruction_loss: 37660.5000 - kl_loss: 9.8456
+Epoch 687/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37663.6124 - reconstruction_loss: 37659.5547 - kl_loss: 9.8602
+Epoch 688/1000
+156/156 [==============================] - 116s 700ms/step - loss: 37672.4596 - reconstruction_loss: 37660.4375 - kl_loss: 9.8432
+Epoch 689/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37677.9794 - reconstruction_loss: 37662.5156 - kl_loss: 9.8353
+Epoch 690/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37667.5701 - reconstruction_loss: 37660.8438 - kl_loss: 9.8629
+Epoch 691/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37666.4920 - reconstruction_loss: 37659.7773 - kl_loss: 9.8536
+Epoch 692/1000
+156/156 [==============================] - 116s 699ms/step - loss: 37666.2986 - reconstruction_loss: 37661.0234 - kl_loss: 9.8631
+Epoch 693/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37674.8505 - reconstruction_loss: 37660.9609 - kl_loss: 9.8393
+Epoch 694/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37665.0339 - reconstruction_loss: 37660.1914 - kl_loss: 9.8088
+Epoch 695/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37671.9427 - reconstruction_loss: 37660.8164 - kl_loss: 9.8705
+Epoch 696/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37671.2798 - reconstruction_loss: 37660.5859 - kl_loss: 9.8782
+Epoch 697/1000
+156/156 [==============================] - 111s 688ms/step - loss: 37668.5581 - reconstruction_loss: 37658.9570 - kl_loss: 9.8698
+Epoch 698/1000
+156/156 [==============================] - 111s 687ms/step - loss: 37672.9893 - reconstruction_loss: 37660.1133 - kl_loss: 9.8533
+Epoch 699/1000
+156/156 [==============================] - 113s 688ms/step - loss: 37667.6232 - reconstruction_loss: 37659.5234 - kl_loss: 9.8546
+Epoch 700/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37670.6043 - reconstruction_loss: 37660.5430 - kl_loss: 9.8503
+Epoch 701/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37668.4990 - reconstruction_loss: 37660.8906 - kl_loss: 9.8484
+Epoch 702/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37668.7874 - reconstruction_loss: 37661.7227 - kl_loss: 9.8217
+Epoch 703/1000
+156/156 [==============================] - 116s 690ms/step - loss: 37668.3160 - reconstruction_loss: 37660.4922 - kl_loss: 9.8594
+Epoch 704/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37669.1038 - reconstruction_loss: 37659.1328 - kl_loss: 9.8685
+Epoch 705/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37667.2672 - reconstruction_loss: 37659.6133 - kl_loss: 9.8527
+Epoch 706/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37666.4350 - reconstruction_loss: 37660.6289 - kl_loss: 9.8653
+Epoch 707/1000
+156/156 [==============================] - 111s 685ms/step - loss: 37670.2925 - reconstruction_loss: 37661.6953 - kl_loss: 9.8435
+Epoch 708/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37666.0900 - reconstruction_loss: 37659.6250 - kl_loss: 9.8944
+Epoch 709/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37669.8193 - reconstruction_loss: 37661.0977 - kl_loss: 9.8597
+Epoch 710/1000
+156/156 [==============================] - 113s 700ms/step - loss: 37662.4291 - reconstruction_loss: 37660.4375 - kl_loss: 9.8784
+Epoch 711/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37670.6332 - reconstruction_loss: 37659.9375 - kl_loss: 9.8823
+Epoch 712/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37665.2260 - reconstruction_loss: 37660.2969 - kl_loss: 9.9023
+Epoch 713/1000
+156/156 [==============================] - 112s 694ms/step - loss: 37672.0304 - reconstruction_loss: 37658.9141 - kl_loss: 9.8719
+Epoch 714/1000
+156/156 [==============================] - 111s 686ms/step - loss: 37670.5271 - reconstruction_loss: 37659.0508 - kl_loss: 9.8861
+Epoch 715/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37664.4157 - reconstruction_loss: 37660.2695 - kl_loss: 9.8557
+Epoch 716/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37665.8167 - reconstruction_loss: 37659.5078 - kl_loss: 9.8794
+Epoch 717/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37667.7254 - reconstruction_loss: 37659.1484 - kl_loss: 9.8738
+Epoch 718/1000
+156/156 [==============================] - 117s 693ms/step - loss: 37666.6051 - reconstruction_loss: 37658.7188 - kl_loss: 9.8802
+Epoch 719/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37664.9223 - reconstruction_loss: 37659.8164 - kl_loss: 9.8727
+Epoch 720/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37663.9449 - reconstruction_loss: 37660.4023 - kl_loss: 9.8622
+Epoch 721/1000
+156/156 [==============================] - 117s 693ms/step - loss: 37666.1147 - reconstruction_loss: 37660.1016 - kl_loss: 9.8749
+Epoch 722/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37670.5837 - reconstruction_loss: 37658.9922 - kl_loss: 9.8789
+Epoch 723/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37668.7025 - reconstruction_loss: 37660.8711 - kl_loss: 9.8648
+Epoch 724/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37671.3132 - reconstruction_loss: 37661.0938 - kl_loss: 9.8562
+Epoch 725/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37667.1930 - reconstruction_loss: 37659.6797 - kl_loss: 9.8615
+Epoch 726/1000
+156/156 [==============================] - 113s 698ms/step - loss: 37664.1127 - reconstruction_loss: 37659.6562 - kl_loss: 9.8474
+Epoch 727/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37667.9801 - reconstruction_loss: 37660.7422 - kl_loss: 9.8753
+Epoch 728/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37669.3213 - reconstruction_loss: 37659.9258 - kl_loss: 9.8621
+Epoch 729/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37666.0770 - reconstruction_loss: 37658.7344 - kl_loss: 9.8635
+Epoch 730/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37666.8737 - reconstruction_loss: 37660.0078 - kl_loss: 9.8876
+Epoch 731/1000
+156/156 [==============================] - 113s 704ms/step - loss: 37666.1195 - reconstruction_loss: 37659.7539 - kl_loss: 9.8590
+Epoch 732/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37671.0075 - reconstruction_loss: 37659.4648 - kl_loss: 9.8751
+Epoch 733/1000
+156/156 [==============================] - 118s 730ms/step - loss: 37668.7463 - reconstruction_loss: 37657.7227 - kl_loss: 9.9098
+Epoch 734/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37668.5601 - reconstruction_loss: 37659.2695 - kl_loss: 9.8819
+Epoch 735/1000
+156/156 [==============================] - 118s 724ms/step - loss: 37671.7072 - reconstruction_loss: 37658.6055 - kl_loss: 9.9089
+Epoch 736/1000
+156/156 [==============================] - 118s 733ms/step - loss: 37665.5674 - reconstruction_loss: 37659.7461 - kl_loss: 9.8832
+Epoch 737/1000
+156/156 [==============================] - 117s 731ms/step - loss: 37664.3907 - reconstruction_loss: 37658.5469 - kl_loss: 9.8850
+Epoch 738/1000
+156/156 [==============================] - 118s 738ms/step - loss: 37668.2569 - reconstruction_loss: 37659.3594 - kl_loss: 9.8928
+Epoch 739/1000
+156/156 [==============================] - 118s 731ms/step - loss: 37667.4651 - reconstruction_loss: 37659.3164 - kl_loss: 9.8836
+Epoch 740/1000
+156/156 [==============================] - 123s 729ms/step - loss: 37672.4699 - reconstruction_loss: 37658.9219 - kl_loss: 9.8885
+Epoch 741/1000
+156/156 [==============================] - 120s 747ms/step - loss: 37666.7111 - reconstruction_loss: 37659.5078 - kl_loss: 9.8778
+Epoch 742/1000
+156/156 [==============================] - 119s 743ms/step - loss: 37669.0178 - reconstruction_loss: 37658.8750 - kl_loss: 9.8933
+Epoch 743/1000
+156/156 [==============================] - 118s 738ms/step - loss: 37672.0098 - reconstruction_loss: 37659.7656 - kl_loss: 9.8753
+Epoch 744/1000
+156/156 [==============================] - 118s 740ms/step - loss: 37665.0657 - reconstruction_loss: 37658.7539 - kl_loss: 9.9056
+Epoch 745/1000
+156/156 [==============================] - 123s 732ms/step - loss: 37668.2198 - reconstruction_loss: 37659.8828 - kl_loss: 9.8669
+Epoch 746/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37674.5136 - reconstruction_loss: 37658.1758 - kl_loss: 9.8753
+Epoch 747/1000
+156/156 [==============================] - 118s 726ms/step - loss: 37668.6261 - reconstruction_loss: 37657.9727 - kl_loss: 9.8895
+Epoch 748/1000
+156/156 [==============================] - 118s 725ms/step - loss: 37675.3742 - reconstruction_loss: 37657.8477 - kl_loss: 9.8983
+Epoch 749/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37674.3516 - reconstruction_loss: 37660.8086 - kl_loss: 9.8748
+Epoch 750/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37671.8165 - reconstruction_loss: 37659.6953 - kl_loss: 9.9056
+Epoch 751/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37665.4594 - reconstruction_loss: 37658.2422 - kl_loss: 9.8726
+Epoch 752/1000
+156/156 [==============================] - 118s 732ms/step - loss: 37667.3943 - reconstruction_loss: 37659.4844 - kl_loss: 9.8878
+Epoch 753/1000
+156/156 [==============================] - 118s 727ms/step - loss: 37672.1238 - reconstruction_loss: 37659.0820 - kl_loss: 9.8793
+Epoch 754/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37665.6909 - reconstruction_loss: 37658.0703 - kl_loss: 9.8894
+Epoch 755/1000
+156/156 [==============================] - 118s 728ms/step - loss: 37667.7055 - reconstruction_loss: 37657.7148 - kl_loss: 9.8995
+Epoch 756/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37667.3063 - reconstruction_loss: 37659.3125 - kl_loss: 9.8790
+Epoch 757/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37669.3037 - reconstruction_loss: 37659.2383 - kl_loss: 9.8653
+Epoch 758/1000
+156/156 [==============================] - 119s 728ms/step - loss: 37672.7120 - reconstruction_loss: 37659.7539 - kl_loss: 9.8713
+Epoch 759/1000
+156/156 [==============================] - 118s 721ms/step - loss: 37665.4401 - reconstruction_loss: 37658.3125 - kl_loss: 9.8876
+Epoch 760/1000
+156/156 [==============================] - 118s 737ms/step - loss: 37672.3419 - reconstruction_loss: 37659.7852 - kl_loss: 9.8950
+Epoch 761/1000
+156/156 [==============================] - 119s 725ms/step - loss: 37669.5829 - reconstruction_loss: 37656.7930 - kl_loss: 9.9050
+Epoch 762/1000
+156/156 [==============================] - 119s 736ms/step - loss: 37670.0258 - reconstruction_loss: 37658.3203 - kl_loss: 9.9070
+Epoch 763/1000
+156/156 [==============================] - 123s 726ms/step - loss: 37673.5907 - reconstruction_loss: 37658.5938 - kl_loss: 9.9022
+Epoch 764/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37671.5614 - reconstruction_loss: 37659.3828 - kl_loss: 9.9114
+Epoch 765/1000
+156/156 [==============================] - 118s 719ms/step - loss: 37675.0559 - reconstruction_loss: 37658.2422 - kl_loss: 9.9104
+Epoch 766/1000
+156/156 [==============================] - 118s 725ms/step - loss: 37667.8185 - reconstruction_loss: 37657.6797 - kl_loss: 9.8770
+Epoch 767/1000
+156/156 [==============================] - 118s 731ms/step - loss: 37666.8003 - reconstruction_loss: 37658.0391 - kl_loss: 9.8906
+Epoch 768/1000
+156/156 [==============================] - 123s 751ms/step - loss: 37667.1147 - reconstruction_loss: 37657.4570 - kl_loss: 9.8787
+Epoch 769/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37668.9394 - reconstruction_loss: 37658.4180 - kl_loss: 9.8935
+Epoch 770/1000
+156/156 [==============================] - 118s 737ms/step - loss: 37667.7215 - reconstruction_loss: 37659.3516 - kl_loss: 9.9059
+Epoch 771/1000
+156/156 [==============================] - 118s 737ms/step - loss: 37667.8086 - reconstruction_loss: 37658.2695 - kl_loss: 9.8806
+Epoch 772/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37665.3736 - reconstruction_loss: 37658.1250 - kl_loss: 9.9242
+Epoch 773/1000
+156/156 [==============================] - 123s 740ms/step - loss: 37670.0766 - reconstruction_loss: 37658.4023 - kl_loss: 9.9075
+Epoch 774/1000
+156/156 [==============================] - 119s 729ms/step - loss: 37664.6401 - reconstruction_loss: 37657.4375 - kl_loss: 9.9140
+Epoch 775/1000
+156/156 [==============================] - 118s 733ms/step - loss: 37664.3633 - reconstruction_loss: 37659.1172 - kl_loss: 9.8709
+Epoch 776/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37670.7970 - reconstruction_loss: 37657.7695 - kl_loss: 9.8957
+Epoch 777/1000
+156/156 [==============================] - 117s 732ms/step - loss: 37662.9460 - reconstruction_loss: 37658.0234 - kl_loss: 9.9244
+Epoch 778/1000
+156/156 [==============================] - 124s 749ms/step - loss: 37665.3780 - reconstruction_loss: 37657.6914 - kl_loss: 9.8812
+Epoch 779/1000
+156/156 [==============================] - 117s 724ms/step - loss: 37670.4650 - reconstruction_loss: 37659.1523 - kl_loss: 9.8886
+Epoch 780/1000
+156/156 [==============================] - 119s 730ms/step - loss: 37658.9745 - reconstruction_loss: 37657.1680 - kl_loss: 9.9180
+Epoch 781/1000
+156/156 [==============================] - 124s 726ms/step - loss: 37667.2683 - reconstruction_loss: 37658.0156 - kl_loss: 9.8945
+Epoch 782/1000
+156/156 [==============================] - 118s 730ms/step - loss: 37667.2766 - reconstruction_loss: 37657.0977 - kl_loss: 9.9248
+Epoch 783/1000
+156/156 [==============================] - 126s 787ms/step - loss: 37674.2292 - reconstruction_loss: 37658.7422 - kl_loss: 9.9089
+Epoch 784/1000
+156/156 [==============================] - 118s 731ms/step - loss: 37667.3911 - reconstruction_loss: 37657.1719 - kl_loss: 9.8746
+Epoch 785/1000
+156/156 [==============================] - 117s 734ms/step - loss: 37673.8121 - reconstruction_loss: 37657.7773 - kl_loss: 9.8931
+Epoch 786/1000
+156/156 [==============================] - 151s 940ms/step - loss: 37667.6598 - reconstruction_loss: 37657.8320 - kl_loss: 9.9011
+Epoch 787/1000
+156/156 [==============================] - 118s 730ms/step - loss: 37669.5884 - reconstruction_loss: 37657.8320 - kl_loss: 9.8950
+Epoch 788/1000
+156/156 [==============================] - 118s 732ms/step - loss: 37668.2727 - reconstruction_loss: 37657.3555 - kl_loss: 9.9058
+Epoch 789/1000
+156/156 [==============================] - 118s 737ms/step - loss: 37670.3265 - reconstruction_loss: 37658.0977 - kl_loss: 9.9074
+Epoch 790/1000
+156/156 [==============================] - 118s 733ms/step - loss: 37670.3335 - reconstruction_loss: 37658.8672 - kl_loss: 9.8701
+Epoch 791/1000
+156/156 [==============================] - 117s 718ms/step - loss: 37665.5554 - reconstruction_loss: 37657.6875 - kl_loss: 9.9133
+Epoch 792/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37656.6728 - reconstruction_loss: 37657.4062 - kl_loss: 9.9081
+Epoch 793/1000
+156/156 [==============================] - 123s 740ms/step - loss: 37664.0591 - reconstruction_loss: 37657.5547 - kl_loss: 9.9349
+Epoch 794/1000
+156/156 [==============================] - 120s 735ms/step - loss: 37659.3523 - reconstruction_loss: 37658.1914 - kl_loss: 9.9172
+Epoch 795/1000
+156/156 [==============================] - 118s 736ms/step - loss: 37667.1077 - reconstruction_loss: 37657.5430 - kl_loss: 9.9152
+Epoch 796/1000
+156/156 [==============================] - 118s 723ms/step - loss: 37663.1374 - reconstruction_loss: 37656.4062 - kl_loss: 9.9261
+Epoch 797/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37659.5927 - reconstruction_loss: 37657.3477 - kl_loss: 9.9147
+Epoch 798/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37669.0378 - reconstruction_loss: 37658.1406 - kl_loss: 9.8825
+Epoch 799/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37669.9755 - reconstruction_loss: 37657.0703 - kl_loss: 9.9264
+Epoch 800/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37661.2234 - reconstruction_loss: 37656.4805 - kl_loss: 9.8957
+Epoch 801/1000
+156/156 [==============================] - 118s 732ms/step - loss: 37669.4041 - reconstruction_loss: 37658.8438 - kl_loss: 9.9271
+Epoch 802/1000
+156/156 [==============================] - 118s 723ms/step - loss: 37671.2526 - reconstruction_loss: 37656.5547 - kl_loss: 9.9186
+Epoch 803/1000
+156/156 [==============================] - 118s 737ms/step - loss: 37670.1055 - reconstruction_loss: 37658.2070 - kl_loss: 9.8883
+Epoch 804/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37663.4066 - reconstruction_loss: 37657.8867 - kl_loss: 9.8895
+Epoch 805/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37667.5263 - reconstruction_loss: 37657.2070 - kl_loss: 9.9237
+Epoch 806/1000
+156/156 [==============================] - 117s 733ms/step - loss: 37672.7406 - reconstruction_loss: 37658.3164 - kl_loss: 9.8939
+Epoch 807/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37666.3490 - reconstruction_loss: 37657.9531 - kl_loss: 9.9210
+Epoch 808/1000
+156/156 [==============================] - 118s 725ms/step - loss: 37657.4479 - reconstruction_loss: 37655.8125 - kl_loss: 9.9137
+Epoch 809/1000
+156/156 [==============================] - 119s 728ms/step - loss: 37668.5875 - reconstruction_loss: 37656.4141 - kl_loss: 9.9223
+Epoch 810/1000
+156/156 [==============================] - 117s 732ms/step - loss: 37663.3400 - reconstruction_loss: 37656.9922 - kl_loss: 9.9178
+Epoch 811/1000
+156/156 [==============================] - 118s 733ms/step - loss: 37660.3333 - reconstruction_loss: 37657.8438 - kl_loss: 9.9036
+Epoch 812/1000
+156/156 [==============================] - 119s 730ms/step - loss: 37669.7416 - reconstruction_loss: 37657.7148 - kl_loss: 9.9234
+Epoch 813/1000
+156/156 [==============================] - 119s 730ms/step - loss: 37664.5418 - reconstruction_loss: 37656.7109 - kl_loss: 9.8962
+Epoch 814/1000
+156/156 [==============================] - 118s 734ms/step - loss: 37668.9449 - reconstruction_loss: 37657.9258 - kl_loss: 9.9161
+Epoch 815/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37665.3991 - reconstruction_loss: 37656.2969 - kl_loss: 9.9155
+Epoch 816/1000
+156/156 [==============================] - 118s 732ms/step - loss: 37663.8511 - reconstruction_loss: 37657.8203 - kl_loss: 9.9030
+Epoch 817/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37671.6511 - reconstruction_loss: 37656.2070 - kl_loss: 9.9031
+Epoch 818/1000
+156/156 [==============================] - 118s 730ms/step - loss: 37662.6051 - reconstruction_loss: 37657.2188 - kl_loss: 9.9239
+Epoch 819/1000
+156/156 [==============================] - 119s 740ms/step - loss: 37669.8224 - reconstruction_loss: 37659.4062 - kl_loss: 9.9084
+Epoch 820/1000
+156/156 [==============================] - 118s 724ms/step - loss: 37671.1029 - reconstruction_loss: 37656.4844 - kl_loss: 9.9205
+Epoch 821/1000
+156/156 [==============================] - 118s 739ms/step - loss: 37661.2574 - reconstruction_loss: 37656.2891 - kl_loss: 9.9234
+Epoch 822/1000
+156/156 [==============================] - 118s 729ms/step - loss: 37664.6785 - reconstruction_loss: 37655.6133 - kl_loss: 9.9251
+Epoch 823/1000
+156/156 [==============================] - 119s 730ms/step - loss: 37666.5923 - reconstruction_loss: 37659.4258 - kl_loss: 9.9109
+Epoch 824/1000
+156/156 [==============================] - 118s 739ms/step - loss: 37657.6598 - reconstruction_loss: 37656.6055 - kl_loss: 9.9066
+Epoch 825/1000
+156/156 [==============================] - 117s 723ms/step - loss: 37663.8469 - reconstruction_loss: 37656.8203 - kl_loss: 9.9246
+Epoch 826/1000
+156/156 [==============================] - 117s 732ms/step - loss: 37665.7376 - reconstruction_loss: 37656.7500 - kl_loss: 9.9392
+Epoch 827/1000
+156/156 [==============================] - 118s 733ms/step - loss: 37671.2863 - reconstruction_loss: 37657.2422 - kl_loss: 9.9350
+Epoch 828/1000
+156/156 [==============================] - 118s 722ms/step - loss: 37672.5024 - reconstruction_loss: 37657.1992 - kl_loss: 9.9133
+Epoch 829/1000
+156/156 [==============================] - 118s 735ms/step - loss: 37667.9776 - reconstruction_loss: 37657.8008 - kl_loss: 9.9157
+Epoch 830/1000
+156/156 [==============================] - 118s 738ms/step - loss: 37666.9449 - reconstruction_loss: 37656.4648 - kl_loss: 9.9040
+Epoch 831/1000
+156/156 [==============================] - 119s 729ms/step - loss: 37666.7257 - reconstruction_loss: 37657.3047 - kl_loss: 9.8945
+Epoch 832/1000
+156/156 [==============================] - 120s 740ms/step - loss: 37659.6143 - reconstruction_loss: 37656.4297 - kl_loss: 9.9221
+Epoch 833/1000
+156/156 [==============================] - 120s 743ms/step - loss: 37669.6988 - reconstruction_loss: 37656.2383 - kl_loss: 9.9148
+Epoch 834/1000
+156/156 [==============================] - 119s 736ms/step - loss: 37670.7032 - reconstruction_loss: 37656.9609 - kl_loss: 9.9410
+Epoch 835/1000
+156/156 [==============================] - 119s 743ms/step - loss: 37667.1276 - reconstruction_loss: 37657.2773 - kl_loss: 9.8889
+Epoch 836/1000
+156/156 [==============================] - 121s 741ms/step - loss: 37670.7496 - reconstruction_loss: 37656.5000 - kl_loss: 9.9412
+Epoch 837/1000
+156/156 [==============================] - 119s 743ms/step - loss: 37671.3476 - reconstruction_loss: 37655.9531 - kl_loss: 9.9528
+Epoch 838/1000
+156/156 [==============================] - 120s 752ms/step - loss: 37667.8270 - reconstruction_loss: 37656.4297 - kl_loss: 9.9144
+Epoch 839/1000
+156/156 [==============================] - 119s 734ms/step - loss: 37668.0066 - reconstruction_loss: 37655.4688 - kl_loss: 9.9370
+Epoch 840/1000
+156/156 [==============================] - 115s 700ms/step - loss: 37666.1935 - reconstruction_loss: 37657.0625 - kl_loss: 9.9287
+Epoch 841/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37666.6118 - reconstruction_loss: 37657.4141 - kl_loss: 9.9228
+Epoch 842/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37665.3883 - reconstruction_loss: 37656.7227 - kl_loss: 9.9111
+Epoch 843/1000
+156/156 [==============================] - 116s 701ms/step - loss: 37665.0265 - reconstruction_loss: 37656.0625 - kl_loss: 9.9501
+Epoch 844/1000
+156/156 [==============================] - 111s 682ms/step - loss: 37666.3855 - reconstruction_loss: 37655.8672 - kl_loss: 9.9295
+Epoch 845/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37665.5040 - reconstruction_loss: 37656.1016 - kl_loss: 9.8930
+Epoch 846/1000
+156/156 [==============================] - 111s 683ms/step - loss: 37672.7386 - reconstruction_loss: 37656.6836 - kl_loss: 9.9322
+Epoch 847/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37663.2974 - reconstruction_loss: 37656.5977 - kl_loss: 9.9086
+Epoch 848/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37669.1362 - reconstruction_loss: 37657.6445 - kl_loss: 9.9350
+Epoch 849/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37659.4506 - reconstruction_loss: 37656.2500 - kl_loss: 9.9461
+Epoch 850/1000
+156/156 [==============================] - 111s 680ms/step - loss: 37663.4944 - reconstruction_loss: 37656.9180 - kl_loss: 9.9345
+Epoch 851/1000
+156/156 [==============================] - 117s 697ms/step - loss: 37667.4631 - reconstruction_loss: 37656.9180 - kl_loss: 9.9141
+Epoch 852/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37667.0701 - reconstruction_loss: 37654.5703 - kl_loss: 9.9438
+Epoch 853/1000
+156/156 [==============================] - 112s 703ms/step - loss: 37665.4776 - reconstruction_loss: 37656.3398 - kl_loss: 9.9279
+Epoch 854/1000
+156/156 [==============================] - 111s 695ms/step - loss: 37666.5670 - reconstruction_loss: 37656.6992 - kl_loss: 9.9329
+Epoch 855/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37664.4953 - reconstruction_loss: 37655.0312 - kl_loss: 9.9370
+Epoch 856/1000
+156/156 [==============================] - 117s 714ms/step - loss: 37665.8463 - reconstruction_loss: 37655.6836 - kl_loss: 9.9430
+Epoch 857/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37672.8620 - reconstruction_loss: 37656.0234 - kl_loss: 9.9254
+Epoch 858/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37663.4430 - reconstruction_loss: 37656.0938 - kl_loss: 9.9220
+Epoch 859/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37667.0156 - reconstruction_loss: 37655.8789 - kl_loss: 9.9508
+Epoch 860/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37668.3223 - reconstruction_loss: 37655.8711 - kl_loss: 9.9254
+Epoch 861/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37665.6480 - reconstruction_loss: 37656.6602 - kl_loss: 9.9356
+Epoch 862/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37659.0675 - reconstruction_loss: 37654.2656 - kl_loss: 9.9441
+Epoch 863/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37663.6254 - reconstruction_loss: 37656.0000 - kl_loss: 9.9261
+Epoch 864/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37668.4329 - reconstruction_loss: 37657.1328 - kl_loss: 9.9220
+Epoch 865/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37666.3726 - reconstruction_loss: 37657.3086 - kl_loss: 9.9345
+Epoch 866/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37661.9090 - reconstruction_loss: 37656.6680 - kl_loss: 9.9189
+Epoch 867/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37665.3411 - reconstruction_loss: 37655.6484 - kl_loss: 9.9385
+Epoch 868/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37666.0169 - reconstruction_loss: 37656.6758 - kl_loss: 9.9269
+Epoch 869/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37664.6913 - reconstruction_loss: 37657.1758 - kl_loss: 9.9324
+Epoch 870/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37670.2361 - reconstruction_loss: 37656.5078 - kl_loss: 9.9476
+Epoch 871/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37671.0316 - reconstruction_loss: 37657.5664 - kl_loss: 9.8984
+Epoch 872/1000
+156/156 [==============================] - 111s 681ms/step - loss: 37663.1195 - reconstruction_loss: 37657.1406 - kl_loss: 9.9021
+Epoch 873/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37663.4256 - reconstruction_loss: 37654.2891 - kl_loss: 9.9456
+Epoch 874/1000
+156/156 [==============================] - 117s 693ms/step - loss: 37659.5156 - reconstruction_loss: 37654.6602 - kl_loss: 9.9424
+Epoch 875/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37674.6295 - reconstruction_loss: 37655.9609 - kl_loss: 9.9413
+Epoch 876/1000
+156/156 [==============================] - 113s 686ms/step - loss: 37663.9495 - reconstruction_loss: 37655.0781 - kl_loss: 9.9390
+Epoch 877/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37668.3406 - reconstruction_loss: 37658.3828 - kl_loss: 9.9073
+Epoch 878/1000
+156/156 [==============================] - 111s 692ms/step - loss: 37664.2399 - reconstruction_loss: 37655.5898 - kl_loss: 9.9352
+Epoch 879/1000
+156/156 [==============================] - 117s 691ms/step - loss: 37664.1673 - reconstruction_loss: 37655.3281 - kl_loss: 9.9466
+Epoch 880/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37664.7581 - reconstruction_loss: 37655.2305 - kl_loss: 9.9422
+Epoch 881/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37658.2278 - reconstruction_loss: 37654.5430 - kl_loss: 9.9494
+Epoch 882/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37667.8514 - reconstruction_loss: 37655.9531 - kl_loss: 9.9003
+Epoch 883/1000
+156/156 [==============================] - 117s 688ms/step - loss: 37662.6675 - reconstruction_loss: 37654.7617 - kl_loss: 9.9562
+Epoch 884/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37659.6547 - reconstruction_loss: 37654.8867 - kl_loss: 9.9918
+Epoch 885/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37661.5225 - reconstruction_loss: 37656.4297 - kl_loss: 9.9517
+Epoch 886/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37662.0997 - reconstruction_loss: 37654.4414 - kl_loss: 9.9593
+Epoch 887/1000
+156/156 [==============================] - 112s 702ms/step - loss: 37657.5608 - reconstruction_loss: 37654.7695 - kl_loss: 9.9628
+Epoch 888/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37667.7760 - reconstruction_loss: 37659.0977 - kl_loss: 9.8998
+Epoch 889/1000
+156/156 [==============================] - 117s 705ms/step - loss: 37669.4248 - reconstruction_loss: 37655.7539 - kl_loss: 9.9459
+Epoch 890/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37668.9833 - reconstruction_loss: 37655.1680 - kl_loss: 9.9621
+Epoch 891/1000
+156/156 [==============================] - 111s 688ms/step - loss: 37665.7850 - reconstruction_loss: 37654.9492 - kl_loss: 9.9477
+Epoch 892/1000
+156/156 [==============================] - 111s 696ms/step - loss: 37673.9799 - reconstruction_loss: 37655.7656 - kl_loss: 9.9342
+Epoch 893/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37670.6014 - reconstruction_loss: 37655.3125 - kl_loss: 9.9734
+Epoch 894/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37662.9171 - reconstruction_loss: 37655.0703 - kl_loss: 9.9538
+Epoch 895/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37655.2900 - reconstruction_loss: 37654.7891 - kl_loss: 9.9287
+Epoch 896/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37667.5254 - reconstruction_loss: 37654.5508 - kl_loss: 9.9652
+Epoch 897/1000
+156/156 [==============================] - 117s 696ms/step - loss: 37659.5376 - reconstruction_loss: 37654.6055 - kl_loss: 9.9523
+Epoch 898/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37659.4879 - reconstruction_loss: 37655.0078 - kl_loss: 9.9700
+Epoch 899/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37661.6809 - reconstruction_loss: 37654.5352 - kl_loss: 9.9619
+Epoch 900/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37661.9686 - reconstruction_loss: 37655.4570 - kl_loss: 9.9371
+Epoch 901/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37673.7618 - reconstruction_loss: 37656.1680 - kl_loss: 9.9288
+Epoch 902/1000
+156/156 [==============================] - 113s 697ms/step - loss: 37663.6579 - reconstruction_loss: 37655.8828 - kl_loss: 9.9154
+Epoch 903/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37667.4198 - reconstruction_loss: 37656.6523 - kl_loss: 9.9228
+Epoch 904/1000
+156/156 [==============================] - 117s 708ms/step - loss: 37663.9609 - reconstruction_loss: 37654.3164 - kl_loss: 9.9728
+Epoch 905/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37670.4375 - reconstruction_loss: 37655.1602 - kl_loss: 9.9575
+Epoch 906/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37669.4196 - reconstruction_loss: 37654.2227 - kl_loss: 9.9579
+Epoch 907/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37669.4225 - reconstruction_loss: 37655.4766 - kl_loss: 9.9866
+Epoch 908/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37669.6476 - reconstruction_loss: 37655.5234 - kl_loss: 9.9385
+Epoch 909/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37668.1331 - reconstruction_loss: 37654.5117 - kl_loss: 9.9844
+Epoch 910/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37673.9101 - reconstruction_loss: 37655.7578 - kl_loss: 9.9500
+Epoch 911/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37666.8069 - reconstruction_loss: 37655.2852 - kl_loss: 9.9152
+Epoch 912/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37663.9868 - reconstruction_loss: 37655.8359 - kl_loss: 9.9490
+Epoch 913/1000
+156/156 [==============================] - 113s 697ms/step - loss: 37661.8567 - reconstruction_loss: 37654.2422 - kl_loss: 9.9606
+Epoch 914/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37668.0355 - reconstruction_loss: 37654.0430 - kl_loss: 9.9414
+Epoch 915/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37665.6288 - reconstruction_loss: 37654.5430 - kl_loss: 9.9664
+Epoch 916/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37664.4243 - reconstruction_loss: 37655.3320 - kl_loss: 9.9294
+Epoch 917/1000
+156/156 [==============================] - 111s 681ms/step - loss: 37660.5448 - reconstruction_loss: 37654.8828 - kl_loss: 9.9677
+Epoch 918/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37672.2924 - reconstruction_loss: 37655.1875 - kl_loss: 9.9721
+Epoch 919/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37661.5930 - reconstruction_loss: 37653.9844 - kl_loss: 9.9296
+Epoch 920/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37668.3926 - reconstruction_loss: 37654.0977 - kl_loss: 9.9600
+Epoch 921/1000
+156/156 [==============================] - 117s 696ms/step - loss: 37661.9235 - reconstruction_loss: 37656.6836 - kl_loss: 9.9468
+Epoch 922/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37664.5458 - reconstruction_loss: 37655.9141 - kl_loss: 9.9368
+Epoch 923/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37665.7850 - reconstruction_loss: 37655.0078 - kl_loss: 9.9685
+Epoch 924/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37659.2410 - reconstruction_loss: 37654.7266 - kl_loss: 9.9482
+Epoch 925/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37660.4294 - reconstruction_loss: 37654.3320 - kl_loss: 9.9541
+Epoch 926/1000
+156/156 [==============================] - 111s 693ms/step - loss: 37662.0846 - reconstruction_loss: 37654.1289 - kl_loss: 9.9570
+Epoch 927/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37670.3197 - reconstruction_loss: 37654.4453 - kl_loss: 9.9500
+Epoch 928/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37666.9398 - reconstruction_loss: 37655.0273 - kl_loss: 9.9660
+Epoch 929/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37661.7506 - reconstruction_loss: 37654.5625 - kl_loss: 9.9643
+Epoch 930/1000
+156/156 [==============================] - 116s 705ms/step - loss: 37662.8046 - reconstruction_loss: 37654.3945 - kl_loss: 9.9631
+Epoch 931/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37664.3130 - reconstruction_loss: 37655.3477 - kl_loss: 9.9755
+Epoch 932/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37663.2713 - reconstruction_loss: 37654.2969 - kl_loss: 9.9782
+Epoch 933/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37664.7882 - reconstruction_loss: 37656.4336 - kl_loss: 9.9496
+Epoch 934/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37658.2549 - reconstruction_loss: 37653.7578 - kl_loss: 9.9619
+Epoch 935/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37660.8887 - reconstruction_loss: 37653.8867 - kl_loss: 9.9353
+Epoch 936/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37659.9802 - reconstruction_loss: 37653.7617 - kl_loss: 9.9668
+Epoch 937/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37667.2364 - reconstruction_loss: 37655.5508 - kl_loss: 9.9832
+Epoch 938/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37667.9317 - reconstruction_loss: 37655.8242 - kl_loss: 9.9475
+Epoch 939/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37664.9993 - reconstruction_loss: 37654.6602 - kl_loss: 9.9906
+Epoch 940/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37660.1811 - reconstruction_loss: 37653.4375 - kl_loss: 9.9573
+Epoch 941/1000
+156/156 [==============================] - 111s 697ms/step - loss: 37666.9125 - reconstruction_loss: 37653.7422 - kl_loss: 9.9691
+Epoch 942/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37659.9921 - reconstruction_loss: 37654.4609 - kl_loss: 9.9629
+Epoch 943/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37670.6451 - reconstruction_loss: 37655.1836 - kl_loss: 9.9467
+Epoch 944/1000
+156/156 [==============================] - 112s 701ms/step - loss: 37666.1691 - reconstruction_loss: 37655.5391 - kl_loss: 9.9709
+Epoch 945/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37660.9393 - reconstruction_loss: 37653.5039 - kl_loss: 9.9485
+Epoch 946/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37665.8259 - reconstruction_loss: 37654.3047 - kl_loss: 9.9615
+Epoch 947/1000
+156/156 [==============================] - 116s 707ms/step - loss: 37667.5747 - reconstruction_loss: 37654.8477 - kl_loss: 9.9523
+Epoch 948/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37667.5205 - reconstruction_loss: 37654.5859 - kl_loss: 9.9494
+Epoch 949/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37662.1614 - reconstruction_loss: 37654.6602 - kl_loss: 9.9694
+Epoch 950/1000
+156/156 [==============================] - 116s 703ms/step - loss: 37661.5644 - reconstruction_loss: 37653.8281 - kl_loss: 9.9682
+Epoch 951/1000
+156/156 [==============================] - 117s 693ms/step - loss: 37660.0708 - reconstruction_loss: 37652.3672 - kl_loss: 9.9856
+Epoch 952/1000
+156/156 [==============================] - 111s 685ms/step - loss: 37668.6791 - reconstruction_loss: 37654.9141 - kl_loss: 9.9727
+Epoch 953/1000
+156/156 [==============================] - 111s 688ms/step - loss: 37661.3152 - reconstruction_loss: 37655.5977 - kl_loss: 9.9782
+Epoch 954/1000
+156/156 [==============================] - 111s 694ms/step - loss: 37664.1408 - reconstruction_loss: 37654.1211 - kl_loss: 9.9486
+Epoch 955/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37662.8233 - reconstruction_loss: 37653.3633 - kl_loss: 9.9479
+Epoch 956/1000
+156/156 [==============================] - 114s 700ms/step - loss: 37664.5961 - reconstruction_loss: 37655.6602 - kl_loss: 9.9741
+Epoch 957/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37664.0639 - reconstruction_loss: 37654.8438 - kl_loss: 9.9577
+Epoch 958/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37660.8491 - reconstruction_loss: 37652.7109 - kl_loss: 9.9429
+Epoch 959/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37660.2936 - reconstruction_loss: 37656.2109 - kl_loss: 9.9549
+Epoch 960/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37668.1976 - reconstruction_loss: 37654.9375 - kl_loss: 9.9483
+Epoch 961/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37661.3335 - reconstruction_loss: 37653.3438 - kl_loss: 9.9532
+Epoch 962/1000
+156/156 [==============================] - 112s 699ms/step - loss: 37660.4436 - reconstruction_loss: 37652.7266 - kl_loss: 9.9656
+Epoch 963/1000
+156/156 [==============================] - 111s 688ms/step - loss: 37665.0523 - reconstruction_loss: 37654.6328 - kl_loss: 9.9613
+Epoch 964/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37655.8561 - reconstruction_loss: 37653.6523 - kl_loss: 9.9806
+Epoch 965/1000
+156/156 [==============================] - 111s 693ms/step - loss: 37665.4283 - reconstruction_loss: 37652.7266 - kl_loss: 9.9780
+Epoch 966/1000
+156/156 [==============================] - 112s 682ms/step - loss: 37662.9687 - reconstruction_loss: 37654.0195 - kl_loss: 9.9792
+Epoch 967/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37668.5117 - reconstruction_loss: 37654.0508 - kl_loss: 9.9653
+Epoch 968/1000
+156/156 [==============================] - 116s 712ms/step - loss: 37661.0103 - reconstruction_loss: 37654.1758 - kl_loss: 9.9674
+Epoch 969/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37662.2793 - reconstruction_loss: 37653.6094 - kl_loss: 9.9529
+Epoch 970/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37662.6177 - reconstruction_loss: 37652.9258 - kl_loss: 9.9693
+Epoch 971/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37656.8937 - reconstruction_loss: 37653.6133 - kl_loss: 9.9749
+Epoch 972/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37665.4698 - reconstruction_loss: 37656.8516 - kl_loss: 9.9303
+Epoch 973/1000
+156/156 [==============================] - 112s 688ms/step - loss: 37660.1433 - reconstruction_loss: 37654.3828 - kl_loss: 9.9710
+Epoch 974/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37662.6162 - reconstruction_loss: 37654.2930 - kl_loss: 9.9750
+Epoch 975/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37661.3060 - reconstruction_loss: 37652.6211 - kl_loss: 9.9922
+Epoch 976/1000
+156/156 [==============================] - 112s 693ms/step - loss: 37662.6139 - reconstruction_loss: 37654.3320 - kl_loss: 9.9675
+Epoch 977/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37662.4853 - reconstruction_loss: 37654.5234 - kl_loss: 9.9680
+Epoch 978/1000
+156/156 [==============================] - 112s 691ms/step - loss: 37663.3739 - reconstruction_loss: 37653.6523 - kl_loss: 9.9837
+Epoch 979/1000
+156/156 [==============================] - 112s 689ms/step - loss: 37665.5748 - reconstruction_loss: 37653.7188 - kl_loss: 9.9826
+Epoch 980/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37662.2351 - reconstruction_loss: 37652.8945 - kl_loss: 10.0012
+Epoch 981/1000
+156/156 [==============================] - 112s 703ms/step - loss: 37668.1666 - reconstruction_loss: 37653.5000 - kl_loss: 9.9937
+Epoch 982/1000
+156/156 [==============================] - 112s 683ms/step - loss: 37662.9051 - reconstruction_loss: 37653.5273 - kl_loss: 9.9512
+Epoch 983/1000
+156/156 [==============================] - 112s 700ms/step - loss: 37653.9696 - reconstruction_loss: 37655.9570 - kl_loss: 9.9574
+Epoch 984/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37662.9935 - reconstruction_loss: 37654.3984 - kl_loss: 9.9753
+Epoch 985/1000
+156/156 [==============================] - 112s 690ms/step - loss: 37663.9385 - reconstruction_loss: 37653.3398 - kl_loss: 9.9823
+Epoch 986/1000
+156/156 [==============================] - 112s 684ms/step - loss: 37661.1645 - reconstruction_loss: 37652.2578 - kl_loss: 9.9891
+Epoch 987/1000
+156/156 [==============================] - 112s 686ms/step - loss: 37663.2852 - reconstruction_loss: 37652.5078 - kl_loss: 10.0078
+Epoch 988/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37667.0876 - reconstruction_loss: 37653.7227 - kl_loss: 9.9855
+Epoch 989/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37655.8809 - reconstruction_loss: 37652.6016 - kl_loss: 9.9886
+Epoch 990/1000
+156/156 [==============================] - 112s 687ms/step - loss: 37659.7931 - reconstruction_loss: 37653.6953 - kl_loss: 9.9752
+Epoch 991/1000
+156/156 [==============================] - 112s 685ms/step - loss: 37656.3781 - reconstruction_loss: 37652.4727 - kl_loss: 9.9756
+Epoch 992/1000
+156/156 [==============================] - 112s 698ms/step - loss: 37669.8202 - reconstruction_loss: 37654.4570 - kl_loss: 9.9498
+Epoch 993/1000
+156/156 [==============================] - 112s 696ms/step - loss: 37664.0766 - reconstruction_loss: 37654.4570 - kl_loss: 9.9714
+Epoch 994/1000
+156/156 [==============================] - 117s 702ms/step - loss: 37658.9050 - reconstruction_loss: 37654.0820 - kl_loss: 9.9746
+Epoch 995/1000
+156/156 [==============================] - 112s 695ms/step - loss: 37665.7155 - reconstruction_loss: 37652.6406 - kl_loss: 9.9984
+Epoch 996/1000
+156/156 [==============================] - 111s 692ms/step - loss: 37661.5368 - reconstruction_loss: 37653.3789 - kl_loss: 9.9736
+Epoch 997/1000
+156/156 [==============================] - 111s 690ms/step - loss: 37660.9914 - reconstruction_loss: 37652.3125 - kl_loss: 9.9909
+Epoch 998/1000
+156/156 [==============================] - 112s 692ms/step - loss: 37671.6480 - reconstruction_loss: 37652.6094 - kl_loss: 9.9649
+Epoch 999/1000
+156/156 [==============================] - 112s 697ms/step - loss: 37663.1137 - reconstruction_loss: 37653.0938 - kl_loss: 9.9795
+Epoch 1000/1000
+156/156 [==============================] - 117s 709ms/step - loss: 37660.8095 - reconstruction_loss: 37654.5625 - kl_loss: 9.9646
+WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+2022-05-01 01:01:54.715602: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.
+WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+(sp_venv) [rda2tc@affogato13 15vaeAttempt]$ client_loop: send disconnect: Broken pipe
+garrett@garrett-ubuntu:~$ 

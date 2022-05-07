@@ -128,7 +128,6 @@ def main():
     # path = "/Volumes/Extreme SSD/rangeimgs/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/dataset/sequences/00/"
     # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
-    # path = "/p/lidarrealism/data/range2TrainVal/"
     path = "/p/lidarrealism/data/rangeimgs/"
     # path = "/p/lidarrealism/data/rangeimgs/00/"
     # path = "/p/lidarrealism/data/voxel4/00/"
@@ -148,7 +147,7 @@ def main():
     # 'dim': (65536,),
     # 'dim': (64, 1024, 1)
     params = {'dim': (64, 1024),
-            'batch_size': 256,
+            'batch_size': 32,
             'n_channels': 1,
             'shuffle': True}
 
@@ -173,11 +172,7 @@ def main():
     
     # Encoder
     encoder_inputs = keras.Input(shape=(64, 1024, 1))
-    x = layers.Conv2D(8, 5, activation="relu", strides=2, padding="same")(encoder_inputs)
-    #x = layers.MaxPooling2D(2, padding='same')(x)
-    x = layers.Conv2D(16, 3, activation="relu", strides=1, padding="same")(x)
-    x = layers.MaxPooling2D(2, padding='same')(x)
-    x = layers.Conv2D(32, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.Conv2D(32, 3, activation="relu", strides=1, padding="same")(encoder_inputs)
     x = layers.MaxPooling2D(2, padding='same')(x)
     x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
     x = layers.MaxPooling2D(2, padding='same')(x)
@@ -186,9 +181,7 @@ def main():
     x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
     x = layers.MaxPooling2D(2, padding='same')(x)
     x = layers.Flatten()(x)
-    # x = layers.Dense(1024, activation="relu")(x)
-    #x = layers.Dense(16384, activation="relu")(x)
-    x = layers.Dense(1024, activation="relu")(x)
+    x = layers.Dense(16384, activation="relu")(x)
     z_mean = layers.Dense(latent_dim, name="z_mean")(x)
     z_log_var = layers.Dense(latent_dim, name="z_log_var")(x)
     z = Sampling()([z_mean, z_log_var])
@@ -197,49 +190,17 @@ def main():
 
     # Decoder
     latent_inputs = keras.Input(shape=(latent_dim,))
-    x = layers.Dense(1024, activation="relu")(latent_inputs)
-    # x = layers.Dense(4096, activation="relu")(latent_inputs)
-    #x = layers.Dense(16384, activation="relu")(latent_inputs)
-    # x = layers.Dense(32768, activation="relu")(latent_inputs)
-    # x = layers.Reshape((8, 64, 64))(x)
-    #x = layers.Reshape((4, 64, 64))(x)
-    x = layers.Reshape((1, 16, 64))(x)
-    # x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
-    # x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.Dense(16384, activation="relu")(latent_inputs)
+    x = layers.Reshape((4, 64, 64))(x)
+    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
     x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
     x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
     x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
+    x = layers.Conv2DTranspose(32, 3, activation="relu", strides=1, padding="same")(x)
     x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2D(64, 3, activation="relu", strides=1, padding="same")(x)
-    x = layers.UpSampling2D(2)(x)
-    x = layers.Conv2DTranspose(32, 5, activation="relu", strides=2, padding="same")(x)
-    #x = layers.UpSampling2D(2)(x)
     decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
-
-
-
-    #latent_inputs = keras.Input(shape=(latent_dim,))
-    #x = layers.Dense(4096, activation="relu")(latent_inputs)
-    #x = layers.Dense(16384, activation="relu")(latent_inputs)
-    #x = layers.Reshape((4, 64, 64))(x)
-    #x = layers.Reshape((2, 32, 64))(x)
-    #x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
-    #x = layers.UpSampling2D(2)(x)
-    #x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
-    #x = layers.UpSampling2D(2)(x)
-    #x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
-    #x = layers.UpSampling2D(2)(x)
-    #x = layers.Conv2DTranspose(64, 3, activation="relu", strides=1, padding="same")(x)
-    #x = layers.UpSampling2D(2)(x)
-    #x = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")(x)
-    #x = layers.UpSampling2D(2)(x)
-    # decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
-
-
     decoder = keras.Model(latent_inputs, decoder_outputs, name="decoder")
     print(decoder.summary())
 
@@ -248,8 +209,7 @@ def main():
     vae.compile(optimizer=keras.optimizers.Adam())
     # print(vae.summary())
 
-    history = vae.fit(training_generator, epochs=1000, use_multiprocessing=True, workers=6)
-    #history = vae.fit(training_generator, epochs=50)
+    history = vae.fit(training_generator, epochs=20)
     # history = vae.fit(training_generator, epochs=20, use_multiprocessing=True)
     # history = vae.fit(training_generator, validation_data=validation_generator, epochs=20)
     # history = vae.fit(training_generator, validation_data=validation_generator, epochs=20, use_multiprocessing=True)

@@ -1,0 +1,221 @@
+(sp_venv) [rda2tc@affogato11 v31]$ python trainModel.py 
+(40000,)
+(32000,)
+2022-05-01 21:08:17.970985: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-05-01 21:08:22.937261: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 10417 MB memory:  -> device: 0, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:04:00.0, compute capability: 6.1
+2022-05-01 21:08:22.967365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 10417 MB memory:  -> device: 1, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:0a:00.0, compute capability: 6.1
+2022-05-01 21:08:22.968762: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 10417 MB memory:  -> device: 2, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:84:00.0, compute capability: 6.1
+2022-05-01 21:08:22.969365: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 10417 MB memory:  -> device: 3, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:8a:00.0, compute capability: 6.1
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 16, 256, 64)       7808      
+                                                                 
+ batch_normalization (BatchN  (None, 16, 256, 64)      256       
+ ormalization)                                                   
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 8, 128, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 8, 128, 256)       409856    
+                                                                 
+ batch_normalization_1 (Batc  (None, 8, 128, 256)      1024      
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 4, 64, 256)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 4, 64, 384)        885120    
+                                                                 
+ batch_normalization_2 (Batc  (None, 4, 64, 384)       1536      
+ hNormalization)                                                 
+                                                                 
+ conv2d_3 (Conv2D)           (None, 4, 64, 256)        884992    
+                                                                 
+ batch_normalization_3 (Batc  (None, 4, 64, 256)       1024      
+ hNormalization)                                                 
+                                                                 
+ conv2d_4 (Conv2D)           (None, 4, 64, 128)        295040    
+                                                                 
+ batch_normalization_4 (Batc  (None, 4, 64, 128)       512       
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 2, 32, 128)       0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 8192)              0         
+                                                                 
+ dense (Dense)               (None, 8192)              67117056  
+                                                                 
+ dense_1 (Dense)             (None, 4096)              33558528  
+                                                                 
+ dense_2 (Dense)             (None, 4096)              16781312  
+                                                                 
+ dense_3 (Dense)             (None, 8192)              33562624  
+                                                                 
+ reshape (Reshape)           (None, 2, 32, 128)        0         
+                                                                 
+ conv2d_5 (Conv2D)           (None, 2, 32, 128)        147584    
+                                                                 
+ batch_normalization_5 (Batc  (None, 2, 32, 128)       512       
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 4, 64, 128)       0         
+ )                                                               
+                                                                 
+ conv2d_6 (Conv2D)           (None, 4, 64, 256)        295168    
+                                                                 
+ batch_normalization_6 (Batc  (None, 4, 64, 256)       1024      
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 8, 128, 256)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 8, 128, 384)       885120    
+                                                                 
+ batch_normalization_7 (Batc  (None, 8, 128, 384)      1536      
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 16, 256, 384)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 16, 256, 256)      2457856   
+                                                                 
+ batch_normalization_8 (Batc  (None, 16, 256, 256)     1024      
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 32, 512, 256)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_9 (Conv2D)           (None, 32, 512, 64)       1982528   
+                                                                 
+ batch_normalization_9 (Batc  (None, 32, 512, 64)      256       
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_4 (UpSampling  (None, 64, 1024, 64)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_10 (Conv2D)          (None, 64, 1024, 1)       577       
+                                                                 
+=================================================================
+Total params: 159,279,873
+Trainable params: 159,275,521
+Non-trainable params: 4,352
+_________________________________________________________________
+None
+Epoch 1/50
+2022-05-01 21:08:27.757627: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+2022-05-01 21:08:42.565224: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.30GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+500/500 [==============================] - 821s 2s/step - loss: 0.6147 - val_loss: 0.5845
+Epoch 2/50
+500/500 [==============================] - 741s 1s/step - loss: 0.5822 - val_loss: 0.5817
+Epoch 3/50
+265/500 [==============>...............] - ETA: 5:36 - loss: 0.58162022-05-01 21:40:47.171274: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+476/500 [===========================>..] - ETA: 34s - loss: 0.58162022-05-01 21:45:49.465162: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+500/500 [==============================] - 743s 1s/step - loss: 0.5816 - val_loss: 0.5812
+Epoch 4/50
+385/500 [======================>.......] - ETA: 2:44 - loss: 0.58142022-05-01 21:56:59.408428: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+500/500 [==============================] - 740s 1s/step - loss: 0.5814 - val_loss: 0.5813
+Epoch 5/50
+500/500 [==============================] - 758s 2s/step - loss: 0.5813 - val_loss: 0.5812
+Epoch 6/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5813 - val_loss: 0.5811
+Epoch 7/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5812 - val_loss: 0.5812
+Epoch 8/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5812 - val_loss: 0.5810
+Epoch 9/50
+109/500 [=====>........................] - ETA: 9:17 - loss: 0.58122022-05-01 22:52:53.497148: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+188/500 [==========>...................] - ETA: 7:25 - loss: 0.58122022-05-01 22:54:46.812553: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+194/500 [==========>...................] - ETA: 7:17 - loss: 0.58122022-05-01 22:54:55.367603: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+500/500 [==============================] - 744s 1s/step - loss: 0.5812 - val_loss: 0.5810
+Epoch 10/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5812 - val_loss: 0.5811
+Epoch 11/50
+500/500 [==============================] - 743s 1s/step - loss: 0.5812 - val_loss: 0.5810
+Epoch 12/50
+ 40/500 [=>............................] - ETA: 10:31 - loss: 0.58112022-05-01 23:30:21.239717: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+500/500 [==============================] - 757s 2s/step - loss: 0.5812 - val_loss: 0.5810
+Epoch 13/50
+223/500 [============>.................] - ETA: 6:35 - loss: 0.58122022-05-01 23:47:22.454003: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+491/500 [============================>.] - ETA: 12s - loss: 0.58122022-05-01 23:53:46.636466: W tensorflow/core/common_runtime/bfc_allocator.cc:275] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.29GiB with freed_by_count=0. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory were available.
+500/500 [==============================] - 745s 1s/step - loss: 0.5812 - val_loss: 0.5810
+Epoch 14/50
+500/500 [==============================] - 742s 1s/step - loss: 0.5800 - val_loss: 0.5833
+Epoch 15/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5792 - val_loss: 0.5800
+Epoch 16/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5788 - val_loss: 0.5787
+Epoch 17/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5787 - val_loss: 0.5824
+Epoch 18/50
+500/500 [==============================] - 743s 1s/step - loss: 0.5786 - val_loss: 0.5784
+Epoch 19/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5784 - val_loss: 0.5785
+Epoch 20/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5782 - val_loss: 0.5796
+Epoch 21/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5777 - val_loss: 0.5775
+Epoch 22/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5772 - val_loss: 0.5777
+Epoch 23/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5767 - val_loss: 0.5778
+Epoch 24/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5763 - val_loss: 0.5767
+Epoch 25/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5760 - val_loss: 0.5797
+Epoch 26/50
+500/500 [==============================] - 758s 2s/step - loss: 0.5757 - val_loss: 0.5770
+Epoch 27/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5754 - val_loss: 0.5777
+Epoch 28/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5751 - val_loss: 0.5782
+Epoch 29/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5750 - val_loss: 0.5756
+Epoch 30/50
+500/500 [==============================] - 743s 1s/step - loss: 0.5747 - val_loss: 0.5749
+Epoch 31/50
+500/500 [==============================] - 746s 1s/step - loss: 0.5745 - val_loss: 0.5750
+Epoch 32/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5744 - val_loss: 0.5745
+Epoch 33/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5742 - val_loss: 0.5764
+Epoch 34/50
+500/500 [==============================] - 757s 2s/step - loss: 0.5741 - val_loss: 0.5753
+Epoch 35/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5739 - val_loss: 0.5751
+Epoch 36/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5737 - val_loss: 0.5762
+Epoch 37/50
+500/500 [==============================] - 744s 1s/step - loss: 0.5735 - val_loss: 0.5745
+Epoch 38/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5733 - val_loss: 0.5759
+Epoch 39/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5732 - val_loss: 0.5747
+Epoch 40/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5731 - val_loss: 0.5764
+Epoch 41/50
+500/500 [==============================] - 742s 1s/step - loss: 0.5729 - val_loss: 0.5746
+Epoch 42/50
+500/500 [==============================] - 743s 1s/step - loss: 0.5727 - val_loss: 0.5736
+Epoch 43/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5725 - val_loss: 0.5750
+Epoch 44/50
+500/500 [==============================] - 758s 2s/step - loss: 0.5723 - val_loss: 0.5745
+Epoch 45/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5722 - val_loss: 0.5744
+Epoch 46/50
+500/500 [==============================] - 758s 2s/step - loss: 0.5720 - val_loss: 0.5737
+Epoch 47/50
+500/500 [==============================] - 757s 2s/step - loss: 0.5718 - val_loss: 0.5724
+Epoch 48/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5716 - val_loss: 0.5731
+Epoch 49/50
+500/500 [==============================] - 759s 2s/step - loss: 0.5714 - val_loss: 0.5726
+Epoch 50/50
+500/500 [==============================] - 745s 1s/step - loss: 0.5712 - val_loss: 0.5719
+2022-05-02 07:41:09.712895: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.
+(sp_venv) [rda2tc@affogato11 v31]$ client_loop: send disconnect: Broken pipe
+~ » 

@@ -1,0 +1,183 @@
+(sp_venv) [rda2tc@affogato13 v33]$ python trainModel.py 
+(40000,)
+(32000,)
+2022-05-01 21:24:28.747832: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-05-01 21:24:31.027574: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 10417 MB memory:  -> device: 0, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:04:00.0, compute capability: 6.1
+2022-05-01 21:24:31.029282: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 10417 MB memory:  -> device: 1, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:0a:00.0, compute capability: 6.1
+2022-05-01 21:24:31.030497: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 10417 MB memory:  -> device: 2, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:84:00.0, compute capability: 6.1
+2022-05-01 21:24:31.032058: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 10417 MB memory:  -> device: 3, name: NVIDIA GeForce GTX 1080 Ti, pci bus id: 0000:8a:00.0, compute capability: 6.1
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 16, 256, 64)       7808      
+                                                                 
+ batch_normalization (BatchN  (None, 16, 256, 64)      256       
+ ormalization)                                                   
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 8, 128, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 8, 128, 256)       409856    
+                                                                 
+ batch_normalization_1 (Batc  (None, 8, 128, 256)      1024      
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 4, 64, 256)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 4, 64, 384)        885120    
+                                                                 
+ batch_normalization_2 (Batc  (None, 4, 64, 384)       1536      
+ hNormalization)                                                 
+                                                                 
+ conv2d_3 (Conv2D)           (None, 4, 64, 256)        884992    
+                                                                 
+ batch_normalization_3 (Batc  (None, 4, 64, 256)       1024      
+ hNormalization)                                                 
+                                                                 
+ conv2d_4 (Conv2D)           (None, 4, 64, 128)        295040    
+                                                                 
+ batch_normalization_4 (Batc  (None, 4, 64, 128)       512       
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 2, 32, 128)       0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 8192)              0         
+                                                                 
+ dense (Dense)               (None, 8192)              67117056  
+                                                                 
+ dense_1 (Dense)             (None, 8192)              67117056  
+                                                                 
+ reshape (Reshape)           (None, 2, 32, 128)        0         
+                                                                 
+ conv2d_transpose (Conv2DTra  (None, 4, 64, 128)       147584    
+ nspose)                                                         
+                                                                 
+ batch_normalization_5 (Batc  (None, 4, 64, 128)       512       
+ hNormalization)                                                 
+                                                                 
+ conv2d_transpose_1 (Conv2DT  (None, 8, 128, 256)      295168    
+ ranspose)                                                       
+                                                                 
+ batch_normalization_6 (Batc  (None, 8, 128, 256)      1024      
+ hNormalization)                                                 
+                                                                 
+ conv2d_transpose_2 (Conv2DT  (None, 16, 256, 384)     885120    
+ ranspose)                                                       
+                                                                 
+ batch_normalization_7 (Batc  (None, 16, 256, 384)     1536      
+ hNormalization)                                                 
+                                                                 
+ conv2d_transpose_3 (Conv2DT  (None, 32, 512, 256)     2457856   
+ ranspose)                                                       
+                                                                 
+ batch_normalization_8 (Batc  (None, 32, 512, 256)     1024      
+ hNormalization)                                                 
+                                                                 
+ conv2d_transpose_4 (Conv2DT  (None, 64, 1024, 64)     1982528   
+ ranspose)                                                       
+                                                                 
+ batch_normalization_9 (Batc  (None, 64, 1024, 64)     256       
+ hNormalization)                                                 
+                                                                 
+ conv2d_5 (Conv2D)           (None, 64, 1024, 1)       577       
+                                                                 
+=================================================================
+Total params: 142,494,465
+Trainable params: 142,490,113
+Non-trainable params: 4,352
+_________________________________________________________________
+None
+Epoch 1/50
+2022-05-01 21:24:34.344970: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+1000/1000 [==============================] - 988s 969ms/step - loss: 0.5876 - val_loss: 0.5840
+Epoch 2/50
+1000/1000 [==============================] - 989s 988ms/step - loss: 0.5815 - val_loss: 0.5814
+Epoch 3/50
+1000/1000 [==============================] - 970s 969ms/step - loss: 0.5813 - val_loss: 0.5816
+Epoch 4/50
+1000/1000 [==============================] - 972s 972ms/step - loss: 0.5812 - val_loss: 0.5815
+Epoch 5/50
+1000/1000 [==============================] - 974s 973ms/step - loss: 0.5812 - val_loss: 0.5812
+Epoch 6/50
+1000/1000 [==============================] - 975s 974ms/step - loss: 0.5812 - val_loss: 0.5811
+Epoch 7/50
+1000/1000 [==============================] - 993s 992ms/step - loss: 0.5812 - val_loss: 0.5818
+Epoch 8/50
+1000/1000 [==============================] - 973s 973ms/step - loss: 0.5812 - val_loss: 0.5812
+Epoch 9/50
+1000/1000 [==============================] - 974s 974ms/step - loss: 0.5812 - val_loss: 0.5849
+Epoch 10/50
+1000/1000 [==============================] - 994s 994ms/step - loss: 0.5811 - val_loss: 0.5823
+Epoch 11/50
+1000/1000 [==============================] - 958s 958ms/step - loss: 0.5811 - val_loss: 0.5836
+Epoch 12/50
+1000/1000 [==============================] - 958s 958ms/step - loss: 0.5811 - val_loss: 0.5822
+Epoch 13/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5817
+Epoch 14/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5882
+Epoch 15/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5820
+Epoch 16/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5818
+Epoch 17/50
+1000/1000 [==============================] - 960s 959ms/step - loss: 0.5811 - val_loss: 0.5832
+Epoch 18/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5812
+Epoch 19/50
+1000/1000 [==============================] - 958s 958ms/step - loss: 0.5811 - val_loss: 0.5810
+Epoch 20/50
+1000/1000 [==============================] - 957s 956ms/step - loss: 0.5811 - val_loss: 0.5812
+Epoch 21/50
+1000/1000 [==============================] - 956s 956ms/step - loss: 0.5811 - val_loss: 0.5817
+Epoch 22/50
+1000/1000 [==============================] - 956s 955ms/step - loss: 0.5811 - val_loss: 0.5810
+Epoch 23/50
+1000/1000 [==============================] - 957s 956ms/step - loss: 0.5811 - val_loss: 0.5810
+Epoch 24/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5810
+Epoch 25/50
+1000/1000 [==============================] - 957s 957ms/step - loss: 0.5811 - val_loss: 0.5814
+Epoch 26/50
+1000/1000 [==============================] - 957s 957ms/step - loss: 0.5811 - val_loss: 0.5810
+Epoch 27/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5812
+Epoch 28/50
+1000/1000 [==============================] - 958s 958ms/step - loss: 0.5811 - val_loss: 0.6049
+Epoch 29/50
+1000/1000 [==============================] - 957s 957ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 30/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.7247
+Epoch 31/50
+1000/1000 [==============================] - 957s 956ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 32/50
+1000/1000 [==============================] - 959s 958ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 33/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 34/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 35/50
+1000/1000 [==============================] - 957s 956ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 36/50
+1000/1000 [==============================] - 958s 957ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 37/50
+1000/1000 [==============================] - 957s 956ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 38/50
+1000/1000 [==============================] - 957s 956ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 39/50
+1000/1000 [==============================] - 956s 956ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 40/50
+1000/1000 [==============================] - 956s 956ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 41/50
+1000/1000 [==============================] - 957s 957ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 42/50
+1000/1000 [==============================] - 957s 957ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 43/50
+1000/1000 [==============================] - 957s 956ms/step - loss: 0.5811 - val_loss: 0.5809
+Epoch 44/50
+ 672/1000 [===================>..........] - ETA: 4:53 - loss: 0.5811client_loop: send disconnect: Broken pipe
+~ » 

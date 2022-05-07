@@ -36,7 +36,7 @@ def convertImage(imagePath):
 def getSampleSet(basePath, sampleCount):
     results = np.array([])
     files = np.array(glob.glob(basePath + "*/*.png", recursive = True))
-    # files = np.array(glob.glob(basePath + "*.png", recursive = True))
+    #files = np.array(glob.glob(basePath + "*.png", recursive = True))
 
     for i in range(sampleCount):
         fileLoc = random.choice(files)
@@ -52,18 +52,16 @@ def getSampleSet(basePath, sampleCount):
 # ------------------------------------
 
 # Load model
-encoder = tf.keras.models.load_model("3encoderVaeModel") 
-decoder = tf.keras.models.load_model("3decoderVaeModel")
+encoder = tf.keras.models.load_model("encoderVaeModel") 
+decoder = tf.keras.models.load_model("decoderVaeModel")
 
 # Get test images
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
 # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/"
 # path = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/"
-# path = "/Volumes/Extreme SSD/rangeimgs/01/"
+#path = "/Volumes/Extreme SSD/rangeimgs/01/"
 #path = "/p/lidarrealism/data/range2TrainVal/"
-# path = "/p/lidarrealism/data/range2Test/"
-path = "/Volumes/Extreme SSD/rangeimgs2/"
-
+path = "/p/lidarrealism/data/range2Test/"
 samples = getSampleSet(path, 1000)
 
 # print(samples)
@@ -82,62 +80,8 @@ reconstructions = decoder.predict(z_mean)
 # print(ssim)
 ssimLoss = SSIMLoss(samples, reconstructions)
 
-
 print("----------------------------------------")
-print("100 random of train/val section")
-print("Loss: ", ssimLoss)
-
-print("----------------------------------------")
-# pathHidden = "/Volumes/Extreme SSD/hiddenRangeImgs/"
-pathHidden = "/Volumes/Extreme SSD/hiddenRangeImgs2/"
-samplesHidden = getSampleSet(path, 1000)
-
-z_mean, _, _ = encoder.predict([samplesHidden])
-reconstructionsHidden = decoder.predict(z_mean)
-ssimLossHidden = SSIMLoss(samplesHidden, reconstructionsHidden)
-
 print(ssimLoss)
-print("100 random of train/val section")
-print("Loss: ", ssimLossHidden)
-
-print("----------------------------------------")
-
-path00 = "/Volumes/Extreme SSD/rangeimgs/00/000000.png"
-controlImage = convertImage(path00)
-control = np.array([controlImage])
-
-z_mean, _, _ = encoder.predict([control])
-reconstructionsControl = decoder.predict(z_mean)
-ssimLossControl = SSIMLoss(control, reconstructionsControl)
-
-print("Loss on 00/000000")
-print("Loss: ", ssimLossControl)
-
-print("----------------------------------------")
-
-pathUn1 = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/carsUp1Z00.png"
-un1Image = convertImage(pathUn1)
-un1 = np.array([un1Image])
-
-z_mean, _, _ = encoder.predict([un1])
-reconstructionsUn1 = decoder.predict(z_mean)
-ssimLossUn1 = SSIMLoss(un1, reconstructionsUn1)
-
-print("Loss on floating cars")
-print("Loss: ", ssimLossUn1)
-
-print("----------------------------------------")
-
-pathUn2 = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/removeRoad00.png"
-un2Image = convertImage(pathUn2)
-un2 = np.array([un2Image])
-
-z_mean, _, _ = encoder.predict([un2])
-reconstructionsUn2 = decoder.predict(z_mean)
-ssimLossUn2 = SSIMLoss(un2, reconstructionsUn2)
-
-print("Loss on no road")
-print("Loss: ", ssimLossUn2)
 
 
 

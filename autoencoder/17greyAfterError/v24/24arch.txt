@@ -1,0 +1,307 @@
+(sp_venv) (sp_venv) [rda2tc@adriatic03 v6]$ python trainModel.py 
+(40000,)
+(28000,)
+2022-04-29 18:27:04.835820: I tensorflow/core/platform/cpu_feature_guard.cc:151] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-04-29 18:27:07.286959: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 6674 MB memory:  -> device: 0, name: Quadro RTX 4000, pci bus id: 0000:3d:00.0, compute capability: 7.5
+2022-04-29 18:27:07.288096: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 6674 MB memory:  -> device: 1, name: Quadro RTX 4000, pci bus id: 0000:60:00.0, compute capability: 7.5
+2022-04-29 18:27:07.289529: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 6674 MB memory:  -> device: 2, name: Quadro RTX 4000, pci bus id: 0000:b1:00.0, compute capability: 7.5
+2022-04-29 18:27:07.290539: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1525] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 6674 MB memory:  -> device: 3, name: Quadro RTX 4000, pci bus id: 0000:da:00.0, compute capability: 7.5
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 16, 256, 64)       7808      
+                                                                 
+ batch_normalization (BatchN  (None, 16, 256, 64)      256       
+ ormalization)                                                   
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 8, 128, 64)       0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 8, 128, 256)       409856    
+                                                                 
+ batch_normalization_1 (Batc  (None, 8, 128, 256)      1024      
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 4, 64, 256)       0         
+ 2D)                                                             
+                                                                 
+ conv2d_2 (Conv2D)           (None, 4, 64, 384)        885120    
+                                                                 
+ batch_normalization_2 (Batc  (None, 4, 64, 384)       1536      
+ hNormalization)                                                 
+                                                                 
+ conv2d_3 (Conv2D)           (None, 4, 64, 256)        884992    
+                                                                 
+ batch_normalization_3 (Batc  (None, 4, 64, 256)       1024      
+ hNormalization)                                                 
+                                                                 
+ conv2d_4 (Conv2D)           (None, 4, 64, 128)        295040    
+                                                                 
+ batch_normalization_4 (Batc  (None, 4, 64, 128)       512       
+ hNormalization)                                                 
+                                                                 
+ max_pooling2d_2 (MaxPooling  (None, 2, 32, 128)       0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 8192)              0         
+                                                                 
+ dense (Dense)               (None, 8192)              67117056  
+                                                                 
+ dense_1 (Dense)             (None, 8192)              67117056  
+                                                                 
+ reshape (Reshape)           (None, 2, 32, 128)        0         
+                                                                 
+ conv2d_5 (Conv2D)           (None, 2, 32, 128)        147584    
+                                                                 
+ batch_normalization_5 (Batc  (None, 2, 32, 128)       512       
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d (UpSampling2D  (None, 4, 64, 128)       0         
+ )                                                               
+                                                                 
+ conv2d_6 (Conv2D)           (None, 4, 64, 256)        295168    
+                                                                 
+ batch_normalization_6 (Batc  (None, 4, 64, 256)       1024      
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_1 (UpSampling  (None, 8, 128, 256)      0         
+ 2D)                                                             
+                                                                 
+ conv2d_7 (Conv2D)           (None, 8, 128, 384)       885120    
+                                                                 
+ batch_normalization_7 (Batc  (None, 8, 128, 384)      1536      
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_2 (UpSampling  (None, 16, 256, 384)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_8 (Conv2D)           (None, 16, 256, 256)      2457856   
+                                                                 
+ batch_normalization_8 (Batc  (None, 16, 256, 256)     1024      
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_3 (UpSampling  (None, 32, 512, 256)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_9 (Conv2D)           (None, 32, 512, 64)       1982528   
+                                                                 
+ batch_normalization_9 (Batc  (None, 32, 512, 64)      256       
+ hNormalization)                                                 
+                                                                 
+ up_sampling2d_4 (UpSampling  (None, 64, 1024, 64)     0         
+ 2D)                                                             
+                                                                 
+ conv2d_10 (Conv2D)          (None, 64, 1024, 1)       577       
+                                                                 
+=================================================================
+Total params: 142,494,465
+Trainable params: 142,490,113
+Non-trainable params: 4,352
+_________________________________________________________________
+None
+Epoch 1/100
+2022-04-29 18:27:13.016746: I tensorflow/stream_executor/cuda/cuda_dnn.cc:368] Loaded cuDNN version 8101
+875/875 [==============================] - 1190s 1s/step - loss: 0.6015 - val_loss: 0.5819
+Epoch 2/100
+875/875 [==============================] - 1044s 1s/step - loss: 0.5792 - val_loss: 0.5781
+Epoch 3/100
+875/875 [==============================] - 1043s 1s/step - loss: 0.5773 - val_loss: 0.5779
+Epoch 4/100
+875/875 [==============================] - 1043s 1s/step - loss: 0.5763 - val_loss: 0.5770
+Epoch 5/100
+875/875 [==============================] - 1043s 1s/step - loss: 0.5758 - val_loss: 0.5759
+Epoch 6/100
+875/875 [==============================] - 1043s 1s/step - loss: 0.5753 - val_loss: 0.5827
+Epoch 7/100
+875/875 [==============================] - 1043s 1s/step - loss: 0.5750 - val_loss: 0.5790
+Epoch 8/100
+875/875 [==============================] - 1043s 1s/step - loss: 0.5747 - val_loss: 0.5757
+Epoch 9/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5743 - val_loss: 0.5779
+Epoch 10/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5740 - val_loss: 0.5761
+Epoch 11/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5737 - val_loss: 0.5817
+Epoch 12/100
+875/875 [==============================] - 1043s 1s/step - loss: 0.5734 - val_loss: 0.5754
+Epoch 13/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5731 - val_loss: 0.5739
+Epoch 14/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5729 - val_loss: 0.5745
+Epoch 15/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5726 - val_loss: 0.5732
+Epoch 16/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5723 - val_loss: 0.5731
+Epoch 17/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5718 - val_loss: 0.5721
+Epoch 18/100
+875/875 [==============================] - 1042s 1s/step - loss: 0.5710 - val_loss: 0.5709
+Epoch 19/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5699 - val_loss: 0.5695
+Epoch 20/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5690 - val_loss: 0.5688
+Epoch 21/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5684 - val_loss: 0.5684
+Epoch 22/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5680 - val_loss: 0.5681
+Epoch 23/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5677 - val_loss: 0.5679
+Epoch 24/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5674 - val_loss: 0.5674
+Epoch 25/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5672 - val_loss: 0.5673
+Epoch 26/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5670 - val_loss: 0.5672
+Epoch 27/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5668 - val_loss: 0.5670
+Epoch 28/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5666 - val_loss: 0.5668
+Epoch 29/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5665 - val_loss: 0.5667
+Epoch 30/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5663 - val_loss: 0.5665
+Epoch 31/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5662 - val_loss: 0.5665
+Epoch 32/100
+875/875 [==============================] - 1044s 1s/step - loss: 0.5660 - val_loss: 0.5664
+Epoch 33/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5659 - val_loss: 0.5663
+Epoch 34/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5658 - val_loss: 0.5663
+Epoch 35/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5657 - val_loss: 0.5661
+Epoch 36/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5656 - val_loss: 0.5660
+Epoch 37/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5655 - val_loss: 0.5660
+Epoch 38/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5654 - val_loss: 0.5659
+Epoch 39/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5653 - val_loss: 0.5660
+Epoch 40/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5653 - val_loss: 0.5658
+Epoch 41/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5652 - val_loss: 0.5658
+Epoch 42/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5651 - val_loss: 0.5658
+Epoch 43/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5651 - val_loss: 0.5658
+Epoch 44/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5650 - val_loss: 0.5657
+Epoch 45/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5649 - val_loss: 0.5656
+Epoch 46/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5649 - val_loss: 0.5655
+Epoch 47/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5648 - val_loss: 0.5655
+Epoch 48/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5647 - val_loss: 0.5655
+Epoch 49/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5647 - val_loss: 0.5655
+Epoch 50/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5646 - val_loss: 0.5655
+Epoch 51/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5646 - val_loss: 0.5655
+Epoch 52/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5645 - val_loss: 0.5654
+Epoch 53/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5645 - val_loss: 0.5654
+Epoch 54/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5645 - val_loss: 0.5654
+Epoch 55/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5644 - val_loss: 0.5654
+Epoch 56/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5644 - val_loss: 0.5654
+Epoch 57/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5643 - val_loss: 0.5653
+Epoch 58/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5643 - val_loss: 0.5653
+Epoch 59/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5642 - val_loss: 0.5653
+Epoch 60/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5642 - val_loss: 0.5653
+Epoch 61/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5642 - val_loss: 0.5653
+Epoch 62/100
+875/875 [==============================] - 1044s 1s/step - loss: 0.5641 - val_loss: 0.5653
+Epoch 63/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5641 - val_loss: 0.5653
+Epoch 64/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5641 - val_loss: 0.5653
+Epoch 65/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5640 - val_loss: 0.5653
+Epoch 66/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5640 - val_loss: 0.5653
+Epoch 67/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5640 - val_loss: 0.5653
+Epoch 68/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5639 - val_loss: 0.5653
+Epoch 69/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5639 - val_loss: 0.5653
+Epoch 70/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5639 - val_loss: 0.5653
+Epoch 71/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5639 - val_loss: 0.5652
+Epoch 72/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5638 - val_loss: 0.5653
+Epoch 73/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5638 - val_loss: 0.5652
+Epoch 74/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5638 - val_loss: 0.5652
+Epoch 75/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5638 - val_loss: 0.5652
+Epoch 76/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5637 - val_loss: 0.5653
+Epoch 77/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5637 - val_loss: 0.5652
+Epoch 78/100
+875/875 [==============================] - 1041s 1s/step - loss: 0.5637 - val_loss: 0.5653
+Epoch 79/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5637 - val_loss: 0.5652
+Epoch 80/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5636 - val_loss: 0.5652
+Epoch 81/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5636 - val_loss: 0.5652
+Epoch 82/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5636 - val_loss: 0.5652
+Epoch 83/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5636 - val_loss: 0.5652
+Epoch 84/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5635 - val_loss: 0.5652
+Epoch 85/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5635 - val_loss: 0.5652
+Epoch 86/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5635 - val_loss: 0.5653
+Epoch 87/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5635 - val_loss: 0.5652
+Epoch 88/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5635 - val_loss: 0.5652
+Epoch 89/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5634 - val_loss: 0.5653
+Epoch 90/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5634 - val_loss: 0.5653
+Epoch 91/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5634 - val_loss: 0.5652
+Epoch 92/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5634 - val_loss: 0.5652
+Epoch 93/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5634 - val_loss: 0.5653
+Epoch 94/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5633 - val_loss: 0.5652
+Epoch 95/100
+875/875 [==============================] - 1039s 1s/step - loss: 0.5633 - val_loss: 0.5653
+Epoch 96/100
+875/875 [==============================] - 1039s 1s/step - loss: 0.5633 - val_loss: 0.5653
+Epoch 97/100
+875/875 [==============================] - 1039s 1s/step - loss: 0.5633 - val_loss: 0.5653
+Epoch 98/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5633 - val_loss: 0.5652
+Epoch 99/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5633 - val_loss: 0.5652
+Epoch 100/100
+875/875 [==============================] - 1040s 1s/step - loss: 0.5632 - val_loss: 0.5653
+2022-04-30 23:24:23.364771: W tensorflow/python/util/util.cc:368] Sets are not currently considered sequences, but this may change in the future, so consider avoiding using them.
+(sp_venv) (sp_venv) [rda2tc@adriatic03 v6]$ client_loop: send disconnect: Broken pipe
+garrett@garrett-ubuntu:~$ 

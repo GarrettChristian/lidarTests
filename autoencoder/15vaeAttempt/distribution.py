@@ -7,8 +7,8 @@ import numpy as np
 # vae = load_model('vaeExample.h5', custom_objects={'latent_dim': latent_dim, 'epsilon_std': epsilon_std, 'vae_loss': vae_loss})
 # vae = load_weights('vaeExample.h5')
 # vae.summary()
-encoder = tf.keras.models.load_model("encoderVaeModel") 
-decoder = tf.keras.models.load_model("decoderVaeModel")
+encoder = tf.keras.models.load_model("1encoderVaeModel") 
+decoder = tf.keras.models.load_model("1decoderVaeModel")
 # vae = VAE(encoder, decoder)
 
 import matplotlib.pyplot as plt

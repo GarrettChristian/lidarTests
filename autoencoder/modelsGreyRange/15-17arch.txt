@@ -1,0 +1,21 @@
+
+
+all same model as 14 ran for 50 epochs
+
+
+15 
+- 6515 val loss
+- lr 0.1
+
+16 
+- 6008 val loss 
+- lr 0.01
+
+17 
+- 5675 val loss
+- lr 0.0001
+
+
+
+
+

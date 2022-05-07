@@ -92,7 +92,7 @@ pathHidden = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidar
 samplesHidden = getSampleSet(path, 1000)
 
 reconstructionsHidden = autoencoder.predict([samplesHidden])
-ssimLossHidden = SSIMLoss(samples, reconstructionsHidden)
+ssimLossHidden = SSIMLoss(samplesHidden, reconstructionsHidden)
 
 print(ssimLoss)
 print("100 random of train/val section")

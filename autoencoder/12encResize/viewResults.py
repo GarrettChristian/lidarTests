@@ -21,19 +21,28 @@ def SSIMLoss(y_true, y_pred):
   return 1 - tf.reduce_mean(tf.image.ssim(y_true, y_pred, max_val=1.0))
 
 # Load model
-encoder = tf.keras.models.load_model("2encoderVaeModel") 
-decoder = tf.keras.models.load_model("2decoderVaeModel")
+modelName = '1pcdModel'
+autoencoder = keras.models.load_model(modelName)
+print("Info for ", modelName)
+print(autoencoder.summary())
 
 # Get test images
 # binFileName = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/kitti/000000.bin"
-# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
+testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
 # testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/rangeimgs/00/000000.png"
 # testImage = "unrealistic1.png"
-testImage = "/Volumes/Extreme SSD/rangeimgs/00/000000.png"
+# testImage = "/Volumes/Extreme SSD/hiddenRangeImgs/21/000000.png"
+# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/00rotate180.png"
+# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/removeHalfByYval.png"
+# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/removeRoad00.png"
+# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/removeCars00.png"
+# testImage = "/Users/garrettchristian/DocumentsDesktop/uva21/summerProject/lidarTests/data/sets/uncomforming/png/carsUp1Z00.png"
 
 image = Image.open(testImage)
 imageGrey = ImageOps.grayscale(image)
-imageGreyArray = np.array(imageGrey)
+newSize = (512, 32)
+imageGreyResized = imageGrey.resize(newSize)
+imageGreyArray = np.array(imageGreyResized)
 imageGreyArrayNorm = imageGreyArray.astype('float32') / 255
 test_arr = np.expand_dims(imageGreyArrayNorm, axis=2) 
 print(np.shape(test_arr))
@@ -42,10 +51,7 @@ print(np.shape(test_arr))
 
 # ---
 
-z_mean, _, _ = encoder.predict([test_arr])
-print("VAE encoder results:")
-print(z_mean)
-decoded_data = decoder.predict(z_mean)
+decoded_data = autoencoder.predict([test_arr])
 
 # print(decoded_data)
 print(np.shape(decoded_data))
@@ -53,13 +59,13 @@ print(np.shape(decoded_data[0]))
 
 decoded_data0 = decoded_data[0]
 decoded_data_unnorm = decoded_data0.astype('float32') * 255
-undoExpandDims = decoded_data_unnorm.reshape(64, 1024)
+undoExpandDims = decoded_data_unnorm.reshape(32, 512)
 
 decodedImage = Image.fromarray(undoExpandDims)
 print("dec")
 decodedImage.show()
 print("imgGrey")
-imageGrey.show()
+imageGreyResized.show()
 
 
 print(np.shape(test_arr))
